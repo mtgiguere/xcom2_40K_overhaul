@@ -167,6 +167,14 @@ Existing weapon mods (bolt pistols, plasma pistols, power claws, bolters, plasma
 
 ---
 
+### 4.8b Chapter = Country: livery and one-click armour (decided 2026-10-17)
+A Marine's **Chapter is his "country"** (`X2CountryTemplate`): flag, name list and, in our mod, **livery**. The chapter flag mods (Blood Angels, Ultramarines, Chaos Legions...) already define `Country_BloodAngels` etc.
+- **Campaign start:** the player picks the Chapter; it becomes the default country for every recruit (the generator is re-run with that country, same trick as the gender policy). Mixed-Chapter rosters (Deathwatch) stay possible per soldier.
+- **Livery config** per country: primary/secondary armour tints, pattern, optional preferred part packs / set names. Applied by the appearance hook at generation and re-applied when the player changes a soldier's flag in customization (UI listener), so changing the flag re-dresses the Marine.
+- **Sets:** add set names to pack parts at load time (same patch mechanism as class/tech locks) so choosing a chapter-specific torso cascades to matching arms/legs. The SM2 Tacticus pack ships no sets; most of its identity is tint.
+- **Manual override always allowed:** the customization screen still lets a player put Space Wolves arms on an Ultramarines torso. The livery is a default and a one-click reset, never a lock.
+- Goal: remove the per-soldier armour setup grind the user hits every new campaign.
+
 ### 4.9 Unit scale (decided 2026-10-17)
 Marines stay on the **unmodified rig (scale 1.0)** so the player's most-watched units never have socket or cover glitches. Everyone else is scaled relative to them. Lore ratio: Marine ~2.1 m vs Guardsman ~1.75 m = 0.83.
 

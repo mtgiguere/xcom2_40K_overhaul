@@ -68,12 +68,14 @@ def test_faction_spawn_lists_exist_in_the_faction_mods(factions):
     assert not missing, f"spawn lists not found in any installed mod: {sorted(missing)}"
 
 
-def test_tyranid_lists_cover_every_force_level(config):
-    """Our own Tyranid lists must have at least one leader and one follower eligible at every force level 1..20."""
+def test_our_lists_cover_every_force_level(config):
+    """Our own faction lists must have at least one leader and one follower eligible at every force level 1..20."""
     mgr = [s for s in config["XComEncounterLists.ini"] if s.name == "XComGame.XComTacticalMissionManager"]
     assert mgr, "missing spawn lists"
     lists = {struct_field(v, "ListID"): v for v in mgr[0].values("SpawnDistributionLists")}
-    for list_id in ("Astartes_TyranidLeaders", "Astartes_TyranidFollowers"):
+    ours = [k for k in lists if k.startswith("Astartes_")]
+    assert len(ours) >= 4, f"expected our own faction lists, found {ours}"
+    for list_id in ours:
         entries = re.findall(r'MinForceLevel=(\d+),\s*MaxForceLevel=(\d+)', lists[list_id])
         for fl in range(1, 21):
             assert any(int(lo) <= fl <= int(hi) for lo, hi in entries), f"{list_id}: nothing eligible at force level {fl}"
