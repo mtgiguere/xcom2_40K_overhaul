@@ -282,7 +282,8 @@ Already exists (per user / search): Space Marine armor, Chaos Marine armor, Drea
 - **Mechanism (verified in Highlander source):** `X2DownloadableContentInfo.PostEncounterCreation` is called per pod when a mission's data is cached, with the mission site as `SourceObject` → region → continent → faction. We replace the whole pod with one drawn from the owning faction's encounter lists at the matching force level, so **pods are always faction-pure** (never a Nob next to a Chaos Marine). `PostReinforcementCreation` does the same for reinforcements; `PostSitRepCreation` attaches faction SitReps.
 - **Border regions** (adjacent to another faction's continent): each pod rolls its faction independently → mixed mission, pure pods; optionally the second faction spawns on a spare team (`eTeam_One`/`eTeam_Two`) so they fight each other.
 - **Tyranid continents** never roll a second faction.
-- The Raider mods' own SitRep injection must be disabled so continent ownership is the only source of faction spawns.
+- The Raider mods' own injection is still active and is **not yet disabled**: Ork Raiders adds its raid SitRep in `OnPreMission` (no config knob), Black Legion spawns Geoscape bases per continent that add its SitRep with an appearance chance. Until we neutralise or adopt these, a second faction can occasionally appear as a "raid" on top of our pure pods. Options: a RUN_LAST `OnPreMission` that strips foreign SitReps on owned continents, or adopting Black Legion's base system as the Chaos stronghold.
+- **Implemented 2026-10-17:** `Astartes_FactionConfig` + `RewritePodForContinent` in the DLCInfo; Tyranids use our own full-range lists (`Astartes_TyranidLeaders/Followers`, FL 1-20: cult hybrids -> rippers/drones -> swarm) because The Hive's lists start at FL 5.
 - Existing data: Ork Raiders / Dark Eldar Raiders / Black Legion already ship Weak/Normal/Strong/Boss encounter lists per force level.
 
 ### 7.2 Liberation structure (two tiers)

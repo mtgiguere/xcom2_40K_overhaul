@@ -230,6 +230,20 @@ static function name PickMarinePart(X2BodyPartTemplateManager PartMgr, Astartes_
 	return Part == none ? '' : Part.DataName;
 }
 
+
+/// Log a line and echo it to the in-game console, so dev commands give visible feedback.
+static function Say(string Msg)
+{
+	local Engine Eng;
+
+	`log(Msg,, 'Astartes');
+	Eng = class'Engine'.static.GetEngine();
+	if (Eng != none && Eng.GameViewport != none && Eng.GameViewport.ViewportConsole != none)
+	{
+		Eng.GameViewport.ViewportConsole.OutputText(Msg);
+	}
+}
+
 // ---------------------------------------------------------------------------------------
 // Developer console commands. Require -allowConsole. Strategy layer only unless noted.
 // Each logs a line starting "Astartes_<Command>: PASS" or "FAIL" so a log parser can assert on it.
@@ -252,7 +266,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	if (XComHQ == none)
 	{
-		`log("Astartes_DevSquad: FAIL no XComHQ (strategy layer only)",, 'Astartes');
+		Say("Astartes_DevSquad: FAIL no XComHQ (strategy layer only)");
 		return;
 	}
 
@@ -270,7 +284,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 		ClassTemplate = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager().FindSoldierClassTemplate(ClassName);
 		if (ClassTemplate == none)
 		{
-			`log("Astartes_DevSquad: FAIL unknown class" @ ClassName,, 'Astartes');
+			Say("Astartes_DevSquad: FAIL unknown class" @ ClassName);
 			continue;
 		}
 
@@ -292,7 +306,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 
 		XComHQ.AddToCrew(NewGameState, UnitState);
 		Created++;
-		`log("Astartes_DevSquad: created" @ UnitState.GetFullName() @ "as" @ ClassName @ "rank" @ UnitState.GetRank(),, 'Astartes');
+		Say("Astartes_DevSquad: created" @ UnitState.GetFullName() @ "as" @ ClassName @ "rank" @ UnitState.GetRank());
 	}
 
 	if (NewGameState.GetNumGameStateObjects() > 0)
@@ -304,7 +318,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 		History.CleanupPendingGameState(NewGameState);
 	}
 
-	`log("Astartes_DevSquad: PASS created" @ Created @ "of" @ default.MarineClasses.Length,, 'Astartes');
+	Say("Astartes_DevSquad: PASS created" @ Created @ "of" @ default.MarineClasses.Length);
 }
 
 /// Astartes_ListClasses
@@ -319,11 +333,11 @@ exec function Astartes_ListClasses()
 		ClassTemplate = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager().FindSoldierClassTemplate(ClassName);
 		if (ClassTemplate == none)
 		{
-			`log("Astartes_ListClasses: FAIL missing" @ ClassName,, 'Astartes');
+			Say("Astartes_ListClasses: FAIL missing" @ ClassName);
 		}
 		else
 		{
-			`log("Astartes_ListClasses: PASS" @ ClassName @ "ranks=" $ ClassTemplate.GetMaxConfiguredRank() @ "display=" $ ClassTemplate.DisplayName,, 'Astartes');
+			Say("Astartes_ListClasses: PASS" @ ClassName @ "ranks=" $ ClassTemplate.GetMaxConfiguredRank() @ "display=" $ ClassTemplate.DisplayName);
 		}
 	}
 }
@@ -338,7 +352,7 @@ exec function Astartes_Geneseed(optional int NewAmount = -1)
 	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
 	if (Chapter == none)
 	{
-		`log("Astartes_Geneseed: FAIL no Chapter state in this campaign",, 'Astartes');
+		Say("Astartes_Geneseed: FAIL no Chapter state in this campaign");
 		return;
 	}
 
@@ -350,7 +364,7 @@ exec function Astartes_Geneseed(optional int NewAmount = -1)
 		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	}
 
-	`log("Astartes_Geneseed: PASS geneseed=" $ Chapter.Geneseed @ "recovered_total=" $ Chapter.GeneseedRecoveredTotal @ "fallen=" $ Chapter.BrothersFallen,, 'Astartes');
+	Say("Astartes_Geneseed: PASS geneseed=" $ Chapter.Geneseed @ "recovered_total=" $ Chapter.GeneseedRecoveredTotal @ "fallen=" $ Chapter.BrothersFallen);
 }
 
 /// Astartes_Factions
@@ -365,7 +379,13 @@ exec function Astartes_Factions()
 	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
 	if (Chapter == none || Chapter.ContinentFactions.Length == 0)
 	{
-		`log("Astartes_Factions: FAIL no continent assignments (no Chapter state, or campaign predates this feature; try Astartes_AssignFactions)",, 'Astartes');
+		// Campaign predates this feature (or the strategy-load repair did not run): deal factions now.
+		class'XComGameState_AstartesChapter'.static.EnsureChapterExists();
+		Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	}
+	if (Chapter == none || Chapter.ContinentFactions.Length == 0)
+	{
+		Say("Astartes_Factions: FAIL could not assign continent factions (are any factions configured?)");
 		return;
 	}
 	for (i = 0; i < Chapter.ContinentFactions.Length; i++)
@@ -375,7 +395,7 @@ exec function Astartes_Factions()
 		{
 			Status = class'Astartes_FactionConfig'.static.IsFactionAvailable(Def) ? "lists loaded" : ("lists MISSING - enable" @ Def.RequiredDLC);
 		}
-		`log("Astartes_Factions: PASS" @ Chapter.ContinentFactions[i].ContinentTemplate @ "->" @ Chapter.ContinentFactions[i].FactionName @ "(" $ Status $ ")",, 'Astartes');
+		Say("Astartes_Factions: PASS" @ Chapter.ContinentFactions[i].ContinentTemplate @ "->" @ Chapter.ContinentFactions[i].FactionName @ "(" $ Status $ ")");
 	}
 }
 
@@ -390,20 +410,25 @@ exec function Astartes_AssignFactions()
 	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
 	Chapter.AssignContinentFactions(NewGameState);
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	`log("Astartes_AssignFactions: PASS assigned" @ Chapter.ContinentFactions.Length @ "continents",, 'Astartes');
+	Say("Astartes_AssignFactions: PASS assigned" @ Chapter.ContinentFactions.Length @ "continents");
 }
 
 /// Astartes_SetContinentFaction <ContinentTemplate> <FactionName>
 /// e.g. Astartes_SetContinentFaction Continent_NorthAmerica Orks
-exec function Astartes_SetContinentFaction(name ContinentTemplate, name FactionName)
+exec function Astartes_SetContinentFaction(string ContinentTemplateStr, string FactionNameStr)
 {
 	local XComGameState NewGameState;
 	local XComGameState_AstartesChapter Chapter;
 	local FactionDef Def;
+	local name ContinentTemplate, FactionName;
+
+	// The console cannot parse 'name' parameters; take strings and convert.
+	ContinentTemplate = name(ContinentTemplateStr);
+	FactionName = name(FactionNameStr);
 
 	if (!class'Astartes_FactionConfig'.static.GetFaction(FactionName, Def))
 	{
-		`log("Astartes_SetContinentFaction: FAIL unknown faction" @ FactionName,, 'Astartes');
+		Say("Astartes_SetContinentFaction: FAIL unknown faction" @ FactionName);
 		return;
 	}
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: set continent faction");
@@ -411,11 +436,48 @@ exec function Astartes_SetContinentFaction(name ContinentTemplate, name FactionN
 	if (!Chapter.SetFactionForContinent(ContinentTemplate, FactionName))
 	{
 		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
-		`log("Astartes_SetContinentFaction: FAIL unknown continent" @ ContinentTemplate,, 'Astartes');
+		Say("Astartes_SetContinentFaction: FAIL unknown continent" @ ContinentTemplate);
 		return;
 	}
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	`log("Astartes_SetContinentFaction: PASS" @ ContinentTemplate @ "->" @ FactionName,, 'Astartes');
+	Say("Astartes_SetContinentFaction: PASS" @ ContinentTemplate @ "->" @ FactionName);
+}
+
+/// Astartes_PartPacks
+/// Lists the body-part packs the game knows about and how many male Kevlar-tier torsos each has.
+/// Use to check that an armour pack (e.g. SM2Tacticus) is actually loaded.
+exec function Astartes_PartPacks()
+{
+	local X2BodyPartTemplateManager PartMgr;
+	local array<name> Packs;
+	local array<X2BodyPartTemplate> Torsos;
+	local name Pack;
+	local int i, Count, Configured;
+
+	PartMgr = class'X2BodyPartTemplateManager'.static.GetBodyPartTemplateManager();
+	Packs = PartMgr.GetPartPackNames();
+	PartMgr.GetUberTemplates("Torso", Torsos);
+	Say("Astartes_PartPacks: PASS" @ Packs.Length @ "packs," @ Torsos.Length @ "torsos total");
+	foreach Packs(Pack)
+	{
+		Count = 0;
+		for (i = 0; i < Torsos.Length; i++)
+		{
+			if (Torsos[i].DLCName == Pack && Torsos[i].Gender == eGender_Male && Torsos[i].ArmorTemplate == 'KevlarArmor')
+			{
+				Count++;
+			}
+		}
+		Configured = default.MarineArmorPartPacks.Find(Pack) != INDEX_NONE ? 1 : 0;
+		Say("Astartes_PartPacks:   " $ Pack @ "male kevlar torsos=" $ Count @ (Configured == 1 ? "<- Marine look pack" : ""));
+	}
+	foreach default.MarineArmorPartPacks(Pack)
+	{
+		if (Packs.Find(Pack) == INDEX_NONE)
+		{
+			Say("Astartes_PartPacks: FAIL configured Marine pack" @ Pack @ "is not loaded (enable its mod in AML)");
+		}
+	}
 }
 
 /// Astartes_Redress
@@ -435,7 +497,7 @@ exec function Astartes_Redress()
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	if (XComHQ == none)
 	{
-		`log("Astartes_Redress: FAIL no XComHQ",, 'Astartes');
+		Say("Astartes_Redress: FAIL no XComHQ");
 		return;
 	}
 
@@ -456,5 +518,5 @@ exec function Astartes_Redress()
 		Count++;
 	}
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	`log("Astartes_Redress: PASS redressed" @ Count @ "soldiers",, 'Astartes');
+	Say("Astartes_Redress: PASS redressed" @ Count @ "soldiers");
 }
