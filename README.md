@@ -69,6 +69,67 @@ Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 - Localization files are UTF-8 in the repo; the build converts them to UTF-16.
 - Keep features modular so phases can ship independently (see `docs/design.md` §13).
 
+## Helpful testing console commands
 
+Setup: in AML tick the `-allowConsole` quick-toggle argument, launch, and press `~` (or `\`) in game.
+Dev commands from this mod print their result on screen; vanilla cheats mostly print nothing and just happen.
+Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 
-helpful testing console commands:
+### Getting to the Avenger fast
+| Where | Command | Does |
+|---|---|---|
+| Campaign setup | untick *Tutorial* and *Lost and Abandoned* | Skips the scripted opening; Gatecrasher becomes a normal mission |
+| In Gatecrasher | `KillAllAIs` | Kills every enemy (bodies may stand there; take any action to end the mission) |
+
+### Building a test squad (Avenger)
+| Command | Does |
+|---|---|
+| `Astartes_DevSquad` | One fully promoted soldier of every Marine class, best gear, nicknamed after their class |
+| `Astartes_DevSquad 3` | Same, but promoted only 3 ranks |
+| `Astartes_Redress` | Re-rolls every soldier's look through the Marine generator (Tacticus armour, gender policy) |
+| `LevelUpBarracks 7` | Promotes every existing soldier 7 ranks |
+| `MakeSoldierAClass "First Last" Astartes_Librarian` | Forces a soldier into a class |
+| `MakeAllSoldiersReady` | Clears wounds, fatigue and shaken status |
+| `HealAllSoldiers` | Heals everyone |
+| `SetSoldierWill 1 "First Last"` | Sets Will (to test Know No Fear: no panic should follow) |
+| `SetSoldierStat eStat_Mobility 30 "First Last"` | Sets any stat; useful stats: `eStat_HP`, `eStat_Offense`, `eStat_Mobility`, `eStat_Will` |
+
+### Resources, research and gear (Avenger)
+| Command | Does |
+|---|---|
+| `GiveResource Supplies 5000` | Also `AlienAlloy`, `EleriumDust`, `Intel`, `AbilityPoint` |
+| `GiveTech <TechName>` | Completes a research, e.g. `GiveTech PlatedArmor`, `GiveTech MagnetizedWeapons` |
+| `AddItem <Template> <Qty>` | Adds items, e.g. `AddItem Sword_CV_Primary 2` |
+| `GiveFacility <FacilityName>` | Builds a facility instantly |
+| `SetForceLevel 10` | Sets the campaign force level (what enemy tiers spawn) |
+| `Astartes_Geneseed` / `Astartes_Geneseed 20` | Shows or sets the Chapter geneseed pool |
+
+### Factions and continents (Avenger)
+| Command | Does |
+|---|---|
+| `Astartes_Factions` | Which faction owns each continent, and whether its mod is loaded |
+| `Astartes_SetContinentFaction Continent_NorthAmerica Orks` | Pins a continent; factions are `Orks`, `Chaos`, `Tyranids` |
+| `Astartes_AssignFactions` | Re-deals all six continents at random |
+| `Astartes_PartPacks` | Lists loaded body-part packs; confirms the Marine armour pack is active |
+| `Astartes_ListClasses` | Confirms the five Marine classes are registered |
+
+Continent names: `Continent_NorthAmerica`, `Continent_SouthAmerica`, `Continent_Europe`, `Continent_Africa`,
+`Continent_Asia`, `Continent_Oceania`. Only missions generated *after* a change use the new faction.
+
+### In a mission
+| Command | Does |
+|---|---|
+| `PowerUp` | God mode and unlimited action points for your squad: run across the map in one turn. Run again to turn off |
+| `ToggleFOW` | Lifts the fog of war so you can see every pod |
+| `TakeNoDamage` | Your units cannot be hurt (lighter than PowerUp) |
+| `KillAllAIs` | Kills all enemies; take an action afterwards to trigger mission end |
+| `GiveAbility <AbilityName>` | Grants the selected unit an ability for this mission |
+| `GiveItem <Template>` | Gives the selected unit an item |
+| `DropUnit <Template> <TeamNumber>` | Spawns a unit at the cursor; teams: `0` XCOM, `1` alien, `3` Lost. e.g. `DropUnit OrkNobM1 1` |
+| `AICallReinforcements` | Calls an enemy reinforcement wave (tests the reinforcement rewrite) |
+| `TeleportUnitIDToCursor <id>` | Moves a unit to the cursor |
+
+### Reading results
+The log is `Documents\My Games\XCOM2 War of the Chosen\XComGame\Logs\Launch.log`. Lines from this mod are tagged
+`Astartes`; pod rewrites look like `PodRewrite pod <name> on <continent> -> <faction> FL<n> [before] => [after]`.
+`python -m pytest -m runtime` turns the dev-command PASS/FAIL lines into test results.
