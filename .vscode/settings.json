@@ -1,0 +1,10 @@
+{
+    "xcom.highlander.sdkroot": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\XCOM 2 War of the Chosen SDK",
+    "xcom.highlander.gameroot": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\XCOM 2\\XCom2-WarOfTheChosen",
+    "files.associations": {
+        "*.uc": "unrealscript",
+        "*.uci": "unrealscript",
+        "*.int": "ini",
+        "*.x2proj": "xml"
+    }
+}

@@ -1,0 +1,14 @@
+# X2ModBuildCommon working folder (safe to delete; never commit)
+BuildCache/
+
+# ModBuddy / Visual Studio noise
+*.suo
+*.user
+.vs/
+
+# Compiled script packages are produced by the build, not stored in the repo
+*.u
+
+# Python
+__pycache__/
+.pytest_cache/
