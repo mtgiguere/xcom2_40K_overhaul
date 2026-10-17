@@ -1,13 +1,25 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    X2DownloadableContentInfo_Astartes.uc
 //  PURPOSE: Entry point for the Warhammer 40K overhaul. Campaign-start hooks, Highlander
-//           event registration, and the developer console commands (exec functions) that
-//           double as the runtime test harness.
+//           hooks (recruit appearance), and the developer console commands (exec functions)
+//           that double as the runtime test harness.
 //---------------------------------------------------------------------------------------
 class X2DownloadableContentInfo_Astartes extends X2DownloadableContentInfo;
 
 /// Soldier classes this mod defines, in roster order. Kept in sync with tests/data/class_trees.json.
 var config array<name> MarineClasses;
+
+/// Lore default: Space Marines are male. Set true to let the generator roll female Marines
+/// (they will wear whatever female-compatible armour exists, which today is XCOM gear).
+var config bool bAllowFemaleMarines;
+
+/// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
+/// these packs only, when present. Empty list = vanilla random appearance.
+var config array<name> MarineArmorPartPacks;
+
+// ---------------------------------------------------------------------------------------
+// Campaign lifecycle
+// ---------------------------------------------------------------------------------------
 
 /// Called when the player starts a new campaign while this mod is installed.
 static event InstallNewCampaign(XComGameState StartState)
@@ -32,6 +44,103 @@ static event OnLoadedSavedGameToStrategy()
 static event OnPostTemplatesCreated()
 {
 	`log("Astartes: OnPostTemplatesCreated",, 'Astartes');
+}
+
+// ---------------------------------------------------------------------------------------
+// Recruit appearance (Highlander hook, issue #783)
+// ---------------------------------------------------------------------------------------
+
+/// Runs at the end of XGCharacterGenerator.CreateTSoldier, before it returns CharGen.kSoldier.
+/// For Marines ('Soldier' template): enforce the gender policy, then dress them from the Marine armour packs.
+static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, const name CharacterTemplateName, const EGender eForceGender, const name nmCountry, const int iRace, const name ArmorName, XComGameState_Unit UnitState, XComGameState UseGameState)
+{
+	if (CharacterTemplateName != 'Soldier')
+	{
+		return;
+	}
+
+	if (!default.bAllowFemaleMarines && eForceGender != eGender_Male && CharGen.kSoldier.kAppearance.iGender != eGender_Male)
+	{
+		// Regenerate as male. The nested call re-enters this hook with eForceGender == eGender_Male,
+		// so it cannot recurse, and it applies the armour look itself. CreateTSoldier returns kSoldier
+		// after this hook, so the regenerated soldier is what the caller receives.
+		CharGen.CreateTSoldier(CharacterTemplateName, eGender_Male, nmCountry, iRace, ArmorName);
+		return;
+	}
+
+	ApplyMarineArmourLook(CharGen, ArmorName);
+}
+
+/// Replace torso, arms, legs, deco and helmet with random parts from the configured Marine packs.
+/// Leaves the vanilla look untouched when no pack is installed.
+static function ApplyMarineArmourLook(XGCharacterGenerator CharGen, name ArmorName)
+{
+	local X2BodyPartTemplateManager PartMgr;
+	local Astartes_BodyPartFilter Filter;
+	local X2BodyPartTemplate Torso;
+	local EGender Gender;
+	local ECharacterRace Race;
+
+	if (default.MarineArmorPartPacks.Length == 0)
+	{
+		return;
+	}
+
+	PartMgr = class'X2BodyPartTemplateManager'.static.GetBodyPartTemplateManager();
+	Gender = EGender(CharGen.kSoldier.kAppearance.iGender);
+	Race = ECharacterRace(CharGen.kSoldier.kAppearance.iRace);
+
+	Filter = new class'Astartes_BodyPartFilter';
+	Filter.RequiredPacks = default.MarineArmorPartPacks;
+	Filter.Set(Gender, Race, '', , , default.MarineArmorPartPacks);
+	Filter.SetTorsoSelection('NoCharacterTemplateName', ArmorName == '' ? 'KevlarArmor' : ArmorName);
+
+	Torso = PartMgr.GetRandomUberTemplate("Torso", Filter, Filter.FilterMarineTorso);
+	if (Torso == none)
+	{
+		`log("Astartes: no Marine torso found for armour" @ ArmorName @ "- is the armour pack installed? Keeping vanilla look.",, 'Astartes');
+		return;
+	}
+	CharGen.kSoldier.kAppearance.nmTorso = Torso.DataName;
+
+	// Everything else must match the chosen torso's armour.
+	Filter.Set(Gender, Race, Torso.DataName, false, false, default.MarineArmorPartPacks);
+
+	CharGen.kSoldier.kAppearance.nmArms = PickMarinePart(PartMgr, Filter, "Arms");
+	if (CharGen.kSoldier.kAppearance.nmArms == '')
+	{
+		CharGen.kSoldier.kAppearance.nmLeftArm = PickMarinePart(PartMgr, Filter, "LeftArm");
+		CharGen.kSoldier.kAppearance.nmRightArm = PickMarinePart(PartMgr, Filter, "RightArm");
+		CharGen.kSoldier.kAppearance.nmLeftArmDeco = PickMarinePart(PartMgr, Filter, "LeftArmDeco");
+		CharGen.kSoldier.kAppearance.nmRightArmDeco = PickMarinePart(PartMgr, Filter, "RightArmDeco");
+	}
+	else
+	{
+		CharGen.kSoldier.kAppearance.nmLeftArm = '';
+		CharGen.kSoldier.kAppearance.nmRightArm = '';
+		CharGen.kSoldier.kAppearance.nmLeftArmDeco = '';
+		CharGen.kSoldier.kAppearance.nmRightArmDeco = '';
+	}
+	CharGen.kSoldier.kAppearance.nmLegs = PickMarinePart(PartMgr, Filter, "Legs");
+	CharGen.kSoldier.kAppearance.nmThighs = PickMarinePart(PartMgr, Filter, "Thighs");
+	CharGen.kSoldier.kAppearance.nmShins = PickMarinePart(PartMgr, Filter, "Shins");
+	CharGen.kSoldier.kAppearance.nmTorsoDeco = PickMarinePart(PartMgr, Filter, "TorsoDeco");
+	CharGen.kSoldier.kAppearance.nmLeftForearm = PickMarinePart(PartMgr, Filter, "LeftForearm");
+	CharGen.kSoldier.kAppearance.nmRightForearm = PickMarinePart(PartMgr, Filter, "RightForearm");
+
+	// Marines wear helmets. Keep the vanilla head if the pack has none.
+	if (PickMarinePart(PartMgr, Filter, "Helmets") != '')
+	{
+		CharGen.kSoldier.kAppearance.nmHelmet = PickMarinePart(PartMgr, Filter, "Helmets");
+	}
+}
+
+static function name PickMarinePart(X2BodyPartTemplateManager PartMgr, Astartes_BodyPartFilter Filter, string PartType)
+{
+	local X2BodyPartTemplate Part;
+
+	Part = PartMgr.GetRandomUberTemplate(PartType, Filter, Filter.FilterMarinePart);
+	return Part == none ? '' : Part.DataName;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -155,4 +264,45 @@ exec function Astartes_Geneseed(optional int NewAmount = -1)
 	}
 
 	`log("Astartes_Geneseed: PASS geneseed=" $ Chapter.Geneseed @ "recovered_total=" $ Chapter.GeneseedRecoveredTotal @ "fallen=" $ Chapter.BrothersFallen,, 'Astartes');
+}
+
+/// Astartes_Redress
+/// Re-rolls every barracks soldier's appearance through the Marine generator (gender policy + armour packs).
+/// Use after enabling an armour pack mid-campaign.
+exec function Astartes_Redress()
+{
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState;
+	local XGCharacterGenerator CharGen;
+	local TSoldier Generated;
+	local int idx, Count;
+
+	History = `XCOMHISTORY;
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	if (XComHQ == none)
+	{
+		`log("Astartes_Redress: FAIL no XComHQ",, 'Astartes');
+		return;
+	}
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: Redress");
+	for (idx = 0; idx < XComHQ.Crew.Length; idx++)
+	{
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(XComHQ.Crew[idx].ObjectID));
+		if (UnitState == none || !UnitState.IsSoldier() || UnitState.GetMyTemplateName() != 'Soldier')
+		{
+			continue;
+		}
+		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		CharGen = `XCOMGRI.Spawn(UnitState.GetMyTemplate().CharacterGeneratorClass);
+		Generated = CharGen.CreateTSoldierFromUnit(UnitState, NewGameState);
+		UnitState.SetTAppearance(Generated.kAppearance);
+		UnitState.StoreAppearance();
+		CharGen.Destroy();
+		Count++;
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	`log("Astartes_Redress: PASS redressed" @ Count @ "soldiers",, 'Astartes');
 }

@@ -203,3 +203,11 @@ def test_no_stasis_or_sustain_anywhere(class_sections):
     for class_name in MARINE_CLASSES:
         flat = {a for rank in rank_abilities(class_sections[class_name]) for a in rank}
         assert not (flat & banned), f"{class_name} uses banned abilities: {sorted(flat & banned)}"
+
+
+def test_vanilla_classes_are_removed_from_the_deck(config):
+    """Scouts must only promote into Marine classes."""
+    deck = [s for s in config["XComClassData.ini"] if s.name == "XComGame.X2SoldierClass_DefaultClasses"][0]
+    removed = {unquote(v) for op, k, v in deck.entries if k == "SoldierClasses" and op == "-"}
+    assert removed >= set(SPEC["remove_from_deck"]), f"vanilla classes still in the deck: {set(SPEC['remove_from_deck']) - removed}"
+    assert "Rookie" not in removed, "Rookie must stay in the deck"

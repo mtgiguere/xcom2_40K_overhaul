@@ -738,5 +738,12 @@
     }
   },
   "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row. Astartes_Physiology (poison immunity) is also in every rank-1 row.",
-  "_dependencies": "Loadouts use Sword_CV_Primary from the Primary Secondaries mod (Workshop 1142234205), which generates primary variants of all swords and pistols at game start."
+  "_dependencies": "Loadouts use Sword_CV_Primary from the Primary Secondaries mod (Workshop 1142234205), which generates primary variants of all swords and pistols at game start.",
+  "remove_from_deck": [
+    "Ranger",
+    "Sharpshooter",
+    "Grenadier",
+    "Specialist",
+    "PsiOperative"
+  ]
 }

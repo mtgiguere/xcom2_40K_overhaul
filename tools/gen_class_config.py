@@ -78,6 +78,7 @@ def render_class_ini(spec: dict) -> str:
         "",
         "[XComGame.X2SoldierClass_DefaultClasses]",
     ]
+    parts += [f'-SoldierClasses="{name}"' for name in spec.get("remove_from_deck", [])]
     parts += [f'+SoldierClasses="{name}"' for name in spec["classes"]]
     parts.append("")
     for name, c in spec["classes"].items():
