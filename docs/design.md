@@ -36,7 +36,7 @@ The player commands a Space Marine Chapter fighting to liberate a cluster of sta
 - Haven advisor / outpost (`UIOutpostManagement`, `XComGameState_LWOutpost`) -> Imperial Officer stationed in a region (§4.7b).
 - Regional strength + liberation chain -> system strongholds and faction threat (§7.2, §7.3).
 - Alien activities (`XComGameState_LWAlienActivity`) -> faction activities per continent (Waaagh! musters, hive incursions, rituals).
-- Infiltration (time-vs-strength trade before a mission) -> candidate for drop-pod planning; undecided.
+- Infiltration (time-vs-strength trade before a mission) -> **recommended replacement: Drop-Pod Planning** (pending the user's call, 2026-10-17). On mission appearance the player picks the insertion: immediate orbital drop = full squad now, higher alert level; delayed Thunderhawk insertion = smaller strike team, lower alert, start concealed. Same decision space as infiltration, lore-correct, reuses alert-level and squad-size levers instead of a new timer system. Phase 4.
 - Bigger pods / more enemies per mission -> pacing target, within the §7.3 performance limit.
 - Squad Barracks / squad cohesion (also in the subscribed SquadBasedRoster) -> battle-brother squads.
 - Officer class and Commissariat already reference LW officers.
