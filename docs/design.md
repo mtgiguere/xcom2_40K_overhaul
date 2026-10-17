@@ -32,13 +32,22 @@ The player commands a Space Marine Chapter fighting to liberate a cluster of sta
 | Existing Chaos Space Marine armor reskin mods | Art | Can be applied to **enemy** humanoid units (see §6.3). |
 | "Advent to Imperium [WOTC]" (Workshop) | Reference / possible contact | Reskins ADVENT as Imperial enemies. Its author mentions collaborating with a modder named **Iron** on an **Ork mod** and an early **Tau** version. Worth checking the Ork mod and contacting them about permissions/techniques. |
 
+**Base game decision (2026-10-17): vanilla WotC + Community Highlander, NOT on top of Long War of the Chosen.** We are making our own "Long War of the Imperium". LWOTC is the *reference* for mechanics we port (its source is on GitHub, X2CommunityCore/X2LWOTC):
+- Haven advisor / outpost (`UIOutpostManagement`, `XComGameState_LWOutpost`) -> Imperial Officer stationed in a region (§4.7b).
+- Regional strength + liberation chain -> system strongholds and faction threat (§7.2, §7.3).
+- Alien activities (`XComGameState_LWAlienActivity`) -> faction activities per continent (Waaagh! musters, hive incursions, rituals).
+- Infiltration (time-vs-strength trade before a mission) -> candidate for drop-pod planning; undecided.
+- Bigger pods / more enemies per mission -> pacing target, within the §7.3 performance limit.
+- Squad Barracks / squad cohesion (also in the subscribed SquadBasedRoster) -> battle-brother squads.
+- Officer class and Commissariat already reference LW officers.
+
 **Tooling:** XCOM 2 WotC SDK (ModBuddy + Unreal Editor), UnrealScript (`.uc`), config files (`.ini`), localization files (`.int`).
 
 ---
 
 ## 4. Player faction: Space Marines (Marines only, for now)
 
-Decision: **Marines-only roster.** (Imperial Guard as soldiers was considered and set aside; the Guard still exists as an allied faction — see §7.6.)
+Decision (revised 2026-10-17): **Marines + Adepta Sororitas roster.** Two recruit pools offered side by side (config ratio, default 50/50): Space Marine *Scouts* (gender forced male via the Highlander appearance hook; MCM toggle "Allow female Space Marines" removes the force) and Sororitas *Novices* (female). Each pool promotes from its own class deck. Sisters are the **renewable** half (recruited via the Ecclesiarchy/Inquisition with supplies and standing); Marines are the **rare** half (geneseed-gated). Sisters have no psykers: their fifth line is **faith** (Acts of Faith keyed off Will, anti-psyker resistance). Sister classes mirror Marine classes: Battle Sister / Seraphim / Retributor / Hospitaller / Repentia-or-Celestian Sacresant. Art: WH40k_SisterOfBattle_Armor (22 female parts, one look) - a larger Sororitas set is wanted. (Imperial Guard as soldiers was set aside; the Guard is an allied faction, §7.6.)
 
 ### 4.1 Rank progression
 Maps onto XCOM's rookie → class promotion → ranks.
@@ -89,12 +98,26 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 
 **Synergy idea:** Apothecary (body) + Chaplain (soul) in the same squad → bonus.
 
-### 4.5 Terminators
-- First Company veterans in lore — "veterans of the veterans."
-- **Only top-tier Marines can wear Terminator armor.**
-- Armor is **rare**: gated by **research + rare drop items**.
-- Terminators should feel like a milestone, not a squad type.
-- Possible ability: **deep strike** (teleport in mid-mission instead of deploying normally).
+### 4.5 Terminators (expanded 2026-10-17)
+- **A status, not a class.** A top-rank Marine of any combat class is *inducted into the First Company*; the class and tree are kept.
+- **Hard cap**: `MaxFirstCompany` config, default **10**, enforced on the induction screen.
+- **Gating mechanism:** induction sets a unit flag; the Highlander `CanAddItemToInventory` hook checks it, so Terminator armor and Terminator-only weapons are "requires First Company" items. No new class, no special slots.
+- **Armor is additionally rare**: research + rare drop items, so slots can exceed suits.
+- **Suit effect:** big HP/armor, immunity to disorient and knockback, mobility penalty, scale 1.15. Candidate trade-off: reduced cover bonus (too bulky), compensated by armor - a walking bunker, not a better Marine.
+- **Terminator-only gear:** storm bolter, assault cannon, cyclone missile launcher; power fist, thunder hammer, storm shield (WotC Ballistic Shields mod as basis).
+- **Deep strike:** unit is not placed at mission start and teleports onto a chosen tile during the player's turn (Iridar's Jet Packs "Dynamic Deployment" demonstrates the pattern). A short tactical teleport with long cooldown is a relic-tier option.
+- Art: Gravis parts + Thousand Sons Terminator helmet as placeholder (§4.9).
+
+### 4.5b Weapon lines
+| Class | Primary | Secondary | Upgrade path / notes |
+|---|---|---|---|
+| Tactical | Bolter | Bolt pistol or chainsword | Kraken / Hellfire ammo |
+| Assault | Chainsword | Bolt pistol | Power sword + plasma pistol, then relic blade + inferno pistol. Jump pack = armor/utility item. |
+| Devastator | Heavy bolter **or** plasma cannon; later lascannon / missile launcher | Bolt pistol | Each heavy weapon interacts differently with the tree (suppress / shred+overcharge / single-target / area) |
+| Apothecary | Bolter | Narthecium | |
+| Librarian | Force sword / force staff | Bolt pistol | Psychic hood |
+| Terminator gear | Storm bolter, assault cannon, cyclone | Power fist, thunder hammer, storm shield | First Company only |
+Existing weapon mods (bolt pistols, plasma pistols, power claws, bolters, plasmagun, Space Marine Weaponry) already show the 3-tier + schematic template pattern.
 
 ### 4.6 Dreadnoughts (SPARK replacement) — key signature mechanic
 
@@ -107,6 +130,7 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 4. → The Chapter gains an item: **"Interred Battle-Brother."**
 5. Building a Dreadnought requires **research + the Interred Battle-Brother item** (Proving Ground project, like building a SPARK).
 6. The new Dreadnought unit **inherits the Marine's name and nickname** (and optionally a stat/perk tied to his old class). The original soldier is retired from the roster.
+7. **Dreadnought as a unit (2026-10-17):** SPARK-class unit with its own small tree (Venerable rank names), weapon loadout choice like Devastators (assault cannon / multi-melta / power fist + built-in storm bolter), no cover, slow, very high armor, repaired by Apothecary *Augmentic Repair* not healed. Supply is naturally capped by Interred Battle-Brother items. Pattern: Buildable Geth Redux (SPARK template subclass + Proving Ground project + custom pawn). Art: SM2 Dreadnought SPARK skin (all 3 armor tiers).
 
 **Feasibility notes:**
 - Detecting "stabilized by an Apothecary" + "evacuated" = event listeners on the stabilize ability (source unit is known) + mission-end check. Standard work; Highlander helps.
@@ -119,6 +143,13 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 - **New Scouts are limited by geneseed.** This controls replacement rate and makes leaving dead behind costly.
 - Effect on play: Apothecaries become essential; every evac is a "do we go back for him?" decision; a failed mission can damage the Chapter's future.
 - **Geneseed purity** (idea): geneseed from Chaos-heavy systems may be tainted → better recruit stats but corruption risk later.
+
+### 4.7b Panic, Know No Fear, and the Imperial Officer (decided 2026-10-17)
+- **Marines never panic.** Passive *Know No Fear* on every Marine: immune to panicked / berserk / shattered. Will still exists and is spent on Chaos corruption (§8) and Perils of the Warp. Fatigue stays.
+- **Sisters frenzy instead of panicking.** A would-be panic becomes a charge at the nearest enemy.
+- **Imperial Guard (haven militia, civilians) panic easily:** low Will in config.
+- **Imperial Officer class** - a third promotion path (Novice/Scout stays human). Ranks: Lieutenant, Captain, Major, Colonel... with **Commissar** as the rank-7 title. Three columns: **Command** (orders, give actions, call a Guard fire team), **Commissariat** (aura: Guard in range cannot panic; **Summary Execution**: shoot a panicked allied Guardsman, all friendlies in sight shed panic and gain Will), **Tactician** (artillery, smoke, intel). Ordinary human (scale 0.85, human stats): bringing one is a Marine you did not bring. Mixed-gender human line.
+- **Haven advisor (Phase 4):** only an Officer can be stationed in a region, adding Will to that region's Guard and reducing retaliation damage. WotC has no such slot; Long War of the Chosen's outpost/advisor code is the reference. Moderate-hard.
 
 ### 4.8 Soldier systems to reflavor
 - **Soldier bonds** → battle-brother bonds.
@@ -211,7 +242,7 @@ All territorial factions are hostile to each other as well as to the player (see
 | Chaos | Daemon Prince | Chosen (Warlock slot) | Psionic, teleport, "spectral" summons re-flavoured as daemons. Pawn: Chaos Lord / Kytan. |
 | Orks | Warboss | Chosen (Hunter slot, abilities replaced: charge, choppa, Waaagh! shout) | Pawn from Ork Raiders (3 Warboss models). |
 | Eldar | **Farseer** | **Alien Ruler** (Alien Hunters) | Ruler reactions = foresight; ruler escape = Webway exit; carried-over wounds across missions; ruler armor drop = Rune Armor relic. Spawn weighting toward Chaos continents via the pod hook. |
-| Eldar (extra) | Dark Eldar Archon; Avatar of Khaine | Alien Ruler slots 2 and 3 | Archon pawn exists (Dark Eldar Raiders). **No Avatar model known** - placeholder: Berserker Queen rig with fire material/FX, or skip until art appears. |
+| Eldar (extra) | **Archon Tahril** (Dark Eldar) and **Autarch Kayleth** (Craftworld) | Alien Ruler slots 2 and 3 | Archon pawn from Dark Eldar Raiders; Autarch built from the Eldar Armor pack (Swooping Hawk / Aspect armor) on a humanoid rig. Autarch replaces the Avatar of Khaine (no model). Voicepacks subscribed: Farseer Macha, Archon Tahril, Autarch Kayleth - a Dawn of War cast. |
 
 Chosen framework notes: hard-wired to exactly three Chosen (hence Eldar on Rulers). Territories are dealt randomly at campaign start, same as our continent assignment. Kidnap → capture for corruption/sacrifice; "knowledge" → locating the strike cruiser; rival Resistance faction per Chosen → Inquisition / Mechanicus / Guard. Strongholds reuse the existing fortress maps unless new ones are built. Strengths/weaknesses are re-flavoured, not extended.
 
@@ -449,6 +480,14 @@ Keep "third faction hostile to everyone," change the rest:
 ## 15. Testing approach
 - **Config validation (pytest, `tests/`)**: every template referenced must exist; every template must have localization; design rules are assertions (one Chief Librarian, 7 ranks per class, no psi on Ork templates, faction-pure encounter lists). Run with `python -m pytest`.
 - **Runtime log-assert harness (later)**: debug `exec` commands that set up a game state, run a code path and write PASS/FAIL to `Launch.log`; a pytest wrapper parses it. Required coverage, learned from bugs in the Jedi Class mod: (1) an ability's effects must not break the *next* action's visualization (Reflect crash), (2) persistent effects must be removed cleanly at mission end (Lightsaber Telekinesis crash on mission exit).
+
+### 15.1 Playtest cheats
+Enable the console in AML: Quick-toggle `-allowConsole` (already in the launcher's toggle list), then `~` or `\` in game.
+Vanilla cheat commands that matter for us (strategy layer unless noted):
+- `LevelUpBarracks 7` promotes every soldier 7 ranks (fully promoted squad from a fresh campaign). `LevelUpCrew`, `MakeSoldierAClass <id> <class>`, `MakeAllSoldiersReady`, `HealAllSoldiers`.
+- `GiveTech <TechName>`, `GiveResource <Name> <Amount>` (Supplies, AlienAlloy, EleriumDust, Intel), `AddItem <Template> <Qty>`, `GiveFacility <Name>`, `SetForceLevel <n>`, `SetSoldierStat`, `SetSoldierWill`.
+- Tactical: `PowerUp` (god mode + infinite actions), `TakeNoDamage`, `GiveAbility <Ability>`, `GiveItem`, `DropUnit <Template> <Team>`, `KillAllAIs`, `AICallReinforcements`, `TeleportUnitIDToCursor`.
+Our own dev commands (to add as the runtime harness, §15): `Astartes_DevSquad` (one fully promoted Marine of each class + Sister + Officer with tier-3 gear), `Astartes_SpawnPod <Faction> <ForceLevel>` (tactical), `Astartes_SetContinentFaction <Continent> <Faction>`, `Astartes_Geneseed <n>`, `Astartes_InductTerminator <id>`.
 
 ## 14. Notes for Claude Code
 - Engine claims in this document came from a design conversation, not from inspecting the SDK. **Verify against the WotC SDK source and Highlander docs** before relying on any specific class, event, or team name.

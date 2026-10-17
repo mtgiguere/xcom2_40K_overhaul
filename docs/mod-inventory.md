@@ -83,7 +83,7 @@ Steam's `appworkshop_268500.acf` lists 403 subscriptions vs 338 folders on disk.
 | [WOTC] Dual Wielded Pistols 2.0, True Primary Secondaries | 1494099360 / 2133399183 | | Weapon-slot frameworks. |
 | [WOTC] WSR Weapon Skin Replacer - Core | 1517938486 | | Weapon reskin framework. |
 | [WOTC] Alien Hunters Community Highlander | 2534737016 | | Needed if Alien Hunters units are used. |
-| Voicepacks | various | | Chaos Space Marine, Obliterator, Titus, Dreadnought, Gabriel Angelos, Avitus, Eldar Autarch, Canoness Selena, Commissar Lord Bernn. |
+| Voicepacks | various | | Chaos Space Marine, Obliterator, Titus, Dreadnought, Gabriel Angelos, Avitus, Canoness Selena, Commissar Lord Bernn. **Eldar ruler cast:** Farseer Macha, Archon Tahril (DoWArchonVoicePack), Autarch Kayleth. |
 
 The remaining pending items are Fortnite/Marvel/RE outfits and non-40K voicepacks.
 

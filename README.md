@@ -34,6 +34,19 @@ where the Alternative Mod Launcher picks it up.
 
 `BuildCache/` is created by the build system and is safe to delete at any time.
 
+## Playtesting with cheats
+
+In AML, enable the `-allowConsole` quick-toggle argument and launch. Press `~` in game. From a fresh campaign:
+
+```
+LevelUpBarracks 7        # every soldier fully promoted
+GiveResource Supplies 5000
+GiveTech <TechName>      # unlock gear
+PowerUp                  # tactical: god mode
+```
+
+The full list we use, plus the mod's own dev commands, is in `docs/design.md` §15.1.
+
 ## Conventions
 
 - Prefer config (`.ini`) and Highlander event hooks over class overrides.
