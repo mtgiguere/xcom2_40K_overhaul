@@ -1,0 +1,7 @@
+# Normalise line endings: LF in the repo, native on checkout. Stops the autocrlf warnings.
+* text=auto
+*.jpg binary
+*.png binary
+*.upk binary
+*.u binary
+*.tfc binary

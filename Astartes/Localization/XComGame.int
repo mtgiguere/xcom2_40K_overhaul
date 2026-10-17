@@ -8,6 +8,12 @@ LocLongDescription="The Adeptus Astartes do not panic. This Marine is immune to 
 LocHelpText="Immune to panic."
 LocPromotionPopupText="<Bullet/> Immune to Panicked, Berserk, Obsessed and Shattered.<br/><Bullet/> Psychic control and Warp corruption still apply.<br/>"
 
+[Astartes_Physiology X2AbilityTemplate]
+LocFriendlyName="Astartes Physiology"
+LocLongDescription="The oolitic kidney and multi-lung filter toxins from the Marine's blood. Immune to poison, including Chryssalid venom."
+LocHelpText="Immune to poison."
+LocPromotionPopupText="<Bullet/> Immune to Poison and parthenogenic poison.<br/><Bullet/> Fire and acid still apply.<br/>"
+
 [Astartes_RecoverGeneseed X2AbilityTemplate]
 LocFriendlyName="Recover Geneseed"
 LocLongDescription="Harvest the progenoid glands of a fallen battle-brother. Each recovery adds geneseed to the Chapter's vaults, allowing a new Scout to be raised. Each body may be harvested once."

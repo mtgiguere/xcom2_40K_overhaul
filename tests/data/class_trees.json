@@ -85,6 +85,9 @@
           },
           {
             "name": "Astartes_KnowNoFear"
+          },
+          {
+            "name": "Astartes_Physiology"
           }
         ],
         [
@@ -190,17 +193,17 @@
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_ranger",
       "loadout": [
-        "Shotgun_CV",
-        "Sword_CV"
+        "Sword_CV_Primary",
+        "Pistol_CV"
       ],
       "weapons": [
         [
           "eInvSlot_PrimaryWeapon",
-          "shotgun"
+          "sword"
         ],
         [
           "eInvSlot_SecondaryWeapon",
-          "sword"
+          "pistol"
         ]
       ],
       "ranks": [
@@ -208,7 +211,7 @@
           {
             "name": "Astartes_ChainTeeth",
             "standin": "Blademaster",
-            "slot": "secondary"
+            "slot": "primary"
           },
           {
             "name": "Astartes_JumpPack",
@@ -220,6 +223,9 @@
           },
           {
             "name": "Astartes_KnowNoFear"
+          },
+          {
+            "name": "Astartes_Physiology"
           }
         ],
         [
@@ -240,7 +246,7 @@
           {
             "name": "Astartes_Whirlwind",
             "standin": "Reaper",
-            "slot": "secondary"
+            "slot": "primary"
           },
           {
             "name": "Astartes_HitAndRun",
@@ -254,7 +260,7 @@
         [
           {
             "name": "Bladestorm",
-            "slot": "secondary"
+            "slot": "primary"
           },
           {
             "name": "Astartes_HammerOfWrath",
@@ -262,28 +268,29 @@
           },
           {
             "name": "Astartes_BoltPistolSuppression",
-            "standin": "Suppression",
-            "slot": "primary"
+            "standin": "Quickdraw",
+            "slot": "secondary"
           }
         ],
         [
           {
             "name": "Astartes_Duelist",
-            "standin": "LightningReflexes"
+            "standin": "FanFire",
+            "slot": "secondary"
           },
           {
             "name": "Implacable"
           },
           {
             "name": "Astartes_Undying",
-            "standin": "Sustain"
+            "standin": "LightningReflexes"
           }
         ],
         [
           {
             "name": "Astartes_Decapitate",
-            "standin": "HailOfBullets",
-            "slot": "primary"
+            "standin": "Faceoff",
+            "slot": "secondary"
           },
           {
             "name": "Astartes_DeepJump",
@@ -296,8 +303,8 @@
         [
           {
             "name": "Astartes_DeathFromAboveBlade",
-            "standin": "RapidFire",
-            "slot": "primary"
+            "standin": "ReturnFire",
+            "slot": "secondary"
           },
           {
             "name": "Astartes_AngelOfDeath",
@@ -351,6 +358,9 @@
           },
           {
             "name": "Astartes_KnowNoFear"
+          },
+          {
+            "name": "Astartes_Physiology"
           }
         ],
         [
@@ -487,6 +497,9 @@
           },
           {
             "name": "Astartes_KnowNoFear"
+          },
+          {
+            "name": "Astartes_Physiology"
           }
         ],
         [
@@ -502,7 +515,7 @@
           },
           {
             "name": "Astartes_StimmShot",
-            "standin": "CoveringFire"
+            "standin": "LightningReflexes"
           }
         ],
         [
@@ -522,8 +535,7 @@
         [
           {
             "name": "Astartes_AugmenticRepair",
-            "standin": "CombatProtocol",
-            "slot": "secondary"
+            "standin": "CoveringFire"
           },
           {
             "name": "Astartes_Preservation",
@@ -537,7 +549,7 @@
         [
           {
             "name": "Astartes_MassTriage",
-            "standin": "CapacitorDischarge",
+            "standin": "RestorativeMist",
             "slot": "secondary"
           },
           {
@@ -592,13 +604,13 @@
       "rank_set": "librarius",
       "icon": "img:///UILibrary_Common.class_psioperative",
       "loadout": [
-        "AssaultRifle_CV",
+        "Sword_CV_Primary",
         "PsiAmp_CV"
       ],
       "weapons": [
         [
           "eInvSlot_PrimaryWeapon",
-          "rifle"
+          "sword"
         ],
         [
           "eInvSlot_SecondaryWeapon",
@@ -624,6 +636,9 @@
           },
           {
             "name": "Astartes_KnowNoFear"
+          },
+          {
+            "name": "Astartes_Physiology"
           }
         ],
         [
@@ -656,22 +671,22 @@
           },
           {
             "name": "Astartes_TelekineShield",
-            "standin": "StasisShield",
-            "slot": "secondary"
+            "standin": "Fortress"
           }
         ],
         [
           {
             "name": "Astartes_FireShield",
-            "standin": "Fortress"
+            "standin": "Bladestorm",
+            "slot": "primary"
           },
           {
             "name": "Fuse",
             "slot": "secondary"
           },
           {
-            "name": "Stasis",
-            "slot": "secondary"
+            "name": "Astartes_Warp_Bind",
+            "standin": "LightningReflexes"
           }
         ],
         [
@@ -686,13 +701,13 @@
           },
           {
             "name": "Astartes_SmiteTheEarth",
-            "standin": "Demolition",
-            "slot": "primary"
+            "standin": "Shadowstrike"
           }
         ],
         [
           {
-            "name": "Sustain"
+            "name": "Astartes_Warp_Vigour",
+            "standin": "Implacable"
           },
           {
             "name": "Astartes_Hallucination",
@@ -700,14 +715,14 @@
           },
           {
             "name": "Astartes_VortexOfDoom",
-            "standin": "HailOfBullets",
+            "standin": "Blademaster",
             "slot": "primary"
           }
         ],
         [
           {
             "name": "Astartes_Firestorm",
-            "standin": "RapidFire",
+            "standin": "Reaper",
             "slot": "primary"
           },
           {
@@ -722,5 +737,6 @@
       ]
     }
   },
-  "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row."
+  "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row. Astartes_Physiology (poison immunity) is also in every rank-1 row.",
+  "_dependencies": "Loadouts use Sword_CV_Primary from the Primary Secondaries mod (Workshop 1142234205), which generates primary variants of all swords and pistols at game start."
 }

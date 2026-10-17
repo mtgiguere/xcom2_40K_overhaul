@@ -182,3 +182,24 @@ def test_squaddie_row_is_larger_than_the_choice_rows_is_allowed(class_sections):
     for class_name in MARINE_CLASSES:
         ranks = rank_abilities(class_sections[class_name])
         assert all(len(r) == EXPECTED_COLUMNS for r in ranks[1:]), f"{class_name}: choice rows must have exactly {EXPECTED_COLUMNS} options"
+
+
+@pytest.mark.parametrize("class_name", MARINE_CLASSES)
+def test_every_marine_class_has_astartes_physiology_at_squaddie(class_sections, class_name):
+    assert "Astartes_Physiology" in rank_abilities(class_sections[class_name])[0]
+
+
+def test_assault_and_librarian_have_no_rifle_abilities(class_sections):
+    """User rule: Assault and Librarian never carry a bolter, so no rifle/cannon ability may appear in their trees."""
+    rifle_only = {"HailOfBullets", "RapidFire", "Suppression", "Deadeye", "Shredder", "ChainShot", "KillZone", "HoloTargeting", "Salvo", "Demolition", "SaturationFire", "Executioner", "SteadyHands", "BulletShred", "HeavyOrdnance"}
+    for class_name in ("Astartes_Assault", "Astartes_Librarian"):
+        flat = {a for rank in rank_abilities(class_sections[class_name]) for a in rank}
+        assert not (flat & rifle_only), f"{class_name} has rifle abilities: {sorted(flat & rifle_only)}"
+
+
+def test_no_stasis_or_sustain_anywhere(class_sections):
+    """User rule: stasis effects and Sustain are not lore-friendly for the Adeptus Astartes."""
+    banned = {"Stasis", "StasisShield", "Sustain"}
+    for class_name in MARINE_CLASSES:
+        flat = {a for rank in rank_abilities(class_sections[class_name]) for a in rank}
+        assert not (flat & banned), f"{class_name} uses banned abilities: {sorted(flat & banned)}"

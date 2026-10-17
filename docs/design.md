@@ -119,6 +119,14 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 | Terminator gear | Storm bolter, assault cannon, cyclone | Power fist, thunder hammer, storm shield | First Company only |
 Existing weapon mods (bolt pistols, plasma pistols, power claws, bolters, plasmagun, Space Marine Weaponry) already show the 3-tier + schematic template pattern.
 
+**Playtest notes 2026-10-17 (first build):**
+- Assault and Librarian carry **no bolter**: chainsword / force sword as *primary* (via Primary Secondaries, now a required mod) with bolt pistol / psychic hood as secondary. Their trees are melee, pistol, psi and survivability only.
+- **Stasis-type effects and Sustain are not lore-friendly** for Astartes; banned from all Marine trees (enforced by test).
+- **Tactical weapon choice:** bolter, or a plasma gun (shotgun archetype: short range, high damage, blast-style abilities), or a flamer. Needs our own weapon templates: plasma = Shotgun clone with new art; flamer = new primary weapon with cone targeting (the vanilla flamethrower is an armour-mounted heavy weapon; LW2's Technical gauntlet is the precedent). Devastators get a **heavy flamer** the same way.
+- **Apothecary's narthecium** = gremlin re-skinned as a servo-skull (servo-skull mod subscribed); anti-robot gremlin abilities are uninteresting with few robotic enemies and were dropped from the tree.
+- **Astartes Physiology:** all Marines are innately immune to poison (oolitic kidney / multi-lung); fire and acid still apply. Implemented as a squaddie-kit passive alongside Know No Fear.
+- **Librarius training:** Librarians currently promote by XP like other classes. The separate psyker training path (§4.3, Librarius facility like the Psi Lab) is a Phase 2 feature.
+
 ### 4.6 Dreadnoughts (SPARK replacement) — key signature mechanic
 
 **Lore correction applied:** a Dreadnought is a **mortally wounded but living** Marine interred in the sarcophagus. It is *not* made from geneseed.

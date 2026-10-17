@@ -13,9 +13,29 @@ static function array<X2DataTemplate> CreateTemplates()
 	local array<X2DataTemplate> Templates;
 
 	Templates.AddItem(KnowNoFear());
+	Templates.AddItem(AstartesPhysiology());
 	Templates.AddItem(RecoverGeneseed());
 
 	return Templates;
+}
+
+/// Astartes Physiology: the oolitic kidney and multi-lung filter toxins. Marines are immune to
+/// poison. Fire and acid still burn; that is armour, not biology.
+static function X2AbilityTemplate AstartesPhysiology()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_DamageImmunity ImmunityEffect;
+
+	Template = PurePassive('Astartes_Physiology', "img:///UILibrary_PerkIcons.UIPerk_adrenalneurosympathy", false, 'eAbilitySource_Perk', true);
+
+	ImmunityEffect = new class'X2Effect_DamageImmunity';
+	ImmunityEffect.ImmuneTypes.AddItem('Poison');
+	ImmunityEffect.ImmuneTypes.AddItem(class'X2Item_DefaultDamageTypes'.default.ParthenogenicPoisonType);
+	ImmunityEffect.BuildPersistentEffect(1, true, false, false);
+	ImmunityEffect.EffectName = 'Astartes_Physiology_Immunity';
+	Template.AddTargetEffect(ImmunityEffect);
+
+	return Template;
 }
 
 /// Know No Fear: Space Marines are immune to panic. Will still exists and is spent elsewhere
