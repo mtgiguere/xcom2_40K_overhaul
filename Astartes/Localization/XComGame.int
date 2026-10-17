@@ -1,6 +1,20 @@
 ; Astartes - Warhammer 40K overhaul localization.
 ; Kept as UTF-8 in the repo; the build converts it to UTF-16 for the game.
 
+; ---------------------------------------------------------------- shared Marine abilities
+[Astartes_KnowNoFear X2AbilityTemplate]
+LocFriendlyName="Know No Fear"
+LocLongDescription="The Adeptus Astartes do not panic. This Marine is immune to panic, berserk and shattered states. Will can still be eroded by the Warp."
+LocHelpText="Immune to panic."
+LocPromotionPopupText="<Bullet/> Immune to Panicked, Berserk, Obsessed and Shattered.<br/><Bullet/> Psychic control and Warp corruption still apply.<br/>"
+
+[Astartes_RecoverGeneseed X2AbilityTemplate]
+LocFriendlyName="Recover Geneseed"
+LocLongDescription="Harvest the progenoid glands of a fallen battle-brother. Each recovery adds geneseed to the Chapter's vaults, allowing a new Scout to be raised. Each body may be harvested once."
+LocHelpText="Recover geneseed from an adjacent fallen battle-brother. Costs one action."
+LocFlyOverText="Geneseed Recovered"
+LocPromotionPopupText="<Bullet/> Target an adjacent fallen battle-brother.<br/><Bullet/> Adds 1 geneseed to the Chapter pool.<br/><Bullet/> Costs 1 action; does not end the turn.<br/>"
+
 ; === BEGIN GENERATED: CLASSES (tools/gen_class_config.py) ===
 [Astartes_Tactical X2SoldierClassTemplate]
 DisplayName="Tactical Marine"

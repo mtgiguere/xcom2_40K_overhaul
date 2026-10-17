@@ -22,6 +22,12 @@ different from each other. Every rank in every tree below is checked against the
    some carry a risk (Will damage, exposure). Equal power at unequal cost is still a choice.
 6. **Review gate:** anything reviewers would "always take" gets rebalanced or moved before code.
 
+**Rank 1 is the Squaddie kit, not a choice.** XCOM grants every ability in the rank-1 row at once (vanilla
+behaviour, same as Ranger getting Slash + Phantom... at Squaddie). So the rank-1 rows below are the class's
+starting kit and the hard choices begin at rank 2. Every Marine class also carries **Know No Fear**
+(panic immunity) in its rank-1 row, and the Apothecary's **Recover Geneseed** is in its rank-1 row and
+therefore innate (resolves open question 2).
+
 Column layout: three columns (the subscribed New Promotion Screen supports it). The vanilla
 XCOM-AP "buy the off-column ability later" system stays on, which keeps "I want both" alive without
 making it free.

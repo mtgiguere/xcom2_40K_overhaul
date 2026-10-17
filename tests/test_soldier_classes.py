@@ -82,7 +82,8 @@ def test_squaddie_loadout_exists(config, class_name):
 def test_class_has_full_rank_ladder(class_sections, class_name):
     ranks = rank_abilities(class_sections[class_name])
     assert len(ranks) == EXPECTED_RANKS, f"{class_name} has {len(ranks)} ranks"
-    for i, abilities in enumerate(ranks, 1):
+    assert len(ranks[0]) >= EXPECTED_COLUMNS, f"{class_name} squaddie row has {len(ranks[0])} abilities, expected at least {EXPECTED_COLUMNS}"
+    for i, abilities in enumerate(ranks[1:], 2):
         assert len(abilities) == EXPECTED_COLUMNS, f"{class_name} rank {i} has {len(abilities)} abilities, expected {EXPECTED_COLUMNS}"
 
 
@@ -166,3 +167,18 @@ def test_dlcinfo_marine_class_list_matches_spec(config):
     section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
     listed = [unquote(v) for v in section.values("MarineClasses")]
     assert listed == list(SPEC["classes"]), "MarineClasses in XComGame.ini must list the spec classes in order"
+
+
+# --- shared Marine kit --------------------------------------------------------------------------
+
+@pytest.mark.parametrize("class_name", MARINE_CLASSES)
+def test_every_marine_class_knows_no_fear_at_squaddie(class_sections, class_name):
+    """Rank 1 is the squaddie kit (all granted). Every Marine must carry Know No Fear from the start."""
+    assert "Astartes_KnowNoFear" in rank_abilities(class_sections[class_name])[0]
+
+
+def test_squaddie_row_is_larger_than_the_choice_rows_is_allowed(class_sections):
+    """Documenting vanilla behaviour: rank 1 grants all slots, so it may hold more than the 3 choice columns."""
+    for class_name in MARINE_CLASSES:
+        ranks = rank_abilities(class_sections[class_name])
+        assert all(len(r) == EXPECTED_COLUMNS for r in ranks[1:]), f"{class_name}: choice rows must have exactly {EXPECTED_COLUMNS} options"

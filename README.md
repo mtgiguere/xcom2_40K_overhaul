@@ -47,6 +47,19 @@ PowerUp                  # tactical: god mode
 
 The full list we use, plus the mod's own dev commands, is in `docs/design.md` §15.1.
 
+## Tests
+
+```
+python -m pytest              # config validator (fast, no game needed)
+python -m pytest -m runtime   # runtime harness: parses the game's Launch.log for Astartes_* PASS/FAIL lines
+```
+
+Spec-driven classes: edit `tests/data/class_trees.json`, run `python -I tools/gen_class_config.py`, run the
+tests, build. Never hand-edit `XComClassData.ini` or the generated block in `XComGame.int`.
+
+In-game dev commands (console): `Astartes_DevSquad [ranks]`, `Astartes_ListClasses`, `Astartes_Geneseed [n]`.
+Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
+
 ## Conventions
 
 - Prefer config (`.ini`) and Highlander event hooks over class overrides.

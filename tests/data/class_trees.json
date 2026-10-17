@@ -1,103 +1,726 @@
 {
   "_comment": "Single source of truth for the Marine class trees (docs/classes.md v0.1). tools/gen_class_config.py renders config + localization from this; tests validate the rendered config against it. Each slot is the FINAL ability template name; 'standin' is the vanilla ability used until the new one is implemented in UnrealScript. Remove 'standin' when the real ability exists.",
   "rank_names": {
-    "combat": ["Scout", "Neophyte", "Battle-Brother", "Brother-Sergeant", "Veteran Brother", "Veteran Sergeant", "Lieutenant", "Captain"],
-    "librarius": ["Scout", "Aspirant", "Acolyte", "Lexicanium", "Codicier", "Epistolary", "Librarian", "Senior Librarian"]
+    "combat": [
+      "Scout",
+      "Neophyte",
+      "Battle-Brother",
+      "Brother-Sergeant",
+      "Veteran Brother",
+      "Veteran Sergeant",
+      "Lieutenant",
+      "Captain"
+    ],
+    "librarius": [
+      "Scout",
+      "Aspirant",
+      "Acolyte",
+      "Lexicanium",
+      "Codicier",
+      "Epistolary",
+      "Librarian",
+      "Senior Librarian"
+    ]
   },
   "short_names": {
-    "combat": ["Sct.", "Neo.", "Bro.", "Sgt.", "Vet.", "VSg.", "Lt.", "Cpt."],
-    "librarius": ["Sct.", "Asp.", "Acl.", "Lex.", "Cod.", "Epi.", "Lib.", "SLb."]
+    "combat": [
+      "Sct.",
+      "Neo.",
+      "Bro.",
+      "Sgt.",
+      "Vet.",
+      "VSg.",
+      "Lt.",
+      "Cpt."
+    ],
+    "librarius": [
+      "Sct.",
+      "Asp.",
+      "Acl.",
+      "Lex.",
+      "Cod.",
+      "Epi.",
+      "Lib.",
+      "SLb."
+    ]
   },
   "classes": {
     "Astartes_Tactical": {
       "display_name": "Tactical Marine",
       "summary": "The adaptable backbone of the Chapter. Tactical Marines fight with bolter and bolt pistol, lead the squad, and hold the line.",
-      "columns": ["Marksman", "Sergeant", "Reactive"],
+      "columns": [
+        "Marksman",
+        "Sergeant",
+        "Reactive"
+      ],
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_sharpshooter",
-      "loadout": ["AssaultRifle_CV", "Pistol_CV"],
-      "weapons": [["eInvSlot_PrimaryWeapon", "rifle"], ["eInvSlot_SecondaryWeapon", "pistol"]],
+      "loadout": [
+        "AssaultRifle_CV",
+        "Pistol_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "rifle"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "pistol"
+        ]
+      ],
       "ranks": [
-        [{"name": "Astartes_BolterDrill", "standin": "HailOfBullets", "slot": "primary"}, {"name": "Astartes_Rally", "standin": "DeepCover"}, {"name": "CoveringFire"}],
-        [{"name": "Astartes_KrakenRounds", "standin": "Deadeye", "slot": "primary"}, {"name": "Astartes_TacticalDoctrine", "standin": "Phantom"}, {"name": "Astartes_BolterDiscipline", "standin": "ReturnFire", "slot": "secondary"}],
-        [{"name": "Astartes_PistolSnap", "standin": "LightningHands", "slot": "secondary"}, {"name": "Astartes_HoldTheLine", "standin": "BlastPadding"}, {"name": "Suppression", "slot": "primary"}],
-        [{"name": "Astartes_HellfireRounds", "standin": "Shredder", "slot": "primary"}, {"name": "Astartes_ChapterBanner", "standin": "CoolUnderPressure"}, {"name": "EverVigilant"}],
-        [{"name": "RapidFire", "slot": "primary"}, {"name": "Astartes_CombatSquads", "standin": "Implacable"}, {"name": "Sentinel"}],
-        [{"name": "Astartes_Executioner", "standin": "Executioner", "slot": "primary"}, {"name": "Astartes_Inspire", "standin": "SteadyHands", "slot": "primary"}, {"name": "Astartes_TranshumanPhysiology", "standin": "Untouchable"}],
-        [{"name": "Astartes_CodexVolley", "standin": "Faceoff", "slot": "secondary"}, {"name": "Astartes_ForTheEmperor", "standin": "ChainShot", "slot": "primary"}, {"name": "KillZone", "slot": "primary"}]
+        [
+          {
+            "name": "Astartes_BolterDrill",
+            "standin": "HailOfBullets",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_Rally",
+            "standin": "DeepCover"
+          },
+          {
+            "name": "CoveringFire"
+          },
+          {
+            "name": "Astartes_KnowNoFear"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_KrakenRounds",
+            "standin": "Deadeye",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_TacticalDoctrine",
+            "standin": "Phantom"
+          },
+          {
+            "name": "Astartes_BolterDiscipline",
+            "standin": "ReturnFire",
+            "slot": "secondary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_PistolSnap",
+            "standin": "LightningHands",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_HoldTheLine",
+            "standin": "BlastPadding"
+          },
+          {
+            "name": "Suppression",
+            "slot": "primary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_HellfireRounds",
+            "standin": "Shredder",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_ChapterBanner",
+            "standin": "CoolUnderPressure"
+          },
+          {
+            "name": "EverVigilant"
+          }
+        ],
+        [
+          {
+            "name": "RapidFire",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_CombatSquads",
+            "standin": "Implacable"
+          },
+          {
+            "name": "Sentinel"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Executioner",
+            "standin": "Executioner",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_Inspire",
+            "standin": "SteadyHands",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_TranshumanPhysiology",
+            "standin": "Untouchable"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_CodexVolley",
+            "standin": "Faceoff",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_ForTheEmperor",
+            "standin": "ChainShot",
+            "slot": "primary"
+          },
+          {
+            "name": "KillZone",
+            "slot": "primary"
+          }
+        ]
       ]
     },
     "Astartes_Assault": {
       "display_name": "Assault Marine",
       "summary": "Jump-pack shock troops. Assault Marines close with chainsword and bolt pistol and decide fights in melee.",
-      "columns": ["Blade", "Jump", "Bulwark"],
+      "columns": [
+        "Blade",
+        "Jump",
+        "Bulwark"
+      ],
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_ranger",
-      "loadout": ["Shotgun_CV", "Sword_CV"],
-      "weapons": [["eInvSlot_PrimaryWeapon", "shotgun"], ["eInvSlot_SecondaryWeapon", "sword"]],
+      "loadout": [
+        "Shotgun_CV",
+        "Sword_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "shotgun"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "sword"
+        ]
+      ],
       "ranks": [
-        [{"name": "Astartes_ChainTeeth", "standin": "Blademaster", "slot": "secondary"}, {"name": "Astartes_JumpPack", "standin": "RunAndGun"}, {"name": "Astartes_PowerArmourVeteran", "standin": "BlastPadding"}],
-        [{"name": "Astartes_Charge", "standin": "Shadowstrike"}, {"name": "Astartes_ShockLanding", "standin": "Shadowstep"}, {"name": "Astartes_IronHalo", "standin": "Fortress"}],
-        [{"name": "Astartes_Whirlwind", "standin": "Reaper", "slot": "secondary"}, {"name": "Astartes_HitAndRun", "standin": "Phantom"}, {"name": "Astartes_HoldFast", "standin": "CoolUnderPressure"}],
-        [{"name": "Bladestorm", "slot": "secondary"}, {"name": "Astartes_HammerOfWrath", "standin": "DeepCover"}, {"name": "Astartes_BoltPistolSuppression", "standin": "Suppression", "slot": "primary"}],
-        [{"name": "Astartes_Duelist", "standin": "LightningReflexes"}, {"name": "Implacable"}, {"name": "Astartes_Undying", "standin": "Sustain"}],
-        [{"name": "Astartes_Decapitate", "standin": "HailOfBullets", "slot": "primary"}, {"name": "Astartes_DeepJump", "standin": "Stealth"}, {"name": "Untouchable"}],
-        [{"name": "Astartes_DeathFromAboveBlade", "standin": "RapidFire", "slot": "primary"}, {"name": "Astartes_AngelOfDeath", "standin": "EverVigilant"}, {"name": "Astartes_LastStand", "standin": "Sentinel"}]
+        [
+          {
+            "name": "Astartes_ChainTeeth",
+            "standin": "Blademaster",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_JumpPack",
+            "standin": "RunAndGun"
+          },
+          {
+            "name": "Astartes_PowerArmourVeteran",
+            "standin": "BlastPadding"
+          },
+          {
+            "name": "Astartes_KnowNoFear"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Charge",
+            "standin": "Shadowstrike"
+          },
+          {
+            "name": "Astartes_ShockLanding",
+            "standin": "Shadowstep"
+          },
+          {
+            "name": "Astartes_IronHalo",
+            "standin": "Fortress"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Whirlwind",
+            "standin": "Reaper",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_HitAndRun",
+            "standin": "Phantom"
+          },
+          {
+            "name": "Astartes_HoldFast",
+            "standin": "CoolUnderPressure"
+          }
+        ],
+        [
+          {
+            "name": "Bladestorm",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_HammerOfWrath",
+            "standin": "DeepCover"
+          },
+          {
+            "name": "Astartes_BoltPistolSuppression",
+            "standin": "Suppression",
+            "slot": "primary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Duelist",
+            "standin": "LightningReflexes"
+          },
+          {
+            "name": "Implacable"
+          },
+          {
+            "name": "Astartes_Undying",
+            "standin": "Sustain"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Decapitate",
+            "standin": "HailOfBullets",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_DeepJump",
+            "standin": "Stealth"
+          },
+          {
+            "name": "Untouchable"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_DeathFromAboveBlade",
+            "standin": "RapidFire",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_AngelOfDeath",
+            "standin": "EverVigilant"
+          },
+          {
+            "name": "Astartes_LastStand",
+            "standin": "Sentinel"
+          }
+        ]
       ]
     },
     "Astartes_Devastator": {
       "display_name": "Devastator",
       "summary": "Heavy weapons and zone control. Devastators carry the squad's heavy bolter or plasma cannon and own the ground they stand on.",
-      "columns": ["Suppressor", "Gunner", "Emplacement"],
+      "columns": [
+        "Suppressor",
+        "Gunner",
+        "Emplacement"
+      ],
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_grenadier",
-      "loadout": ["Cannon_CV", "Pistol_CV"],
-      "weapons": [["eInvSlot_PrimaryWeapon", "cannon"], ["eInvSlot_SecondaryWeapon", "pistol"]],
+      "loadout": [
+        "Cannon_CV",
+        "Pistol_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "cannon"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "pistol"
+        ]
+      ],
       "ranks": [
-        [{"name": "Suppression", "slot": "primary"}, {"name": "Shredder", "slot": "primary"}, {"name": "Astartes_Brace", "standin": "SteadyHands", "slot": "primary"}],
-        [{"name": "HoloTargeting", "slot": "primary"}, {"name": "Astartes_PlasmaOvercharge", "standin": "BulletShred", "slot": "primary"}, {"name": "Astartes_Bipod", "standin": "CoveringFire"}],
-        [{"name": "Astartes_SweepingFire", "standin": "Demolition", "slot": "primary"}, {"name": "Astartes_LascannonRound", "standin": "Deadeye", "slot": "primary"}, {"name": "Astartes_SandbagPosition", "standin": "BlastPadding"}],
-        [{"name": "Astartes_GrindingAdvance", "standin": "HeavyOrdnance"}, {"name": "ChainShot", "slot": "primary"}, {"name": "Astartes_HeavyStance", "standin": "Salvo"}],
-        [{"name": "Astartes_FireLane", "standin": "SaturationFire", "slot": "primary"}, {"name": "Astartes_KrakMissile", "standin": "HailOfBullets", "slot": "primary"}, {"name": "Astartes_WeaponMount", "standin": "EverVigilant"}],
-        [{"name": "Astartes_HunkerThemDown", "standin": "CoolUnderPressure"}, {"name": "Astartes_MeltaRound", "standin": "RapidFire", "slot": "primary"}, {"name": "Sentinel"}],
-        [{"name": "Astartes_WhirlwindBarrage", "standin": "KillZone", "slot": "primary"}, {"name": "Astartes_TankHunter", "standin": "Executioner", "slot": "primary"}, {"name": "Astartes_Castellan", "standin": "Untouchable"}]
+        [
+          {
+            "name": "Suppression",
+            "slot": "primary"
+          },
+          {
+            "name": "Shredder",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_Brace",
+            "standin": "SteadyHands",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_KnowNoFear"
+          }
+        ],
+        [
+          {
+            "name": "HoloTargeting",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_PlasmaOvercharge",
+            "standin": "BulletShred",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_Bipod",
+            "standin": "CoveringFire"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_SweepingFire",
+            "standin": "Demolition",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_LascannonRound",
+            "standin": "Deadeye",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_SandbagPosition",
+            "standin": "BlastPadding"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_GrindingAdvance",
+            "standin": "HeavyOrdnance"
+          },
+          {
+            "name": "ChainShot",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_HeavyStance",
+            "standin": "Salvo"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_FireLane",
+            "standin": "SaturationFire",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_KrakMissile",
+            "standin": "HailOfBullets",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_WeaponMount",
+            "standin": "EverVigilant"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_HunkerThemDown",
+            "standin": "CoolUnderPressure"
+          },
+          {
+            "name": "Astartes_MeltaRound",
+            "standin": "RapidFire",
+            "slot": "primary"
+          },
+          {
+            "name": "Sentinel"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_WhirlwindBarrage",
+            "standin": "KillZone",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_TankHunter",
+            "standin": "Executioner",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_Castellan",
+            "standin": "Untouchable"
+          }
+        ]
       ]
     },
     "Astartes_Apothecary": {
       "display_name": "Apothecary",
       "summary": "Keeper of the Chapter's future. The Apothecary heals the living, stabilises the dying, and recovers the geneseed of the dead.",
-      "columns": ["Triage", "Reductor", "Battle-Medic"],
+      "columns": [
+        "Triage",
+        "Reductor",
+        "Battle-Medic"
+      ],
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_specialist",
-      "loadout": ["AssaultRifle_CV", "Gremlin_CV"],
-      "weapons": [["eInvSlot_PrimaryWeapon", "rifle"], ["eInvSlot_SecondaryWeapon", "gremlin"]],
+      "loadout": [
+        "AssaultRifle_CV",
+        "Gremlin_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "rifle"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "gremlin"
+        ]
+      ],
       "ranks": [
-        [{"name": "Astartes_Narthecium", "standin": "MedicalProtocol", "slot": "secondary"}, {"name": "Astartes_RecoverGeneseed", "standin": "FieldMedic"}, {"name": "Astartes_CombatStims", "standin": "AidProtocol", "slot": "secondary"}],
-        [{"name": "Astartes_FieldSurgery", "standin": "ThreatAssessment", "slot": "secondary"}, {"name": "Astartes_IntermentRites", "standin": "ScanningProtocol", "slot": "secondary"}, {"name": "Astartes_StimmShot", "standin": "CoveringFire"}],
-        [{"name": "RevivalProtocol", "slot": "secondary"}, {"name": "Astartes_ReductorMastery", "standin": "Phantom"}, {"name": "Suppression", "slot": "primary"}],
-        [{"name": "Astartes_AugmenticRepair", "standin": "CombatProtocol", "slot": "secondary"}, {"name": "Astartes_Preservation", "standin": "BlastPadding"}, {"name": "Astartes_WarriorMedic", "standin": "EverVigilant"}],
-        [{"name": "Astartes_MassTriage", "standin": "CapacitorDischarge", "slot": "secondary"}, {"name": "Astartes_PurityCheck", "standin": "DeepCover"}, {"name": "Astartes_Guardian", "standin": "Sentinel"}],
-        [{"name": "Astartes_CombatDoctrine", "standin": "CoolUnderPressure"}, {"name": "Astartes_HonourTheFallen", "standin": "Fortress"}, {"name": "Astartes_ChirurgeonsFury", "standin": "Deadeye", "slot": "primary"}],
-        [{"name": "Astartes_MiracleOfTheEmperor", "standin": "Untouchable"}, {"name": "Astartes_Harvest", "standin": "Implacable"}, {"name": "Astartes_LastRites", "standin": "RapidFire", "slot": "primary"}]
+        [
+          {
+            "name": "Astartes_Narthecium",
+            "standin": "MedicalProtocol",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_RecoverGeneseed"
+          },
+          {
+            "name": "Astartes_CombatStims",
+            "standin": "AidProtocol",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_KnowNoFear"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_FieldSurgery",
+            "standin": "ThreatAssessment",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_IntermentRites",
+            "standin": "ScanningProtocol",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_StimmShot",
+            "standin": "CoveringFire"
+          }
+        ],
+        [
+          {
+            "name": "RevivalProtocol",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_ReductorMastery",
+            "standin": "Phantom"
+          },
+          {
+            "name": "Suppression",
+            "slot": "primary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_AugmenticRepair",
+            "standin": "CombatProtocol",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_Preservation",
+            "standin": "BlastPadding"
+          },
+          {
+            "name": "Astartes_WarriorMedic",
+            "standin": "EverVigilant"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_MassTriage",
+            "standin": "CapacitorDischarge",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_PurityCheck",
+            "standin": "DeepCover"
+          },
+          {
+            "name": "Astartes_Guardian",
+            "standin": "Sentinel"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_CombatDoctrine",
+            "standin": "CoolUnderPressure"
+          },
+          {
+            "name": "Astartes_HonourTheFallen",
+            "standin": "Fortress"
+          },
+          {
+            "name": "Astartes_ChirurgeonsFury",
+            "standin": "Deadeye",
+            "slot": "primary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_MiracleOfTheEmperor",
+            "standin": "Untouchable"
+          },
+          {
+            "name": "Astartes_Harvest",
+            "standin": "Implacable"
+          },
+          {
+            "name": "Astartes_LastRites",
+            "standin": "RapidFire",
+            "slot": "primary"
+          }
+        ]
       ]
     },
     "Astartes_Librarian": {
       "display_name": "Librarian",
       "summary": "The Chapter's psyker. Librarians wield the three disciplines of Pyromancy, Telepathy and Biomancy, at the risk of the Perils of the Warp.",
-      "columns": ["Pyromancy", "Telepathy", "Biomancy"],
+      "columns": [
+        "Pyromancy",
+        "Telepathy",
+        "Biomancy"
+      ],
       "rank_set": "librarius",
       "icon": "img:///UILibrary_Common.class_psioperative",
-      "loadout": ["AssaultRifle_CV", "PsiAmp_CV"],
-      "weapons": [["eInvSlot_PrimaryWeapon", "rifle"], ["eInvSlot_SecondaryWeapon", "psiamp"]],
+      "loadout": [
+        "AssaultRifle_CV",
+        "PsiAmp_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "rifle"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "psiamp"
+        ]
+      ],
       "ranks": [
-        [{"name": "Astartes_Smite", "standin": "Soulfire", "slot": "secondary"}, {"name": "Astartes_Terrify", "standin": "Insanity", "slot": "secondary"}, {"name": "Astartes_Quickening", "standin": "Inspire", "slot": "secondary"}],
-        [{"name": "Astartes_FlameBreath", "standin": "NullLance", "slot": "secondary"}, {"name": "Astartes_PsychicScream", "standin": "Schism", "slot": "secondary"}, {"name": "Astartes_MightOfHeroes", "standin": "Solace", "slot": "secondary"}],
-        [{"name": "Astartes_MoltenBeam", "standin": "SoulSteal", "slot": "secondary"}, {"name": "Astartes_Dominate", "standin": "Domination", "slot": "secondary"}, {"name": "Astartes_TelekineShield", "standin": "StasisShield", "slot": "secondary"}],
-        [{"name": "Astartes_FireShield", "standin": "Fortress"}, {"name": "Fuse", "slot": "secondary"}, {"name": "Stasis", "slot": "secondary"}],
-        [{"name": "Astartes_FuryOfTheAncients", "standin": "VoidRift", "slot": "secondary"}, {"name": "Astartes_PuppetMaster", "standin": "Phantom"}, {"name": "Astartes_SmiteTheEarth", "standin": "Demolition", "slot": "primary"}],
-        [{"name": "Sustain"}, {"name": "Astartes_Hallucination", "standin": "DeepCover"}, {"name": "Astartes_VortexOfDoom", "standin": "HailOfBullets", "slot": "primary"}],
-        [{"name": "Astartes_Firestorm", "standin": "RapidFire", "slot": "primary"}, {"name": "Astartes_PsychicHood", "standin": "CoolUnderPressure"}, {"name": "Astartes_WarpQuake", "standin": "Untouchable"}]
+        [
+          {
+            "name": "Astartes_Smite",
+            "standin": "Soulfire",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_Terrify",
+            "standin": "Insanity",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_Quickening",
+            "standin": "Inspire",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_KnowNoFear"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_FlameBreath",
+            "standin": "NullLance",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_PsychicScream",
+            "standin": "Schism",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_MightOfHeroes",
+            "standin": "Solace",
+            "slot": "secondary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_MoltenBeam",
+            "standin": "SoulSteal",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_Dominate",
+            "standin": "Domination",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_TelekineShield",
+            "standin": "StasisShield",
+            "slot": "secondary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_FireShield",
+            "standin": "Fortress"
+          },
+          {
+            "name": "Fuse",
+            "slot": "secondary"
+          },
+          {
+            "name": "Stasis",
+            "slot": "secondary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_FuryOfTheAncients",
+            "standin": "VoidRift",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_PuppetMaster",
+            "standin": "Phantom"
+          },
+          {
+            "name": "Astartes_SmiteTheEarth",
+            "standin": "Demolition",
+            "slot": "primary"
+          }
+        ],
+        [
+          {
+            "name": "Sustain"
+          },
+          {
+            "name": "Astartes_Hallucination",
+            "standin": "DeepCover"
+          },
+          {
+            "name": "Astartes_VortexOfDoom",
+            "standin": "HailOfBullets",
+            "slot": "primary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Firestorm",
+            "standin": "RapidFire",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_PsychicHood",
+            "standin": "CoolUnderPressure"
+          },
+          {
+            "name": "Astartes_WarpQuake",
+            "standin": "Untouchable"
+          }
+        ]
       ]
     }
-  }
+  },
+  "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row."
 }

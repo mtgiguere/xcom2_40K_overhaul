@@ -12,6 +12,7 @@ var config array<name> MarineClasses;
 /// Called when the player starts a new campaign while this mod is installed.
 static event InstallNewCampaign(XComGameState StartState)
 {
+	class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(StartState);
 	`log("Astartes: new campaign started",, 'Astartes');
 }
 
@@ -21,6 +22,12 @@ static event OnLoadedSavedGame()
 	`log("Astartes: loaded a save created without this mod",, 'Astartes');
 }
 
+/// Called when a save is loaded directly into the strategy layer. Repairs campaigns that predate the Chapter state.
+static event OnLoadedSavedGameToStrategy()
+{
+	class'XComGameState_AstartesChapter'.static.EnsureChapterExists();
+}
+
 /// Called once all mods' templates exist. Use for edits that must run after every CreateTemplates.
 static event OnPostTemplatesCreated()
 {
@@ -28,13 +35,13 @@ static event OnPostTemplatesCreated()
 }
 
 // ---------------------------------------------------------------------------------------
-// Developer console commands. Require -allowConsole. Strategy layer only.
+// Developer console commands. Require -allowConsole. Strategy layer only unless noted.
+// Each logs a line starting "Astartes_<Command>: PASS" or "FAIL" so a log parser can assert on it.
 // ---------------------------------------------------------------------------------------
 
 /// Astartes_DevSquad [Ranks]
 /// Adds one soldier of every Marine class to the barracks, promoted to the given rank (default: max),
-/// with squaddie loadout and the best gear available. Names them after their class so they are easy
-/// to find in squad select.
+/// with squaddie loadout and the best gear available. Nicknames them after their class.
 exec function Astartes_DevSquad(optional int Ranks = -1)
 {
 	local XComGameStateHistory History;
@@ -49,7 +56,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
 	if (XComHQ == none)
 	{
-		`log("Astartes_DevSquad: no XComHQ (strategy layer only)",, 'Astartes');
+		`log("Astartes_DevSquad: FAIL no XComHQ (strategy layer only)",, 'Astartes');
 		return;
 	}
 
@@ -67,7 +74,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 		ClassTemplate = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager().FindSoldierClassTemplate(ClassName);
 		if (ClassTemplate == none)
 		{
-			`log("Astartes_DevSquad: unknown class" @ ClassName,, 'Astartes');
+			`log("Astartes_DevSquad: FAIL unknown class" @ ClassName,, 'Astartes');
 			continue;
 		}
 
@@ -105,7 +112,7 @@ exec function Astartes_DevSquad(optional int Ranks = -1)
 }
 
 /// Astartes_ListClasses
-/// Logs every soldier class template this mod registered and how many ranks it has. Harness sanity check.
+/// Logs every soldier class template this mod registered and how many ranks it has.
 exec function Astartes_ListClasses()
 {
 	local X2SoldierClassTemplate ClassTemplate;
@@ -123,4 +130,29 @@ exec function Astartes_ListClasses()
 			`log("Astartes_ListClasses: PASS" @ ClassName @ "ranks=" $ ClassTemplate.GetMaxConfiguredRank() @ "display=" $ ClassTemplate.DisplayName,, 'Astartes');
 		}
 	}
+}
+
+/// Astartes_Geneseed [NewAmount]
+/// Logs the Chapter's geneseed pool; with an argument, sets it. Works in strategy and tactical.
+exec function Astartes_Geneseed(optional int NewAmount = -1)
+{
+	local XComGameState NewGameState;
+	local XComGameState_AstartesChapter Chapter;
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	if (Chapter == none)
+	{
+		`log("Astartes_Geneseed: FAIL no Chapter state in this campaign",, 'Astartes');
+		return;
+	}
+
+	if (NewAmount >= 0)
+	{
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: set geneseed");
+		Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
+		Chapter.Geneseed = NewAmount;
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	}
+
+	`log("Astartes_Geneseed: PASS geneseed=" $ Chapter.Geneseed @ "recovered_total=" $ Chapter.GeneseedRecoveredTotal @ "fallen=" $ Chapter.BrothersFallen,, 'Astartes');
 }
