@@ -24,8 +24,95 @@ var config array<name> MarineArmorPartPacks;
 /// Called when the player starts a new campaign while this mod is installed.
 static event InstallNewCampaign(XComGameState StartState)
 {
-	class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(StartState);
+	local XComGameState_AstartesChapter Chapter;
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(StartState);
+	Chapter.AssignContinentFactions(StartState);
 	`log("Astartes: new campaign started",, 'Astartes');
+}
+
+// ---------------------------------------------------------------------------------------
+// Continent faction ownership (Highlander hooks, issues #136 / #278)
+// ---------------------------------------------------------------------------------------
+
+/// Called per pod when a mission's encounter data is cached. SourceObject is the mission site.
+static function PostEncounterCreation(out name EncounterName, out PodSpawnInfo Encounter, int ForceLevel, int AlertLevel, optional XComGameState_BaseObject SourceObject)
+{
+	RewritePodForContinent(Encounter, ForceLevel, XComGameState_MissionSite(SourceObject), "pod" @ EncounterName);
+}
+
+/// Called per reinforcement group. SourceObject is the BattleData, which knows the mission.
+static function PostReinforcementCreation(out name EncounterName, out PodSpawnInfo Encounter, int ForceLevel, int AlertLevel, optional XComGameState_BaseObject SourceObject, optional XComGameState_BaseObject ReinforcementState)
+{
+	local XComGameState_BattleData BattleData;
+	local XComGameState_MissionSite MissionSite;
+
+	BattleData = XComGameState_BattleData(SourceObject);
+	if (BattleData != none)
+	{
+		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(BattleData.m_iMissionID));
+	}
+	RewritePodForContinent(Encounter, ForceLevel, MissionSite, "reinforcements" @ EncounterName);
+}
+
+/// Replace an alien-team pod with a same-sized pod from the faction that owns the mission's continent.
+static function RewritePodForContinent(out PodSpawnInfo Encounter, int ForceLevel, XComGameState_MissionSite MissionSite, string Context)
+{
+	local XComGameState_AstartesChapter Chapter;
+	local XComGameState_Continent Continent;
+	local FactionDef Def;
+	local name FactionName;
+	local array<name> NewTemplates;
+	local string Before, After;
+	local int i;
+
+	if (!class'Astartes_FactionConfig'.default.bEnableContinentFactions || MissionSite == none)
+	{
+		return;
+	}
+	if (Encounter.Team != eTeam_Alien || Encounter.StrategyUnitTag != '' || Encounter.SelectedCharacterTemplateNames.Length == 0)
+	{
+		return;
+	}
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	Continent = MissionSite.GetContinent();
+	if (Chapter == none || Continent == none)
+	{
+		return;
+	}
+
+	FactionName = Chapter.GetFactionForContinent(Continent.GetReference());
+	if (FactionName == '' || !class'Astartes_FactionConfig'.static.GetFaction(FactionName, Def))
+	{
+		return;
+	}
+	if (!class'Astartes_FactionConfig'.static.IsFactionAvailable(Def))
+	{
+		`log("Astartes: faction" @ FactionName @ "owns" @ Continent.GetMyTemplateName() @ "but its spawn lists are not loaded (is" @ Def.RequiredDLC @ "enabled?). Leaving" @ Context @ "vanilla.",, 'Astartes');
+		return;
+	}
+
+	if (!class'Astartes_FactionConfig'.static.BuildPod(Def, ForceLevel, Encounter.SelectedCharacterTemplateNames.Length, NewTemplates))
+	{
+		`log("Astartes: faction" @ FactionName @ "has no eligible units at force level" @ ForceLevel @ "for" @ Context $ ". Leaving it vanilla.",, 'Astartes');
+		return;
+	}
+
+	if (class'Astartes_FactionConfig'.default.bLogPodRewrites)
+	{
+		for (i = 0; i < Encounter.SelectedCharacterTemplateNames.Length; i++)
+		{
+			Before @= string(Encounter.SelectedCharacterTemplateNames[i]);
+		}
+		for (i = 0; i < NewTemplates.Length; i++)
+		{
+			After @= string(NewTemplates[i]);
+		}
+		`log("Astartes: PodRewrite" @ Context @ "on" @ Continent.GetMyTemplateName() @ "->" @ FactionName @ "FL" $ ForceLevel @ "[" $ Before @ "] => [" $ After @ "]",, 'Astartes');
+	}
+
+	Encounter.SelectedCharacterTemplateNames = NewTemplates;
 }
 
 /// Called when the player loads a saved game that was created without this mod.
@@ -264,6 +351,71 @@ exec function Astartes_Geneseed(optional int NewAmount = -1)
 	}
 
 	`log("Astartes_Geneseed: PASS geneseed=" $ Chapter.Geneseed @ "recovered_total=" $ Chapter.GeneseedRecoveredTotal @ "fallen=" $ Chapter.BrothersFallen,, 'Astartes');
+}
+
+/// Astartes_Factions
+/// Logs which faction owns each continent and whether that faction's spawn lists are loaded.
+exec function Astartes_Factions()
+{
+	local XComGameState_AstartesChapter Chapter;
+	local FactionDef Def;
+	local int i;
+	local string Status;
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	if (Chapter == none || Chapter.ContinentFactions.Length == 0)
+	{
+		`log("Astartes_Factions: FAIL no continent assignments (no Chapter state, or campaign predates this feature; try Astartes_AssignFactions)",, 'Astartes');
+		return;
+	}
+	for (i = 0; i < Chapter.ContinentFactions.Length; i++)
+	{
+		Status = "unknown faction";
+		if (class'Astartes_FactionConfig'.static.GetFaction(Chapter.ContinentFactions[i].FactionName, Def))
+		{
+			Status = class'Astartes_FactionConfig'.static.IsFactionAvailable(Def) ? "lists loaded" : ("lists MISSING - enable" @ Def.RequiredDLC);
+		}
+		`log("Astartes_Factions: PASS" @ Chapter.ContinentFactions[i].ContinentTemplate @ "->" @ Chapter.ContinentFactions[i].FactionName @ "(" $ Status $ ")",, 'Astartes');
+	}
+}
+
+/// Astartes_AssignFactions
+/// (Re)deals factions to continents. Use on a campaign that predates this feature, or to re-roll.
+exec function Astartes_AssignFactions()
+{
+	local XComGameState NewGameState;
+	local XComGameState_AstartesChapter Chapter;
+
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: assign factions");
+	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
+	Chapter.AssignContinentFactions(NewGameState);
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	`log("Astartes_AssignFactions: PASS assigned" @ Chapter.ContinentFactions.Length @ "continents",, 'Astartes');
+}
+
+/// Astartes_SetContinentFaction <ContinentTemplate> <FactionName>
+/// e.g. Astartes_SetContinentFaction Continent_NorthAmerica Orks
+exec function Astartes_SetContinentFaction(name ContinentTemplate, name FactionName)
+{
+	local XComGameState NewGameState;
+	local XComGameState_AstartesChapter Chapter;
+	local FactionDef Def;
+
+	if (!class'Astartes_FactionConfig'.static.GetFaction(FactionName, Def))
+	{
+		`log("Astartes_SetContinentFaction: FAIL unknown faction" @ FactionName,, 'Astartes');
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: set continent faction");
+	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
+	if (!Chapter.SetFactionForContinent(ContinentTemplate, FactionName))
+	{
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+		`log("Astartes_SetContinentFaction: FAIL unknown continent" @ ContinentTemplate,, 'Astartes');
+		return;
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	`log("Astartes_SetContinentFaction: PASS" @ ContinentTemplate @ "->" @ FactionName,, 'Astartes');
 }
 
 /// Astartes_Redress

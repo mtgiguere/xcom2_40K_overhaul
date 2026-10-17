@@ -57,7 +57,18 @@ python -m pytest -m runtime   # runtime harness: parses the game's Launch.log fo
 Spec-driven classes: edit `tests/data/class_trees.json`, run `python -I tools/gen_class_config.py`, run the
 tests, build. Never hand-edit `XComClassData.ini` or the generated block in `XComGame.int`.
 
-In-game dev commands (console): `Astartes_DevSquad [ranks]`, `Astartes_ListClasses`, `Astartes_Geneseed [n]`.
+In-game dev commands (console):
+
+| Command | Does |
+|---|---|
+| `Astartes_DevSquad [ranks]` | One fully promoted soldier of every Marine class, best gear |
+| `Astartes_ListClasses` | Logs the registered classes and rank counts |
+| `Astartes_Geneseed [n]` | Logs (or sets) the Chapter geneseed pool |
+| `Astartes_Redress` | Re-rolls every barracks soldier's look through the Marine generator |
+| `Astartes_Factions` | Logs which faction owns each continent and whether its mod is loaded |
+| `Astartes_AssignFactions` | (Re)deals factions to continents |
+| `Astartes_SetContinentFaction <Continent_X> <Faction>` | Pins a continent to Orks / Chaos / Tyranids |
+
 Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 
 ## Conventions

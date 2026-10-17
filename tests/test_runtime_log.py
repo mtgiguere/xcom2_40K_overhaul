@@ -73,3 +73,13 @@ def test_list_classes_found_all(results):
     for _, detail in results["ListClasses"]:
         m = re.search(r"ranks=(\d+)", detail)
         assert m and int(m.group(1)) == 7, detail
+
+
+def test_factions_assigned_and_lists_loaded(results):
+    if "Factions" not in results:
+        pytest.skip("Astartes_Factions was not run")
+    runs = results["Factions"]
+    assert all(s == "PASS" for s, _ in runs), runs
+    assert len(runs) >= 6, "expected one line per continent"
+    missing = [d for _, d in runs if "MISSING" in d]
+    assert not missing, f"factions whose mods are not enabled: {missing}"
