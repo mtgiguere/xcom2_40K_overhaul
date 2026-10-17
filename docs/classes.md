@@ -164,3 +164,55 @@ force multiplier and the safest. Perils keeps Pyromancy from being "the damage c
    innate; replace the slot with **Enhanced Narthecium**: +1 heal charge.)
 3. Does Perils of the Warp need a visible UI indicator? (Recommendation: yes, like the Templar's Focus bar.)
 4. Rank 7 "once per mission" powers: should some be "once per campaign" relic abilities reserved for the uniques instead?
+
+---
+
+## Ideas borrowed from other class mods (reviewed 2026-10-17)
+
+**Guardsmen_WotC** (Workshop 1139714141), a 15-ability single class. Worth stealing:
+- *On Guard / Vigilance*: +defense per enemy in sight (cap 25). Perfect for Guard militia and the Officer's **Hold the Line** flavour: the more enemies, the steadier the line.
+- *Fervor*: +1 action per turn for -5 mobility. A natural **Terminator** stance trade (bulk for tempo).
+- *Volley Fire*: shot at -10, and a second at -5 if it hits. Cleaner than Rapid Fire for **Bolter Drill**.
+- *In the Zone*: activated, primary kills refund actions, 4-turn cooldown. Candidate for Assault **Whirlwind** instead of a flat Reaper clone.
+- *Full Kit / Minefield*: bonus charges per equipped item. Devastator **Weapon Mount** and Officer **Call Fire Team** could use the same effect.
+- *Improved Survival Gear*: fire + gas immunity passive, same shape as **Astartes Physiology**.
+- It is built on **XModBase**, an ability-authoring library (conditional bonuses, cost refunds, reserve action points, stat changes, event-listener triggers). Adopting XModBase for our own abilities would cut the UnrealScript for most "(new)" abilities to a few lines each. Decision pending; many Workshop classes bundle it.
+
+**The Servoskull** (Workshop 1193993048): a gremlin-type item (`X2Item_Servoskull`) with its own cosmetic unit. The Apothecary's **Narthecium** can be a clone of this item rather than a gremlin re-skin.
+
+## Librarius power ideas from the subscribed psi mods (reviewed 2026-10-17)
+
+Source material: Iridar's Psi Overhaul, Even More Psionic Abilities, Rusty's Psionic class, Jedi Class Revised,
+Imperial Surplus Force Weapons. (Warp Warden is config-only on other perk packs; nothing new.) Mapped onto the three
+disciplines. Mechanics only; names are ours.
+
+**Pyromancy (damage, area, fire)**
+- *Soul Storm* (Iridar): psionic meteors on an area, destroys cover -> **Fury of the Ancients** done right.
+- *Frostfire Blast* (EMPA): guaranteed psi damage ignoring cover and armor, burns -> **Smite** tier 2 / **Molten Beam**.
+- *Force Lightning / Chain Lightning* (Jedi): single and chained arcs -> Pyromancy's **Flame Breath** could chain instead of cone, which reads very "warp lightning".
+- *Force Drain* (Jedi): damage all around you, heal yourself -> **Fire Shield** variant that feeds the Librarian.
+
+**Telepathy (control, Will)**
+- *Jedi Mind Tricks*: zero move/sight/detection, does not break concealment -> **Hallucination** / a stealth-opener for Librarians.
+- *Force Fear*: fear that cascades -> **Terrify** upgrade (**Psychic Scream**).
+- *Reimage* (EMPA): control that makes the target attack its own side -> **Puppet Master**.
+- *Reformat / Void's Adjuration* (EMPA): permanent control, one per mission -> too strong for a Marine; reserve for the **Chief Librarian** relic tier.
+- *Force Choke*: ranged single-target damage + stun -> a Telepathy damage option so the column is not pure utility.
+
+**Biomancy / Telekinesis (bodies and objects)**
+- *Force Push / Force Shove / Force Wind* (Jedi, Imperial Surplus): knockback, cancel overwatch, stun chance, environmental destruction -> **Smite the Earth** and a new rank-2 **Telekine Shove** (replaces the stand-in for Might of Heroes).
+- *Null Ward* (Iridar): shields on self and nearby allies, collapse if caster dies -> **Telekine Shield** as an aura instead of single target.
+- *Soul Merge* (Iridar): link to an ally, they gain action + stats while linked -> **Might of Heroes** exactly.
+- *Soul Mend / Panacea* (Rusty): psionic body heal / mind heal -> Biomancy **Quickening** could heal; mind heal = **corruption cleanse** (a Librarian alternative to the Chaplain, at Perils risk).
+- *Phase Walk* (Iridar): short teleport -> Biomancy mobility pick; also the Terminator deep-strike visual.
+- *Force Speed*: three non-ending actions this turn -> **Quickening** at rank 7 instead of rank 1.
+- *Battle Precognition / Battle Meditation* (Jedi): pre-emptive melee strike, deflect shots -> the force-sword duellist flavour for the Librarian's melee slots.
+
+**Resource model.** The Jedi mod's **Force Power pool** (spent per power, holocrons raise the cap, Meditation refills it at
+the cost of vulnerability) is the right skeleton for **Warp Charge**: powers cost charge; Perils of the Warp triggers
+when a Librarian casts with low charge or above his rank; a "focus" action refills charge but leaves him exposed.
+This makes "cast everything every turn" impossible without copying Templar Focus. Decision pending.
+
+**Known crashers to avoid copying** (from the user's Jedi playtests): Reflect (crash on the next action) and
+Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were stable.
+
