@@ -225,6 +225,8 @@ All territorial factions are hostile to each other as well as to the player (see
 
 **Tyranid-held systems should contain only Tyranids** (lore: the fleet devours everything). Exception: Orks may crash a Tyranid world for a fight.
 
+**Playtest 2026-10-17, all three factions confirmed via pod rewrite.** The Hive's `ChrysHybrid` is tuned as a mid-game unit (9 HP, 1 armour, 75 aim, 16 mobility): too strong for force level 1 against kevlar-stat Marines, about right once Power Armour exists. **Planned tool: faction unit variants** - clone a borrowed character template into our own (e.g. `Astartes_CultHybrid` from `ChrysHybrid`, `Astartes_Cultist` from `AdvTrooperM1`) with our own stats/loadout/appearance, in `OnPostTemplatesCreated`, leaving the source mod's balance untouched. Early lists then use our variants; the source mod's units take over at higher force levels.
+
 ### 6.2 Orks
 
 | Ork unit | Base rig |
