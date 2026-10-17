@@ -36,16 +36,7 @@ where the Alternative Mod Launcher picks it up.
 
 ## Playtesting with cheats
 
-In AML, enable the `-allowConsole` quick-toggle argument and launch. Press `~` in game. From a fresh campaign:
-
-```
-LevelUpBarracks 7        # every soldier fully promoted
-GiveResource Supplies 5000
-GiveTech <TechName>      # unlock gear
-PowerUp                  # tactical: god mode
-```
-
-The full list we use, plus the mod's own dev commands, is in `docs/design.md` §15.1.
+See **Helpful testing console commands** at the end of this file.
 
 ## Tests
 
@@ -77,3 +68,7 @@ Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 - Third-party art mods are required Workshop dependencies, never bundled assets.
 - Localization files are UTF-8 in the repo; the build converts them to UTF-16.
 - Keep features modular so phases can ship independently (see `docs/design.md` §13).
+
+
+
+helpful testing console commands:
