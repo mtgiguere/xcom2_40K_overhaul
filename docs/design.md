@@ -245,6 +245,8 @@ All territorial factions are hostile to each other as well as to the player (see
 | Daemons | Teleport/psi-based rigs | |
 | Possessed | **Faceless** mechanic | Ordinary-looking people erupt into horrors (§9.4) |
 
+**Chaos Marine balance principle (playtest 2026-10-17): peers with a trade.** Observed: Black Legion M1 vs our Marine = +1 HP, +1 armour. Keep Chaos Marines at parity-or-slightly-above in raw body, because they *gain* dark gifts (mutation traits, sorcery, daemon engines) and *lose*: discipline (aggressive AI, poor cover/coordination, no healer), stability (mutations can be bad: berserk-at-half-health etc.), resistance to faith and anti-Warp effects (Sisters' Zealot, Null Zone, holy weapons hit harder; sorcerers suffer Perils), and numbers (warbands pad pods with cultists, our pods are all Astartes). Note: our Marines currently have kevlar-tier item stats; re-check parity once the Power Armour item exists.
+
 ### 6.4 Eldar (wildcard)
 - Humanoid → could reuse soldier-style armor parts **if suitable Eldar armor mods exist** (unknown — needs checking).
 - Units: Rangers, Farseer, Wraithguard, Warp Spiders (teleport, Codex-like).
