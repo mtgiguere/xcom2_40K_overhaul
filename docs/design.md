@@ -131,7 +131,7 @@ Terminator armour stays a separate item (§4.5). Chaos parity (§6.3) should be 
 
 ### 4.5b Weapon lines
 
-**Models (2026-10-17):** our weapons are vanilla clones that *borrow* a donor mod's model, icon and attachments (`MeshFrom` in `X2Item_AstartesWeapons`), keeping vanilla stats and the research upgrade chain. Bolter and Bolt Pistol already wear the BolterWeaponMod / 40KBoltPistolsMod models; the donor items are hidden so the armoury lists one Bolter. Without the donor mod the weapon falls back to the vanilla look. See docs/mod-inventory.md for the remaining candidates.
+**Models (2026-10-17):** our weapons are vanilla clones that *borrow* a donor mod's model, icon and attachments (`MeshFrom` in `X2Item_AstartesWeapons`), keeping vanilla stats and the research upgrade chain. Bolter, Bolt Pistol, Chainsword/Power Sword, Heavy Bolter and Force Sword wear the Space Marine Armory (workshop 3656755854) models, the Space Marine 2 set that matches the Tacticus armour; the donor packs are hidden so the armoury lists one Bolter. Without the donor mod the weapon falls back to the vanilla look. See docs/mod-inventory.md for the remaining candidates.
 | Class | Primary | Secondary | Upgrade path / notes |
 |---|---|---|---|
 | Tactical | Bolter | Bolt pistol or chainsword | Kraken / Hellfire ammo |

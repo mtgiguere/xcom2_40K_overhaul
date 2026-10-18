@@ -451,3 +451,18 @@ Highlander comment: "eTeam_One and eTeam_Two should be the only ones here." The 
 | Mod | ID | Notes |
 |---|---|---|
 | Resident Evil 2: Remake G-Virus (Beta) | 2264204537 | Full enemy units (G1/G2/G3 forms, own AI, melee sweeps, a civilian that morphs). G3 = `Astartes_GreaterDaemon`, G2 = `Astartes_Daemon` via `Astartes_UnitVariants`. Used by Perils of the Warp possession; candidate for Chaos pods at high force level. |
+
+## 40K weapon models (reviewed 2026-10-17)
+| Mod | ID | Templates | Use |
+|---|---|---|---|
+| Space Marine Armory ("Space Marine Weaponry (Warhammer)") | 3656755854 | WP_BoltRifle, WP_BoltPistol, WP_Chainsword, WP_PowerSword, WP_HeavyBolter, WP_AutoBolter, WP_BoltSniperRifle (CV/MG/BM) | **In use**: Bolter, Bolt Pistol, Chainsword (CV) and Power Sword (MG/BM), Heavy Bolter and Force Sword wear its models via `MeshFrom`; the whole pack is hidden from the armoury. Auto Bolter and Bolt Sniper Rifle reserved for Tactical options / Scouts |
+| BolterWeaponMod | 1493097153 | BOLTER_CV/MG/BM (rifle) | Godwyn-pattern bolter; hidden, kept as an alternative look |
+| 40KBoltPistolsMod | 1495590206 | BOLTPISTOL_CV/MG/BM (pistol) | Hidden, alternative look |
+| 40KPlasmagunMod | 1499457957 | PLASMAGUN_CV/MG/BM (rifle) | Tactical weapon choice (plasma gun) later |
+| 40KPlasmaPistolsMod | 1497538465 | PLASMAPISTOL_CV/MG/BM (pistol) | Sergeant / Commander sidearm later |
+| 40KPowerclawsMod | 1517417627 | POWERCLAW_LEFT_CV/MG/BM (sword) | Terminator lightning claws later |
+| LasgunWotC / The Lasgun | 1237846886 / 1081412760 | Lasgun, HotshotLasgun, MastercraftedLasgun, DecayedLasgun | Imperial Guard / Officer line later (two copies subscribed; keep the WotC one) |
+| Spark Bolter | 945783807 | Bolter (sparkrifle) | Dreadnought heavy bolter later |
+| Space Marine Class Pack | 3789746906 | 10 AA_* classes, no weapons/models | Its classes are removed from our class deck (`remove_from_deck`). Reference for its Dreadnought class |
+
+Still without a 40K model: Psychic Hood and Narthecium (vanilla psi amp and gremlin meshes); a servo-skull mod is subscribed for the Narthecium look.
