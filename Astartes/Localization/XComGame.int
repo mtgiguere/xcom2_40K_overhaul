@@ -562,3 +562,109 @@ LocHelpText="Melee attacks against the Marine lose 25 to-hit."
 LocFlyOverText="Hold Fast"
 LocPromotionPopupText="<Bullet/> Enemy melee attacks against this Marine suffer -25 to hit.<br/>"
 
+; --- Tactical, Devastator, Apothecary, Librarian round-out ---
+[Astartes_TacticalDoctrine X2AbilityTemplate]
+LocFriendlyName="Tactical Doctrine"
+LocLongDescription="The sergeant's drill keeps the whole squad moving. Every Marine on the mission gains +1 mobility."
+LocHelpText="Squad: +1 mobility."
+LocFlyOverText="Tactical Doctrine"
+LocPromotionPopupText="<Bullet/> Every Marine on the mission gains +1 mobility while the sergeant is on it.<br/>"
+
+[Astartes_HoldTheLine X2AbilityTemplate]
+LocFriendlyName="Hold the Line"
+LocLongDescription="The squad holds its ground. Every Marine in full cover is 10 harder to hit."
+LocHelpText="Squad: +10 defence while in full cover."
+LocFlyOverText="Hold the Line"
+LocPromotionPopupText="<Bullet/> Every Marine on the mission gains +10 defence while in full cover.<br/>"
+
+[Astartes_ChapterBanner X2AbilityTemplate]
+LocFriendlyName="Chapter Banner"
+LocLongDescription="The standard of the Chapter steels every brother. The squad gains +20 Will, and while the banner-bearer stands the Librarian's Perils of the Warp chance is lowered."
+LocHelpText="Squad: +20 Will. Lowers the Librarian's Perils chance."
+LocFlyOverText="Chapter Banner"
+LocPromotionPopupText="<Bullet/> Every Marine on the mission gains +20 Will.<br/><Bullet/> While the banner-bearer lives, Librarians roll Perils of the Warp 4% less often.<br/>"
+
+[Astartes_CombatSquads X2AbilityTemplate]
+LocFriendlyName="Combat Squads"
+LocLongDescription="Split the squad. The sergeant and one chosen brother each gain a free move. Once per mission."
+LocHelpText="You and one brother gain a free move. Once per mission."
+LocFlyOverText="Combat Squads"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Target a brother: he and the sergeant each gain a move action.<br/>"
+
+[Astartes_CodexVolley X2AbilityTemplate]
+LocFriendlyName="Codex Volley"
+LocLongDescription="By the book: one bolter shot at every visible enemy. Once per mission."
+LocHelpText="Fire the bolter once at every visible enemy. Once per mission."
+LocFlyOverText="Codex Volley"
+LocPromotionPopupText="<Bullet/> Fire once at every visible enemy within bolter range.<br/><Bullet/> Ends the turn. Once per mission.<br/>"
+
+[Astartes_PlasmaOvercharge X2AbilityTemplate]
+LocFriendlyName="Plasma Overcharge"
+LocLongDescription="Run the coils hot. Heavy-weapon shots this turn deal +3 damage. 3-turn cooldown."
+LocHelpText="Heavy-weapon shots this turn deal +3 damage. Cooldown."
+LocFlyOverText="Plasma Overcharge"
+LocPromotionPopupText="<Bullet/> Free action: heavy-weapon shots for the rest of the turn deal +3 damage.<br/><Bullet/> 3-turn cooldown.<br/>"
+
+[Astartes_LascannonRound X2AbilityTemplate]
+LocFriendlyName="Lascannon Round"
+LocLongDescription="One shot, one hole. A heavy-weapon shot with +5 armour piercing and +2 damage. 2 charges per mission."
+LocHelpText="Heavy shot: +5 pierce, +2 damage. 2 charges."
+LocFlyOverText="Lascannon Round"
+LocPromotionPopupText="<Bullet/> A heavy-weapon shot that pierces 5 armour and deals +2 damage.<br/><Bullet/> 2 charges per mission.<br/>"
+
+[Astartes_HeavyStance X2AbilityTemplate]
+LocFriendlyName="Heavy Stance"
+LocLongDescription="From a set position the heavy weapon's first shot of the turn does not end it. Requires not having moved this turn."
+LocHelpText="If unmoved, the first heavy-weapon shot each turn does not end the turn."
+LocFlyOverText="Heavy Stance"
+LocPromotionPopupText="<Bullet/> If the Devastator has not moved this turn, his first standard shot does not end the turn.<br/>"
+
+[Astartes_KrakMissile X2AbilityTemplate]
+LocFriendlyName="Krak Missile"
+LocLongDescription="The anti-armour shot: +2 damage and +3 armour piercing. 3-turn cooldown."
+LocHelpText="Heavy shot: +2 damage, +3 pierce. Cooldown."
+LocFlyOverText="Krak Missile"
+LocPromotionPopupText="<Bullet/> A heavy-weapon shot with +2 damage and +3 armour piercing.<br/><Bullet/> 3-turn cooldown.<br/>"
+
+[Astartes_WeaponMount X2AbilityTemplate]
+LocFriendlyName="Weapon Mount"
+LocLongDescription="Dug in behind the gun. While the Devastator has not moved this turn he gains +2 armour and +10 defence."
+LocHelpText="Unmoved this turn: +2 armour, +10 defence."
+LocFlyOverText="Weapon Mount"
+LocPromotionPopupText="<Bullet/> While the Devastator has not moved this turn: +2 armour and +10 defence.<br/>"
+
+[Astartes_MeltaRound X2AbilityTemplate]
+LocFriendlyName="Melta Round"
+LocLongDescription="Point blank, nothing stops it. A heavy shot at a target within 4 tiles that ignores armour and deals +3 damage. 2 charges per mission."
+LocHelpText="Heavy shot within 4 tiles: ignores armour, +3 damage. 2 charges."
+LocFlyOverText="Melta Round"
+LocPromotionPopupText="<Bullet/> A heavy-weapon shot at a target within 4 tiles.<br/><Bullet/> Ignores armour and deals +3 damage. 2 charges per mission.<br/>"
+
+[Astartes_FieldSurgery X2AbilityTemplate]
+LocFriendlyName="Field Surgery"
+LocLongDescription="A better-stocked narthecium: +1 heal charge per mission."
+LocHelpText="+1 narthecium heal charge."
+LocFlyOverText="Field Surgery"
+LocPromotionPopupText="<Bullet/> The narthecium carries one more heal per mission.<br/>"
+
+[Astartes_ReductorMastery X2AbilityTemplate]
+LocFriendlyName="Reductor Mastery"
+LocLongDescription="The Apothecary's skill with the reductor wastes nothing. Every geneseed recovery yields +1 geneseed."
+LocHelpText="+1 geneseed per recovery."
+LocFlyOverText="Reductor Mastery"
+LocPromotionPopupText="<Bullet/> Recover Geneseed yields one extra geneseed.<br/>"
+
+[Astartes_ChirurgeonsFury X2AbilityTemplate]
+LocFriendlyName="Chirurgeon's Fury"
+LocLongDescription="Tending a brother sharpens the Apothecary's aim. After using the narthecium or a stimm this turn, his bolter hits are critical."
+LocHelpText="After healing this turn, bolter hits crit."
+LocFlyOverText="Chirurgeon's Fury"
+LocPromotionPopupText="<Bullet/> After a heal, stabilize, revive or stimm, the Apothecary's bolter hits for the rest of the turn are critical.<br/>"
+
+[Astartes_TelekineShield X2AbilityTemplate]
+LocFriendlyName="Telekine Shield"
+LocLongDescription="A dome of force over the Librarian and the brothers beside him. Grants shield points that absorb damage. 4-turn cooldown. Psychic power: rolls for Perils."
+LocHelpText="Shield points for the Librarian and nearby brothers. Cooldown."
+LocFlyOverText="Telekine Shield"
+LocPromotionPopupText="<Bullet/> The Librarian and allies around him gain shield points that absorb damage.<br/><Bullet/> 4-turn cooldown. Rolls for Perils of the Warp.<br/>"
+

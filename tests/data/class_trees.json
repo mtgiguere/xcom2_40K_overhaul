@@ -94,8 +94,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_TacticalDoctrine",
-            "standin": "Phantom"
+            "name": "Astartes_TacticalDoctrine"
           },
           {
             "name": "ReturnFire",
@@ -108,8 +107,7 @@
             "slot": "secondary"
           },
           {
-            "name": "Astartes_HoldTheLine",
-            "standin": "BlastPadding"
+            "name": "Astartes_HoldTheLine"
           },
           {
             "name": "Suppression",
@@ -122,8 +120,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_ChapterBanner",
-            "standin": "CoolUnderPressure"
+            "name": "Astartes_ChapterBanner"
           },
           {
             "name": "EverVigilant"
@@ -135,8 +132,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_CombatSquads",
-            "standin": "Implacable"
+            "name": "Astartes_CombatSquads"
           },
           {
             "name": "Sentinel"
@@ -158,8 +154,7 @@
         [
           {
             "name": "Astartes_CodexVolley",
-            "standin": "Faceoff",
-            "slot": "secondary"
+            "slot": "primary"
           },
           {
             "name": "Astartes_ForTheEmperor",
@@ -341,9 +336,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_PlasmaOvercharge",
-            "standin": "BulletShred",
-            "slot": "primary"
+            "name": "Astartes_PlasmaOvercharge"
           },
           {
             "name": "Astartes_Bipod",
@@ -358,7 +351,6 @@
           },
           {
             "name": "Astartes_LascannonRound",
-            "standin": "Deadeye",
             "slot": "primary"
           },
           {
@@ -376,8 +368,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_HeavyStance",
-            "standin": "Salvo"
+            "name": "Astartes_HeavyStance"
           }
         ],
         [
@@ -388,12 +379,10 @@
           },
           {
             "name": "Astartes_KrakMissile",
-            "standin": "HailOfBullets",
             "slot": "primary"
           },
           {
-            "name": "Astartes_WeaponMount",
-            "standin": "EverVigilant"
+            "name": "Astartes_WeaponMount"
           }
         ],
         [
@@ -403,7 +392,6 @@
           },
           {
             "name": "Astartes_MeltaRound",
-            "standin": "RapidFire",
             "slot": "primary"
           },
           {
@@ -473,9 +461,7 @@
         ],
         [
           {
-            "name": "Astartes_FieldSurgery",
-            "standin": "ThreatAssessment",
-            "slot": "secondary"
+            "name": "Astartes_FieldSurgery"
           },
           {
             "name": "Astartes_IntermentRites",
@@ -492,8 +478,7 @@
             "slot": "secondary"
           },
           {
-            "name": "Astartes_ReductorMastery",
-            "standin": "Phantom"
+            "name": "Astartes_ReductorMastery"
           },
           {
             "name": "Suppression",
@@ -537,9 +522,7 @@
             "standin": "Fortress"
           },
           {
-            "name": "Astartes_ChirurgeonsFury",
-            "standin": "Deadeye",
-            "slot": "primary"
+            "name": "Astartes_ChirurgeonsFury"
           }
         ],
         [
@@ -631,8 +614,7 @@
             "slot": "secondary"
           },
           {
-            "name": "Astartes_TelekineShield",
-            "standin": "Fortress"
+            "name": "Astartes_TelekineShield"
           }
         ],
         [

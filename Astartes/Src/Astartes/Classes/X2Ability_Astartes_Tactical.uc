@@ -12,6 +12,7 @@ var config int EXECUTIONER_HP_PERCENT, EXECUTIONER_CRITS_PER_TURN;
 var config int RALLY_CHARGES, RALLY_RANGE_TILES;
 var config int INSPIRE_RADIUS_TILES, INSPIRE_COOLDOWN;
 var config int FOR_THE_EMPEROR_RADIUS_TILES, FOR_THE_EMPEROR_CHARGES;
+var config int TACTICAL_DOCTRINE_MOBILITY, HOLD_THE_LINE_DEFENSE, CHAPTER_BANNER_WILL, COMBAT_SQUADS_CHARGES;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -24,6 +25,10 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(Rally());
 	Templates.AddItem(Inspire());
 	Templates.AddItem(ForTheEmperor());
+	Templates.AddItem(TacticalDoctrine());
+	Templates.AddItem(HoldTheLine());
+	Templates.AddItem(ChapterBanner());
+	Templates.AddItem(CombatSquads());
 
 	return Templates;
 }
@@ -200,5 +205,75 @@ static function X2AbilityTemplate ForTheEmperor()
 	Template.AddMultiTargetEffect(Effect);
 
 	Template.ActivationSpeech = 'Inspire';
+	return Template;
+}
+
+// --- Sergeant (continued) --------------------------------------------------------------------
+
+/// Tactical Doctrine: the sergeant's drill keeps the whole squad moving. Every Marine gains mobility.
+static function X2AbilityTemplate TacticalDoctrine()
+{
+	local X2Effect_PersistentStatChange Effect;
+
+	Effect = new class'X2Effect_PersistentStatChange';
+	Effect.EffectName = 'Astartes_TacticalDoctrine_Effect';
+	Effect.AddPersistentStatChange(eStat_Mobility, default.TACTICAL_DOCTRINE_MOBILITY);
+
+	return SquadPassive('Astartes_TacticalDoctrine', "img:///UILibrary_PerkIcons.UIPerk_command", false, Effect);
+}
+
+/// Hold the Line: the squad holds its ground. Every Marine in full cover is harder to hit.
+static function X2AbilityTemplate HoldTheLine()
+{
+	local XMBEffect_ConditionalBonus Effect;
+
+	Effect = new class'XMBEffect_ConditionalBonus';
+	Effect.EffectName = 'Astartes_HoldTheLine_Effect';
+	Effect.AddToHitAsTargetModifier(-default.HOLD_THE_LINE_DEFENSE);
+	Effect.AbilityTargetConditionsAsTarget.AddItem(default.FullCoverCondition);
+
+	return SquadPassive('Astartes_HoldTheLine', "img:///UILibrary_PerkIcons.UIPerk_hunkerdown", false, Effect);
+}
+
+/// Chapter Banner: the standard of the Chapter steels every brother's will (and steadies the Librarian: Perils of the Warp is less likely while the banner stands).
+static function X2AbilityTemplate ChapterBanner()
+{
+	local X2Effect_PersistentStatChange Effect;
+
+	Effect = new class'X2Effect_PersistentStatChange';
+	Effect.EffectName = 'Astartes_ChapterBanner_Effect';
+	Effect.AddPersistentStatChange(eStat_Will, default.CHAPTER_BANNER_WILL);
+
+	return SquadPassive('Astartes_ChapterBanner', "img:///UILibrary_PerkIcons.UIPerk_inspire", false, Effect);
+}
+
+/// Combat Squads: split the squad. The sergeant and one brother each gain a free move.
+static function X2AbilityTemplate CombatSquads()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_GrantActionPoints TargetMove, SelfMove;
+	local X2Condition_UnitProperty NotSelf;
+
+	TargetMove = new class'X2Effect_GrantActionPoints';
+	TargetMove.NumActionPoints = 1;
+	TargetMove.PointType = class'X2CharacterTemplateManager'.default.MoveActionPoint;
+
+	SelfMove = new class'X2Effect_GrantActionPoints';
+	SelfMove.NumActionPoints = 1;
+	SelfMove.PointType = class'X2CharacterTemplateManager'.default.MoveActionPoint;
+
+	Template = TargetedBuff('Astartes_CombatSquads', "img:///UILibrary_PerkIcons.UIPerk_runandgun", false, TargetMove, class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY, eCost_Free);
+	Template.AddShooterEffect(SelfMove);
+	AddCharges(Template, default.COMBAT_SQUADS_CHARGES);
+
+	NotSelf = new class'X2Condition_UnitProperty';
+	NotSelf.ExcludeDead = true;
+	NotSelf.ExcludeHostileToSource = true;
+	NotSelf.ExcludeFriendlyToSource = false;
+	NotSelf.RequireSquadmates = true;
+	Template.AbilityTargetConditions.AddItem(NotSelf);
+
+	Template.ActivationSpeech = 'Inspire';
+	Template.bShowActivation = true;
 	return Template;
 }

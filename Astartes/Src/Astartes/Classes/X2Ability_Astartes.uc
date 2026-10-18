@@ -176,6 +176,7 @@ static function X2AbilityTemplate RecoverGeneseed()
 
 	HarvestEffect = new class'X2Effect_Astartes_RecoverGeneseed';
 	HarvestEffect.GeneseedAmount = default.GENESEED_PER_RECOVERY;
+	HarvestEffect.MasteryBonus = class'X2Ability_Astartes_Apothecary'.default.REDUCTOR_MASTERY_BONUS_GENESEED;
 	Template.AddTargetEffect(HarvestEffect);
 
 	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_PlayerInput');

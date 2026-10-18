@@ -30,6 +30,7 @@ var config array<PsychicPowerDef> PsychicPowers;
 var config array<PerilsDaemonDef> PerilsDaemons;
 var config int PERILS_BASE_CHANCE, PERILS_CHANCE_PER_WARP_CHARGE;
 var config int PERILS_HOOD_REDUCTION_MG, PERILS_HOOD_REDUCTION_BM;
+var config int PERILS_BANNER_REDUCTION; // while a living squadmate carries the Chapter Banner (Tactical)
 var config int PERILS_WEIGHT_WARP_SURGE, PERILS_WEIGHT_BACKLASH, PERILS_WEIGHT_WARP_SHOCK, PERILS_WEIGHT_MENTAL_PURGE, PERILS_WEIGHT_POSSESSION;
 var config int PERILS_BACKLASH_DAMAGE, PERILS_BACKLASH_SPREAD, PERILS_SHOCK_STUN_ACTIONS, PERILS_PURGE_COOLDOWN;
 var config bool bLogPerils;
@@ -220,7 +221,26 @@ static function int PerilsChance(XComGameState_Unit Unit, int WarpCharge)
 			}
 		}
 	}
+	if (BannerStands(Unit))
+	{
+		Chance -= default.PERILS_BANNER_REDUCTION;
+	}
 	return Max(Chance, 0);
+}
+
+/// True while a living, present squadmate of the unit carries the Chapter Banner.
+static function bool BannerStands(XComGameState_Unit Unit)
+{
+	local XComGameState_Unit Ally;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', Ally)
+	{
+		if (Ally.GetTeam() == Unit.GetTeam() && Ally.IsAlive() && !Ally.bRemovedFromPlay && Ally.HasSoldierAbility('Astartes_ChapterBanner'))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 /// Weighted pick from the outcome table.

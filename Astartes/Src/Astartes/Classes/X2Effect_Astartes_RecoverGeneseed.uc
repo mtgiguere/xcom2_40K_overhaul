@@ -7,11 +7,13 @@ class X2Effect_Astartes_RecoverGeneseed extends X2Effect;
 
 var name HarvestedValueName;
 var int GeneseedAmount;
+var int MasteryBonus; // extra geneseed when the Apothecary knows Reductor Mastery
 
 simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
 {
-	local XComGameState_Unit Body;
+	local XComGameState_Unit Body, Apothecary;
 	local XComGameState_AstartesChapter Chapter;
+	local int Amount;
 
 	Body = XComGameState_Unit(kNewTargetState);
 	if (Body == none)
@@ -22,7 +24,13 @@ simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffe
 	Body.SetUnitFloatValue(default.HarvestedValueName, 1, eCleanup_Never);
 
 	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
-	Chapter.AddGeneseed(GeneseedAmount);
+	Amount = GeneseedAmount;
+	Apothecary = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(ApplyEffectParameters.SourceStateObjectRef.ObjectID));
+	if (Apothecary != none && Apothecary.HasSoldierAbility('Astartes_ReductorMastery'))
+	{
+		Amount += MasteryBonus;
+	}
+	Chapter.AddGeneseed(Amount);
 
 	`log("Astartes: geneseed recovered from" @ Body.GetFullName() @ "pool now" @ Chapter.Geneseed,, 'Astartes');
 }
@@ -31,4 +39,5 @@ defaultproperties
 {
 	HarvestedValueName = "Astartes_GeneseedRecovered"
 	GeneseedAmount = 1
+	MasteryBonus = 1
 }

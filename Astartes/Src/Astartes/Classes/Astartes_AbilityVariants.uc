@@ -20,6 +20,7 @@ struct AbilityClone
 	var bool bEndsTurn;        // with ActionPoints >= 1: consume all remaining points
 	var int RangeTiles;        // -1 keep; for cursor-targeted abilities: fixed range in tiles
 	var bool bNoRulerReaction; // drop the 'RulerArmorAbilityActivated' post-activation event (Alien Rulers would get a free move)
+	var int Charges;           // 0 keep; n = per-mission charges (a charge cost is added if the base has none)
 	structdefaultproperties
 	{
 		Cooldown = -1
@@ -132,8 +133,42 @@ static function Tune(X2AbilityTemplate Clone, const out AbilityClone Def)
 		}
 	}
 
+	if (Def.Charges > 0)
+	{
+		SetCharges(Clone, Def.Charges);
+	}
+
 	if (Def.bNoRulerReaction)
 	{
 		Clone.PostActivationEvents.RemoveItem('RulerArmorAbilityActivated');
 	}
+}
+
+static function SetCharges(X2AbilityTemplate Clone, int NumCharges)
+{
+	local X2AbilityCharges Charges;
+	local X2AbilityCost_Charges ChargeCost;
+	local array<X2AbilityCost> Costs;
+	local bool bHasChargeCost;
+	local int i;
+
+	Charges = new class'X2AbilityCharges';
+	Charges.InitialCharges = NumCharges;
+	Clone.AbilityCharges = Charges;
+
+	for (i = 0; i < Clone.AbilityCosts.Length; i++)
+	{
+		Costs.AddItem(Clone.AbilityCosts[i]);
+		if (X2AbilityCost_Charges(Clone.AbilityCosts[i]) != none)
+		{
+			bHasChargeCost = true;
+		}
+	}
+	if (!bHasChargeCost)
+	{
+		ChargeCost = new class'X2AbilityCost_Charges';
+		ChargeCost.NumCharges = 1;
+		Costs.AddItem(ChargeCost);
+	}
+	Clone.AbilityCosts = Costs;
 }
