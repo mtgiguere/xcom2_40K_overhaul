@@ -127,8 +127,10 @@ Begin:
 	}
 	BuildArc();
 
-	UnitPawn.EnableRMA(true, true);
-	UnitPawn.EnableRMAInteractPhysics(true);
+	// We place the pawn ourselves every frame, so root motion stays OFF. Vanilla move actions switch it off in
+	// MoveEnd; left on, later animations slide the pawn to animation space, which is the world origin (playtest 2026-10-18).
+	UnitPawn.EnableRMA(false, false);
+	UnitPawn.EnableRMAInteractPhysics(false);
 	UnitPawn.bSkipIK = true;
 
 	// leap
@@ -179,6 +181,8 @@ Begin:
 		IgnitionSound.Stop();
 	}
 	UnitPawn.bSkipIK = false;
+	UnitPawn.EnableRMA(false, false);
+	UnitPawn.EnableRMAInteractPhysics(false);
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	UnitPawn.SetLocation(EndLocation);
 	Unit.ProcessNewPosition();
