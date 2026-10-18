@@ -56,8 +56,8 @@
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_sharpshooter",
       "loadout": [
-        "AssaultRifle_CV",
-        "Pistol_CV"
+        "Astartes_Bolter_CV",
+        "Astartes_BoltPistol_CV"
       ],
       "weapons": [
         [
@@ -183,8 +183,8 @@
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_ranger",
       "loadout": [
-        "Sword_CV_Primary",
-        "Pistol_CV"
+        "Astartes_Chainsword_CV_Primary",
+        "Astartes_BoltPistol_CV"
       ],
       "weapons": [
         [
@@ -311,8 +311,8 @@
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_grenadier",
       "loadout": [
-        "Cannon_CV",
-        "Pistol_CV"
+        "Astartes_HeavyBolter_CV",
+        "Astartes_BoltPistol_CV"
       ],
       "weapons": [
         [
@@ -450,8 +450,8 @@
       "rank_set": "combat",
       "icon": "img:///UILibrary_Common.class_specialist",
       "loadout": [
-        "AssaultRifle_CV",
-        "Gremlin_CV"
+        "Astartes_Bolter_CV",
+        "Astartes_Narthecium_CV"
       ],
       "weapons": [
         [
@@ -587,8 +587,8 @@
       "rank_set": "librarius",
       "icon": "img:///UILibrary_Common.class_psioperative",
       "loadout": [
-        "Sword_CV_Primary",
-        "PsiAmp_CV"
+        "Astartes_ForceSword_CV_Primary",
+        "Astartes_PsychicHood_CV"
       ],
       "weapons": [
         [
@@ -721,7 +721,7 @@
     }
   },
   "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row. Astartes_Physiology (poison immunity) is also in every rank-1 row.",
-  "_dependencies": "Loadouts use Sword_CV_Primary from the Primary Secondaries mod (Workshop 1142234205), which generates primary variants of all swords and pistols at game start.",
+  "_dependencies": "Loadouts use our weapon clones (X2Item_AstartesWeapons) and their _Primary variants from the Primary Secondaries mod (Workshop 1142234205).",
   "remove_from_deck": [
     "Ranger",
     "Sharpshooter",

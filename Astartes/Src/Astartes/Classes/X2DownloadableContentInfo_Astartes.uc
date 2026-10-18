@@ -162,6 +162,42 @@ static event OnPostTemplatesCreated()
 	`log("Astartes: OnPostTemplatesCreated",, 'Astartes');
 	class'Astartes_UnitVariants'.static.CreateVariants();
 	class'X2Ability_Astartes'.static.MakeKevlarPowerArmour();
+	class'X2Item_AstartesWeapons'.static.CreateWeapons();
+}
+
+/// Called when a mission is generated, after the faction mods have added their raid SitReps (we run after
+/// them, see CHDLCRunOrder). On a continent we own, foreign raid SitReps are removed so pods stay pure.
+static function PostSitRepCreation(out GeneratedMissionData GeneratedMission, optional XComGameState_BaseObject SourceObject)
+{
+	local XComGameState_MissionSite MissionSite;
+	local XComGameState_AstartesChapter Chapter;
+	local XComGameState_Continent Continent;
+	local int i;
+
+	if (!class'Astartes_FactionConfig'.default.bEnableContinentFactions)
+	{
+		return;
+	}
+	MissionSite = XComGameState_MissionSite(SourceObject);
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	if (MissionSite == none || Chapter == none)
+	{
+		return;
+	}
+	Continent = MissionSite.GetContinent();
+	if (Continent == none || Chapter.GetFactionForContinent(Continent.GetReference()) == '')
+	{
+		return;
+	}
+
+	for (i = GeneratedMission.SitReps.Length - 1; i >= 0; i--)
+	{
+		if (class'Astartes_FactionConfig'.default.ForeignRaidSitReps.Find(GeneratedMission.SitReps[i]) != INDEX_NONE)
+		{
+			`log("Astartes: removed foreign raid SitRep" @ GeneratedMission.SitReps[i] @ "from a mission on" @ Continent.GetMyTemplateName(),, 'Astartes');
+			GeneratedMission.SitReps.Remove(i, 1);
+		}
+	}
 }
 
 // ---------------------------------------------------------------------------------------

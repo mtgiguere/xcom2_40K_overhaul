@@ -126,3 +126,25 @@ def test_cultist_has_pawn_parts_for_both_genders(config):
     pawns = [v for v in mgr[0].values("BodyPartTemplateConfig") if struct_field(v, "PartType") == "Pawn" and struct_field(v, "CharacterTemplate") == "Astartes_Cultist"]
     genders = {struct_field(v, "Gender") for v in pawns}
     assert genders == {"eGender_Male", "eGender_Female"}, f"cultist pawn parts: {genders}"
+
+
+def test_foreign_raid_sitreps_and_run_order(config, faction_section):
+    raids = {unquote(v) for v in faction_section.values("ForeignRaidSitReps")}
+    assert {"OrkTeamOneRaiders", "OrkTeamTwoRaiders", "BlackLegion", "DarkEldarRaiders"} <= raids
+    order = [s for s in config["XComGame.ini"] if s.name == "Astartes CHDLCRunOrder"]
+    assert order, "missing [Astartes CHDLCRunOrder]"
+    after = {unquote(v) for v in order[0].values("RunAfter")}
+    assert {"OrkRaiders", "BlackLegion"} <= after, "we must run after the faction mods to strip their SitReps"
+    assert "PrimarySecondaries" in {unquote(v) for v in order[0].values("RunBefore")}
+
+
+def test_loadouts_use_our_wargear(config):
+    mgr = [s for s in config["XComGameData.ini"] if s.name == "XComGame.X2ItemTemplateManager"][0]
+    weapons_section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Item_AstartesWeapons"][0]
+    defined = {struct_field(v, "NewName") for v in weapons_section.values("Weapons")}
+    for v in mgr.values("Loadouts"):
+        if not struct_field(v, "LoadoutName").startswith("SquaddieAstartes_"):
+            continue
+        for item in re.findall(r'Item="(\w+)"', v):
+            base = item[:-len("_Primary")] if item.endswith("_Primary") else item
+            assert base in defined, f"loadout item {item} is not one of our weapons"

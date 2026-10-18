@@ -31,6 +31,8 @@ var config array<ContinentFactionOverride> ContinentFactionOverrides;
 var config array<name> NeverRewriteEncounters;
 /// Encounter ID prefixes whose leader is drawn from the faction's CommanderList (e.g. "SPCx" = Field Commander groups).
 var config array<string> CommanderEncounterPrefixes;
+/// SitRep templates the faction mods inject on their own (raids). Removed from missions on continents we own.
+var config array<name> ForeignRaidSitReps;
 
 static function bool IsNeverRewritten(name EncounterID)
 {

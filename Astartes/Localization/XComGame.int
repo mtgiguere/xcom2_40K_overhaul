@@ -30,6 +30,100 @@ LocFriendlyName="Power Armour"
 LocHelpText="Power armour plating."
 LocLongDescription="Ceramite plate and an adamantium skeleton give the wearer additional health and armour."
 
+; ---------------------------------------------------------------- wargear (vanilla clones)
+[Astartes_Bolter_CV X2WeaponTemplate]
+FriendlyName="Bolter"
+FriendlyNamePlural="Bolters"
+BriefSummary="The Godwyn-pattern boltgun fires .75 calibre mass-reactive shells that detonate inside the target. The signature weapon of the Adeptus Astartes."
+TacticalText="<Bullet/> Standard issue for every battle-brother.<br/><Bullet/> Hits harder than a lasgun; small magazine."
+[Astartes_Bolter_MG X2WeaponTemplate]
+FriendlyName="Bolter Mk II"
+FriendlyNamePlural="Bolters Mk II"
+BriefSummary="A reworked boltgun with an improved feed and a stabilised barrel."
+[Astartes_Bolter_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Bolter"
+FriendlyNamePlural="Master-Crafted Bolters"
+BriefSummary="A boltgun built by the Chapter's artificers, each round hand-loaded and blessed."
+
+[Astartes_BoltPistol_CV X2WeaponTemplate]
+FriendlyName="Bolt Pistol"
+FriendlyNamePlural="Bolt Pistols"
+BriefSummary="A one-handed boltgun. The Assault Marine's sidearm and the officer's badge of rank."
+[Astartes_BoltPistol_MG X2WeaponTemplate]
+FriendlyName="Bolt Pistol Mk II"
+FriendlyNamePlural="Bolt Pistols Mk II"
+BriefSummary="An improved bolt pistol with a heavier shell."
+[Astartes_BoltPistol_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Bolt Pistol"
+FriendlyNamePlural="Master-Crafted Bolt Pistols"
+BriefSummary="An artificer's bolt pistol, ornate and lethal."
+
+[Astartes_Chainsword_CV X2WeaponTemplate]
+FriendlyName="Chainsword"
+FriendlyNamePlural="Chainswords"
+BriefSummary="Adamantium chain-teeth on a powered track. Loud, brutal, beloved."
+[Astartes_Chainsword_MG X2WeaponTemplate]
+FriendlyName="Power Sword"
+FriendlyNamePlural="Power Swords"
+BriefSummary="A blade sheathed in a disruptive power field that parts armour like cloth."
+[Astartes_Chainsword_BM X2WeaponTemplate]
+FriendlyName="Relic Blade"
+FriendlyNamePlural="Relic Blades"
+BriefSummary="A two-handed power weapon from the Chapter's reliquary, carried by champions."
+
+[Astartes_HeavyBolter_CV X2WeaponTemplate]
+FriendlyName="Heavy Bolter"
+FriendlyNamePlural="Heavy Bolters"
+BriefSummary="The Devastator's belt-fed support weapon. Suppression made manifest."
+[Astartes_HeavyBolter_MG X2WeaponTemplate]
+FriendlyName="Heavy Bolter Mk II"
+FriendlyNamePlural="Heavy Bolters Mk II"
+BriefSummary="A heavy bolter with an improved feed and recoil compensation."
+[Astartes_HeavyBolter_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Heavy Bolter"
+FriendlyNamePlural="Master-Crafted Heavy Bolters"
+BriefSummary="An artificer heavy bolter firing blessed rounds."
+
+[Astartes_ForceSword_CV X2WeaponTemplate]
+FriendlyName="Force Sword"
+FriendlyNamePlural="Force Swords"
+BriefSummary="A psychically attuned blade. In a Librarian's hands it channels the Warp into every cut."
+[Astartes_ForceSword_MG X2WeaponTemplate]
+FriendlyName="Force Sword Mk II"
+FriendlyNamePlural="Force Swords Mk II"
+BriefSummary="A force sword with a refined psychic matrix."
+[Astartes_ForceSword_BM X2WeaponTemplate]
+FriendlyName="Relic Force Sword"
+FriendlyNamePlural="Relic Force Swords"
+BriefSummary="An ancient force weapon, its matrix tempered by ten thousand years of use."
+
+[Astartes_PsychicHood_CV X2WeaponTemplate]
+FriendlyName="Psychic Hood"
+FriendlyNamePlural="Psychic Hoods"
+BriefSummary="A crystalline matrix worn about the head that focuses a Librarian's power and shields his mind from the Warp."
+TacticalText="<Bullet/> Required to use psychic powers.<br/><Bullet/> Protects against hostile psykers."
+[Astartes_PsychicHood_MG X2WeaponTemplate]
+FriendlyName="Psychic Hood Mk II"
+FriendlyNamePlural="Psychic Hoods Mk II"
+BriefSummary="A psychic hood with an enlarged focusing matrix."
+[Astartes_PsychicHood_BM X2WeaponTemplate]
+FriendlyName="Relic Psychic Hood"
+FriendlyNamePlural="Relic Psychic Hoods"
+BriefSummary="The hood of a Chief Librarian of ages past."
+
+[Astartes_Narthecium_CV X2WeaponTemplate]
+FriendlyName="Narthecium"
+FriendlyNamePlural="Narthecia"
+BriefSummary="The Apothecary's gauntlet of surgical tools, stimms and the reductor that recovers a fallen brother's geneseed."
+[Astartes_Narthecium_MG X2WeaponTemplate]
+FriendlyName="Narthecium Mk II"
+FriendlyNamePlural="Narthecia Mk II"
+BriefSummary="An improved narthecium with an expanded medicae suite."
+[Astartes_Narthecium_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Narthecium"
+FriendlyNamePlural="Master-Crafted Narthecia"
+BriefSummary="An artificer narthecium, the finest tools the Apothecarion can provide."
+
 ; ---------------------------------------------------------------- Tactical Marine
 [Astartes_BolterDrill X2AbilityTemplate]
 LocFriendlyName="Bolter Drill"

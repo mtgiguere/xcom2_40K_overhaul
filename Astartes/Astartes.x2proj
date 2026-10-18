@@ -33,6 +33,7 @@
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Tactical.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Assault.uc" />
+    <Content Include="Src\Astartes\Classes\X2Item_AstartesWeapons.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_UnitVariants.uc" />
