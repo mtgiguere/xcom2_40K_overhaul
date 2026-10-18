@@ -460,6 +460,31 @@ single high-rank unique character with a class of their own, instead of the Mari
 Build order when picked up: Commissar and Canoness first (models and voices present), Inquisitor when a model turns up.
 The hero rewards in `Astartes_NoHeroes` then generate these characters by faction instead of a rookie.
 
+### 9.1e The Inquisition takes notice (proposed 2026-10-18)
+
+The Inquisitor is never a reward. Nobody recruits an Inquisitor; the Inquisition notices you. A hidden **Taint** tally
+grows with the Chapter's exposure to the Warp, and when it crosses a threshold an Inquisitor arrives to judge the Chapter.
+
+**What raises Taint** (all events the mod already produces, so the tally is a listener, not new content):
+- a Librarian lost to possession (the Daemon Prince event): large;
+- a Sorcerer's rift opened on a mission the Chapter was present for, and every daemon that walked out of it: medium;
+- Marines corrupted by Chaos once that mechanic exists (the corruption backlog item): per Marine;
+- a Chaos-held region left unliberated for a long time: slow drift.
+
+**The judgement.** A story mission (the Inquisitor's retinue on the map as a third party) or a strategy event with a choice:
+- *Submit to the Inquisition's scrutiny*: lose a Librarian to censure (or the most tainted Marine to execution), Taint resets,
+  and the Inquisitor **joins the Chapter** as its hero: the gate to the third hero class.
+- *Refuse*: Taint stays, the Inquisitor becomes a recurring hostile presence (Inquisitorial strike teams as a SitRep, an
+  Exterminatus clock as a late-game loss condition in section 10).
+- *Prove purity in the field*: a mission to destroy a Daemon Prince or a Sorcerer's coven under the Inquisitor's eye;
+  success skips the censure and still gains the hero.
+
+**Why this shape.** It ties three loose threads together: the Perils / possession events gain a strategic consequence beyond
+the lost squad member, Chaos corruption gets its payoff, and the Inquisitor hero arrives with a story instead of a covert
+action. A pious Chapter that never loses a Librarian simply never meets the Inquisition, which is also correct.
+
+Model still needed (a coat-and-rosette cosmetic). Mechanics after Chaos corruption exists.
+
 ### 9.1d Eldar Warlock (built 2026-10-18) and the Eldar faction
 
 The first craftworld unit, and the technique every soldier-bodied enemy or ally will reuse. The Warlock is a Black Legion
