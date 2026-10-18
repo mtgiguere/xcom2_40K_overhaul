@@ -187,10 +187,10 @@ LocPromotionPopupText="<Bullet/> Chainsword attacks deal extra damage.<br/>"
 
 [Astartes_Whirlwind X2AbilityTemplate]
 LocFriendlyName="Whirlwind"
-LocLongDescription="Momentum is a weapon. A chainsword kill refunds the action, up to a limit each turn."
-LocHelpText="Chainsword kills refund the action, up to a limit per turn."
+LocLongDescription="Momentum is a weapon. A chainsword kill refunds the action, up to 2 times each turn."
+LocHelpText="Chainsword kills refund the action, up to 2 times per turn."
 LocFlyOverText="Whirlwind"
-LocPromotionPopupText="<Bullet/> When a chainsword attack kills its target, the action is refunded.<br/><Bullet/> Limited refunds per turn.<br/>"
+LocPromotionPopupText="<Bullet/> When a chainsword attack kills its target, the action is refunded.<br/><Bullet/> Up to 2 refunds per turn.<br/>"
 
 [Astartes_Duelist X2AbilityTemplate]
 LocFriendlyName="Duelist"
