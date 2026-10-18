@@ -22,6 +22,7 @@ struct AbilityClone
 	var bool bNoRulerReaction; // drop the 'RulerArmorAbilityActivated' post-activation event (Alien Rulers would get a free move)
 	var int Charges;           // 0 keep; n = per-mission charges (a charge cost is added if the base has none)
 	var bool bClearPrerequisites; // drop PrerequisiteAbilities (our trees define their own progression)
+	var bool bRemoveOtherCosts;  // drop every cost that is not action points, charges or ammo (another mod's resource pool)
 	structdefaultproperties
 	{
 		Cooldown = -1
@@ -35,6 +36,15 @@ var config array<AbilityClone> Clones;
 // name: perk visual effects and per-ability animations are bound to the ability name, so a clone loses them.
 // The 40K name and text come from localization overrides in XComGame.int.
 var config array<AbilityClone> Retunes;
+
+// Class-tree fallbacks: when an ability another mod provides is not loaded, the promotion slot that names it
+// is swapped for a vanilla stand-in at template init, so the tree is always complete.
+struct AbilityFallback
+{
+	var name Ability;
+	var name Fallback;
+};
+var config array<AbilityFallback> Fallbacks;
 
 static function CreateClones()
 {
@@ -114,10 +124,14 @@ static function Tune(X2AbilityTemplate Clone, const out AbilityClone Def)
 		}
 	}
 
-	if (Def.bRemoveCharges || Def.ActionPoints >= 0)
+	if (Def.bRemoveCharges || Def.ActionPoints >= 0 || Def.bRemoveOtherCosts)
 	{
 		for (i = 0; i < Clone.AbilityCosts.Length; i++)
 		{
+			if (Def.bRemoveOtherCosts && X2AbilityCost_ActionPoints(Clone.AbilityCosts[i]) == none && X2AbilityCost_Charges(Clone.AbilityCosts[i]) == none && X2AbilityCost_Ammo(Clone.AbilityCosts[i]) == none)
+			{
+				continue;
+			}
 			if (Def.bRemoveCharges && X2AbilityCost_Charges(Clone.AbilityCosts[i]) != none)
 			{
 				continue;
@@ -205,4 +219,38 @@ static function SetCharges(X2AbilityTemplate Clone, int NumCharges)
 		Costs.AddItem(ChargeCost);
 	}
 	Clone.AbilityCosts = Costs;
+}
+
+/// Replace abilities that are not loaded in a soldier's own ability tree with their configured vanilla stand-ins.
+/// Soldiers build their tree from the class template at squaddie promotion (the template's ranks are protected,
+/// the unit's AbilityTree is not), so Astartes_ClassLook calls this on every UnitRankUp. Returns the number swapped.
+static function int ApplyFallbacksToUnit(XComGameState_Unit Unit)
+{
+	local X2AbilityTemplateManager AbilityMgr;
+	local int r, a, f, Swapped;
+	local name Missing;
+
+	AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	for (r = 0; r < Unit.AbilityTree.Length; r++)
+	{
+		for (a = 0; a < Unit.AbilityTree[r].Abilities.Length; a++)
+		{
+			Missing = Unit.AbilityTree[r].Abilities[a].AbilityName;
+			if (Missing == '' || AbilityMgr.FindAbilityTemplate(Missing) != none)
+			{
+				continue;
+			}
+			for (f = 0; f < default.Fallbacks.Length; f++)
+			{
+				if (default.Fallbacks[f].Ability == Missing && AbilityMgr.FindAbilityTemplate(default.Fallbacks[f].Fallback) != none)
+				{
+					Unit.AbilityTree[r].Abilities[a].AbilityName = default.Fallbacks[f].Fallback;
+					`log("Astartes:" @ Unit.GetFullName() @ "rank" @ r + 1 @ "slot" @ a + 1 $ ":" @ Missing @ "is not loaded; using" @ default.Fallbacks[f].Fallback,, 'Astartes');
+					Swapped++;
+					break;
+				}
+			}
+		}
+	}
+	return Swapped;
 }

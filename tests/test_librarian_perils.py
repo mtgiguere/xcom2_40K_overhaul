@@ -36,7 +36,8 @@ def librarian_abilities() -> set[str]:
 
 
 # The Librarian's powers are the vanilla psionics, renamed by localization (perk visuals bind to the vanilla name).
-PSYCHIC_POWERS = {"Soulfire", "Insanity", "Inspire", "NullLance", "Schism", "Solace", "SoulSteal", "Domination", "VoidRift", "Fuse", "EnergyShield"}
+PSYCHIC_POWERS = {"Soulfire", "Insanity", "Inspire", "NullLance", "Schism", "Solace", "SoulSteal", "Domination", "VoidRift", "Fuse", "EnergyShield",
+                  "ForceLightning", "ForceChoke", "ForcePush", "ForceHeal", "ForceChainLightning"}
 
 
 def warp_charges(perils_cfg) -> dict[str, int]:

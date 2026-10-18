@@ -51,8 +51,20 @@ static function EventListenerReturn OnUnitRankUp(Object EventData, Object EventS
 		return ELR_NoInterrupt;
 	}
 
-	Helmet = HelmetForClass(UnitState.GetSoldierClassTemplateName());
-	if (Helmet == '' || UnitState.kAppearance.nmHelmet == Helmet)
+	NewUnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(UnitState.ObjectID));
+	if (NewUnitState == none)
+	{
+		NewUnitState = XComGameState_Unit(GameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+	}
+
+	// Optional-mod abilities that are not loaded become their vanilla stand-ins in this soldier's tree.
+	if (class'X2DownloadableContentInfo_Astartes'.default.MarineClasses.Find(NewUnitState.GetSoldierClassTemplateName()) != INDEX_NONE)
+	{
+		class'Astartes_AbilityVariants'.static.ApplyFallbacksToUnit(NewUnitState);
+	}
+
+	Helmet = HelmetForClass(NewUnitState.GetSoldierClassTemplateName());
+	if (Helmet == '' || NewUnitState.kAppearance.nmHelmet == Helmet)
 	{
 		return ELR_NoInterrupt;
 	}
@@ -64,11 +76,6 @@ static function EventListenerReturn OnUnitRankUp(Object EventData, Object EventS
 		return ELR_NoInterrupt;
 	}
 
-	NewUnitState = XComGameState_Unit(GameState.GetGameStateForObjectID(UnitState.ObjectID));
-	if (NewUnitState == none)
-	{
-		NewUnitState = XComGameState_Unit(GameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-	}
 	Appearance = NewUnitState.kAppearance;
 	Appearance.nmHelmet = Helmet;
 	NewUnitState.SetTAppearance(Appearance);

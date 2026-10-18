@@ -112,8 +112,13 @@ def test_no_duplicate_abilities_within_a_class(class_sections, class_name):
 
 # --- every ability must exist somewhere -----------------------------------------------------------
 
+def optional_abilities() -> set[str]:
+    """Abilities another mod provides, with a vanilla fallback declared in the spec (swapped in at template init)."""
+    return {s["name"] for c in SPEC["classes"].values() for rank in c["ranks"] for s in rank if "fallback" in s}
+
+
 def test_every_referenced_ability_exists(class_sections):
-    known = VANILLA_ABILITIES | mod_abilities()
+    known = VANILLA_ABILITIES | mod_abilities() | optional_abilities()
     unknown = sorted(
         {a for c in MARINE_CLASSES for rank in rank_abilities(class_sections[c]) for a in rank if a not in known}
     )
@@ -237,3 +242,24 @@ def test_trigger_filters_use_target_conditions():
             if "AddTriggerTargetCondition(" not in tail or f"ExcludeAbilityNames.AddItem('{m.group(1)}')" not in src:
                 offenders.append(f"{f.name}: {m.group(1)} listens to AbilityActivated without a self-excluding target filter")
     assert not offenders, offenders
+
+
+def test_optional_abilities_have_vanilla_fallbacks_in_config(config):
+    """Every optional (other-mod) ability in the spec has a vanilla fallback, mirrored in +Fallbacks and localized."""
+    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_AbilityVariants"][0]
+    cfg = {struct_field(v, "Ability"): struct_field(v, "Fallback") for v in section.values("Fallbacks")}
+    for c in SPEC["classes"].values():
+        for rank in c["ranks"]:
+            for slot in rank:
+                if "fallback" in slot:
+                    assert slot["fallback"] in VANILLA_ABILITIES, f"{slot['name']}: fallback {slot['fallback']} is not vanilla"
+                    assert cfg.get(slot["name"]) == slot["fallback"], f"{slot['name']}: config Fallbacks must mirror the spec"
+
+
+def test_fallbacks_are_applied_per_unit():
+    """X2SoldierClassTemplate.SoldierRanks is protected; fallbacks must rewrite the soldier's own AbilityTree on rank-up."""
+    av = (SRC_DIR / "Astartes_AbilityVariants.uc").read_text(encoding="utf-8")
+    cl = (SRC_DIR / "Astartes_ClassLook.uc").read_text(encoding="utf-8")
+    assert "ApplyFallbacksToUnit" in av and "Unit.AbilityTree" in av
+    assert "ApplyFallbacksToUnit" in cl, "the UnitRankUp listener must apply fallbacks"
+    assert "SoldierRanks[" not in av, "class template ranks cannot be written from outside the class"

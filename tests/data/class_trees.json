@@ -619,17 +619,16 @@
         ],
         [
           {
-            "name": "Astartes_FireShield",
-            "standin": "Bladestorm",
-            "slot": "primary"
+            "name": "ForceLightning",
+            "fallback": "Bladestorm"
           },
           {
             "name": "Fuse",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_Warp_Bind",
-            "standin": "LightningReflexes"
+            "name": "ForceChoke",
+            "fallback": "LightningReflexes"
           }
         ],
         [
@@ -642,23 +641,22 @@
             "standin": "Phantom"
           },
           {
-            "name": "Astartes_SmiteTheEarth",
-            "standin": "Shadowstrike"
+            "name": "ForcePush",
+            "fallback": "Shadowstrike"
           }
         ],
         [
           {
-            "name": "Astartes_Warp_Vigour",
-            "standin": "Implacable"
+            "name": "ForceHeal",
+            "fallback": "Implacable"
           },
           {
             "name": "Astartes_Hallucination",
             "standin": "DeepCover"
           },
           {
-            "name": "Astartes_VortexOfDoom",
-            "standin": "Blademaster",
-            "slot": "primary"
+            "name": "ForceChainLightning",
+            "fallback": "Blademaster"
           }
         ],
         [
@@ -755,5 +753,6 @@
         "FragGrenade"
       ]
     }
-  ]
+  ],
+  "_fallback_note": "fallback: a vanilla ability used for the slot when the named ability (from an optional mod) is not loaded; mirrored in XComAstartes.ini +Fallbacks and applied at template init."
 }

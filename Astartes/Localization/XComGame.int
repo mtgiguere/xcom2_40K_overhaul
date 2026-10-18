@@ -752,3 +752,39 @@ LocLongDescription="The Warp bends to the Chief Librarian. For the rest of this 
 LocHelpText="This turn: no Perils, powers cost no action, all psychic cooldowns cleared. Once per mission."
 LocFlyOverText="Warp Mastery"
 LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Psychic powers cast this turn roll no Perils of the Warp and cost no action.<br/><Bullet/> Every psychic power's cooldown is cleared: the whole arsenal, once, this turn.<br/>"
+
+; --- Librarian powers borrowed from Jedi Class Revised (names/text are ours; visuals and mechanics are theirs) ---
+[ForceLightning X2AbilityTemplate]
+LocFriendlyName="Living Lightning"
+LocLongDescription="Warp lightning leaps from the Librarian's hands and arcs through the target. Psychic power: rolls for Perils."
+LocHelpText="Lightning bolt at a single target. Rolls for Perils."
+LocFlyOverText="Living Lightning"
+LocPromotionPopupText="<Bullet/> A bolt of warp lightning against one target.<br/><Bullet/> Cooldown. Rolls for Perils of the Warp.<br/>"
+
+[ForceChoke X2AbilityTemplate]
+LocFriendlyName="Warp Bind"
+LocLongDescription="The Librarian closes an unseen fist around an enemy and holds it. Psychic power: rolls for Perils."
+LocHelpText="Seize and hold an enemy. Rolls for Perils."
+LocFlyOverText="Warp Bind"
+LocPromotionPopupText="<Bullet/> Seizes a single enemy in a telekinetic grip.<br/><Bullet/> Cooldown. Rolls for Perils of the Warp.<br/>"
+
+[ForcePush X2AbilityTemplate]
+LocFriendlyName="Smite the Earth"
+LocLongDescription="A telekinetic hammer-blow that hurls enemies back and shatters the cover they hide behind. Psychic power: rolls for Perils."
+LocHelpText="Knock enemies back and destroy cover. Rolls for Perils."
+LocFlyOverText="Smite the Earth"
+LocPromotionPopupText="<Bullet/> Hurls enemies back and destroys cover in the blast.<br/><Bullet/> Cooldown. Rolls for Perils of the Warp.<br/>"
+
+[ForceHeal X2AbilityTemplate]
+LocFriendlyName="Warp Vigour"
+LocLongDescription="The Librarian pours warp energy into a brother's wounds and knits them closed. Psychic power: rolls for Perils."
+LocHelpText="Heal a brother. Rolls for Perils."
+LocFlyOverText="Warp Vigour"
+LocPromotionPopupText="<Bullet/> Heals a target brother.<br/><Bullet/> Cooldown. Rolls for Perils of the Warp.<br/>"
+
+[ForceChainLightning X2AbilityTemplate]
+LocFriendlyName="Warp Storm"
+LocLongDescription="Lightning tears from the Immaterium and leaps from enemy to enemy. The Librarian's great working. Psychic power: rolls for Perils at the highest Warp Charge."
+LocHelpText="Chain lightning across several enemies. Rolls for Perils."
+LocFlyOverText="Warp Storm"
+LocPromotionPopupText="<Bullet/> Lightning chains between several enemies.<br/><Bullet/> Cooldown. Warp Charge 3: 20% Perils.<br/>"
