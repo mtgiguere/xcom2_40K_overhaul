@@ -48,6 +48,7 @@
     <Content Include="Src\Astartes\Classes\Astartes_ItemSlots.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Chaos.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_RiftListener.uc" />
+    <Content Include="Src\Astartes\Classes\Astartes_NoHeroes.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />
