@@ -336,7 +336,6 @@
           },
           {
             "name": "Astartes_Brace",
-            "standin": "SteadyHands",
             "slot": "primary"
           },
           {
@@ -358,7 +357,7 @@
           },
           {
             "name": "Astartes_Bipod",
-            "standin": "CoveringFire"
+            "slot": "primary"
           }
         ],
         [
@@ -429,7 +428,6 @@
           },
           {
             "name": "Astartes_TankHunter",
-            "standin": "Executioner",
             "slot": "primary"
           },
           {
@@ -466,16 +464,14 @@
       "ranks": [
         [
           {
-            "name": "Astartes_Narthecium",
-            "standin": "MedicalProtocol",
+            "name": "MedicalProtocol",
             "slot": "secondary"
           },
           {
             "name": "Astartes_RecoverGeneseed"
           },
           {
-            "name": "Astartes_CombatStims",
-            "standin": "AidProtocol",
+            "name": "AidProtocol",
             "slot": "secondary"
           },
           {
@@ -497,8 +493,7 @@
             "slot": "secondary"
           },
           {
-            "name": "Astartes_StimmShot",
-            "standin": "LightningReflexes"
+            "name": "Astartes_StimmShot"
           }
         ],
         [
@@ -525,14 +520,12 @@
             "standin": "BlastPadding"
           },
           {
-            "name": "Astartes_WarriorMedic",
-            "standin": "EverVigilant"
+            "name": "Astartes_WarriorMedic"
           }
         ],
         [
           {
-            "name": "Astartes_MassTriage",
-            "standin": "RestorativeMist",
+            "name": "RestorativeMist",
             "slot": "secondary"
           },
           {

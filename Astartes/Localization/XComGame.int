@@ -205,6 +205,39 @@ LocLongDescription="Larraman cells and the suit's medicae systems close wounds i
 LocHelpText="Regenerate health each turn, up to a limit per mission."
 LocPromotionPopupText="<Bullet/> Regenerate health at the start of each turn.<br/><Bullet/> Capped per mission.<br/>"
 
+; ---------------------------------------------------------------- Devastator
+[Astartes_Brace X2AbilityTemplate]
+LocFriendlyName="Brace"
+LocLongDescription="Plant the weapon and let the servos take the recoil. Heavy weapon shots gain <Ability:BRACE_AIM/> aim on turns the Devastator has not moved."
+LocHelpText="Heavy weapon aim bonus when you have not moved this turn."
+LocPromotionPopupText="<Bullet/> Heavy weapon shots gain aim if you have not moved this turn.<br/>"
+
+[Astartes_Bipod X2AbilityTemplate]
+LocFriendlyName="Bipod"
+LocLongDescription="Reaction fire from a prepared position. Overwatch and other reaction shots gain <Ability:BIPOD_REACTION_AIM/> aim when the Devastator has not moved this turn."
+LocHelpText="Reaction fire aim bonus from an unmoved position."
+LocPromotionPopupText="<Bullet/> Reaction shots gain aim if you have not moved this turn.<br/>"
+
+[Astartes_TankHunter X2AbilityTemplate]
+LocFriendlyName="Tank Hunter"
+LocLongDescription="Know where the plate is thin. Heavy weapon shots against armoured targets gain <Ability:TANK_HUNTER_CRIT/> critical chance and <Ability:TANK_HUNTER_DAMAGE/> damage."
+LocHelpText="Heavy weapon shots vs armoured targets: +crit, +damage."
+LocPromotionPopupText="<Bullet/> Against targets with armour, heavy weapon shots gain critical chance and damage.<br/>"
+
+; ---------------------------------------------------------------- Apothecary
+[Astartes_StimmShot X2AbilityTemplate]
+LocFriendlyName="Stimm Shot"
+LocLongDescription="A combat stimm from the narthecium. A nearby battle-brother gains a free move. Cooldown."
+LocHelpText="Grant a nearby ally a free move."
+LocFlyOverText="Stimm Shot"
+LocPromotionPopupText="<Bullet/> Target a battle-brother within a few tiles to grant him a move action.<br/><Bullet/> Cooldown.<br/>"
+
+[Astartes_WarriorMedic X2AbilityTemplate]
+LocFriendlyName="Warrior Medic"
+LocLongDescription="An Apothecary fights as he heals. Using the narthecium's healing protocols does not end the turn."
+LocHelpText="Healing protocols do not end your turn."
+LocPromotionPopupText="<Bullet/> Narthecium heals, revives and restorative mist do not end your turn.<br/>"
+
 ; ---------------------------------------------------------------- shared Marine abilities
 [Astartes_KnowNoFear X2AbilityTemplate]
 LocFriendlyName="Know No Fear"
