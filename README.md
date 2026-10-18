@@ -159,7 +159,7 @@ Continent names: `Continent_NorthAmerica`, `Continent_SouthAmerica`, `Continent_
 | `TakeNoDamage` | Your units cannot be hurt (lighter than PowerUp) |
 | `KillAllAIs` | Kills all enemies; take an action afterwards to trigger mission end |
 | `GiveAbility <AbilityName>` | Grants the selected unit an ability for this mission |
-| `GiveItem <Template>` | Gives the selected unit an item |
+| `GiveItem <Template>` | Gives the selected unit an item (tactical only; in the Avenger use `AddItem`). An item only shows in the Armoury if some class can equip it in that slot: vanilla swords are secondary-slot, our Marines carry swords as primaries |
 | `DropUnit <Template> <TeamNumber>` | Spawns a unit at the cursor; teams: `0` XCOM, `1` alien, `3` Lost. e.g. `DropUnit OrkNobM1 1`, `DropUnit Astartes_GreaterDaemon 1` |
 | `AICallReinforcements` | Calls an enemy reinforcement wave (tests the reinforcement rewrite) |
 | `TeleportUnitIDToCursor <id>` | Moves a unit to the cursor |
