@@ -164,6 +164,7 @@ static event OnPostTemplatesCreated()
 	class'X2Ability_Astartes'.static.MakeKevlarPowerArmour();
 	class'X2Item_AstartesWeapons'.static.CreateWeapons();
 	class'Astartes_AbilityVariants'.static.CreateClones();
+	class'Astartes_FactionConfig'.static.AddDaemonSpawns();
 }
 
 /// Called when a mission is generated, after the faction mods have added their raid SitReps (we run after
@@ -861,4 +862,54 @@ exec function Astartes_SquadSize(int Size)
 	}
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	Say("Astartes_SquadSize: PASS squad cap is now" @ Clamp(Size, 4, 6) @ "(takes effect at the next squad select)");
+}
+
+/// Astartes_AppointCommander [NameFragment]: appoint the Chapter Master. Picks the barracks soldier whose name
+/// contains the fragment (or the first rank-7 Marine when omitted); he gains his class's relic ability.
+exec function Astartes_AppointCommander(optional string NameFragment)
+{
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState, Pick;
+	local string Reason;
+	local int i;
+
+	XComHQ = `XCOMHQ;
+	if (XComHQ == none)
+	{
+		Say("Astartes_AppointCommander: FAIL no XComHQ (strategy layer only)");
+		return;
+	}
+	for (i = 0; i < XComHQ.Crew.Length; i++)
+	{
+		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Crew[i].ObjectID));
+		if (UnitState == none || !UnitState.IsSoldier() || UnitState.IsDead())
+		{
+			continue;
+		}
+		if (NameFragment != "" && InStr(Caps(UnitState.GetFullName()), Caps(NameFragment)) == INDEX_NONE)
+		{
+			continue;
+		}
+		if (NameFragment == "" && UnitState.GetRank() < class'Astartes_ChapterMaster'.default.CHAPTER_MASTER_MIN_RANK)
+		{
+			continue;
+		}
+		Pick = UnitState;
+		break;
+	}
+	if (Pick == none)
+	{
+		Say("Astartes_AppointCommander: FAIL no matching soldier" @ (NameFragment == "" ? "of rank" @ class'Astartes_ChapterMaster'.default.CHAPTER_MASTER_MIN_RANK : "named like" @ NameFragment));
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: appoint Chapter Master");
+	if (!class'Astartes_ChapterMaster'.static.Appoint(Pick, NewGameState, Reason))
+	{
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+		Say("Astartes_AppointCommander: FAIL" @ Pick.GetFullName() $ ":" @ Reason);
+		return;
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_AppointCommander: PASS" @ Pick.GetFullName() @ "is the Chapter Master; capstone" @ class'Astartes_ChapterMaster'.static.CapstoneFor(Pick.GetSoldierClassTemplateName()));
 }

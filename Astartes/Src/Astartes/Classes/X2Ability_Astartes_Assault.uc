@@ -33,6 +33,8 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HammerOfWrath());
 	Templates.AddItem(AngelOfDeath());
 	Templates.AddItem(HoldFast());
+	Templates.AddItem(DeathIncarnate());
+	Templates.AddItem(DeathIncarnateReset());
 
 	return Templates;
 }
@@ -275,4 +277,49 @@ static function X2AbilityTemplate HoldFast()
 	Effect.AbilityShooterConditionsAsTarget.AddItem(default.MeleeCondition);
 
 	return Passive('Astartes_HoldFast', "img:///UILibrary_PerkIcons.UIPerk_fortress", false, Effect);
+}
+
+// --- Chapter Master capstone ------------------------------------------------------------------
+
+/// Death Incarnate: for the rest of the turn every melee kill refunds the action and readies the jump pack,
+/// with no cap. The Assault-born Chapter Master's relic ability. Free action, once per mission.
+static function X2AbilityTemplate DeathIncarnate()
+{
+	local X2AbilityTemplate Template;
+	local XMBEffect_AbilityCostRefund Refund;
+
+	Refund = new class'XMBEffect_AbilityCostRefund';
+	Refund.EffectName = 'Astartes_DeathIncarnate_Effect';
+	Refund.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Refund.DuplicateResponse = eDupe_Refresh;
+	Refund.TriggeredEvent = 'Astartes_DeathIncarnate';
+	Refund.bShowFlyOver = true;
+	Refund.AbilityShooterConditions.AddItem(default.MatchingWeaponCondition);
+	Refund.AbilityShooterConditions.AddItem(default.MeleeCondition);
+	Refund.AbilityTargetConditions.AddItem(default.DeadCondition);
+
+	Template = SelfTargetActivated('Astartes_DeathIncarnate', "img:///UILibrary_PerkIcons.UIPerk_reaper", false, Refund, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
+	AddCharges(Template, 1);
+	Template.AdditionalAbilities.AddItem('Astartes_DeathIncarnate_Reset');
+	Template.bShowActivation = true;
+	return Template;
+}
+
+/// Hidden: while Death Incarnate is active, every melee kill clears the jump pack cooldown.
+static function X2AbilityTemplate DeathIncarnateReset()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_Astartes_ResetCooldown Reset;
+	local X2Condition_UnitEffects Active;
+
+	Reset = new class'X2Effect_Astartes_ResetCooldown';
+	Reset.AbilityNames.AddItem('Astartes_JumpPack');
+	Reset.AbilityNames.AddItem('Astartes_DeepJump');
+
+	Template = SelfTargetTrigger('Astartes_DeathIncarnate_Reset', "img:///UILibrary_PerkIcons.UIPerk_implacable", false, Reset, 'KillMail');
+	AddTriggerTargetCondition(Template, default.MeleeCondition);
+	Active = new class'X2Condition_UnitEffects';
+	Active.AddRequireEffect('Astartes_DeathIncarnate_Effect', 'AA_MissingRequiredEffect');
+	Template.AbilityShooterConditions.AddItem(Active);
+	return Template;
 }

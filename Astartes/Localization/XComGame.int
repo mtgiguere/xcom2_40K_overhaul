@@ -668,3 +668,16 @@ LocHelpText="Shield points for the Librarian and nearby brothers. Cooldown."
 LocFlyOverText="Telekine Shield"
 LocPromotionPopupText="<Bullet/> The Librarian and allies around him gain shield points that absorb damage.<br/><Bullet/> 4-turn cooldown. Rolls for Perils of the Warp.<br/>"
 
+; --- Chapter Master capstones ---
+[Astartes_DeathIncarnate X2AbilityTemplate]
+LocFriendlyName="Death Incarnate"
+LocLongDescription="The Chapter Master becomes the storm. For the rest of this turn every melee kill refunds the action and readies the jump pack, with no limit. Free action, once per mission."
+LocHelpText="This turn: every melee kill refunds the action and resets the jump pack. Once per mission."
+LocFlyOverText="Death Incarnate"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> For the rest of the turn, every melee kill refunds the action spent and clears the jump pack cooldown.<br/><Bullet/> No cap: the slaughter lasts as long as the kills do.<br/>"
+
+[Astartes_DeathIncarnate_Reset X2AbilityTemplate]
+LocFriendlyName="Death Incarnate"
+LocLongDescription="While Death Incarnate is active, melee kills ready the jump pack."
+LocHelpText="Melee kills ready the jump pack."
+LocFlyOverText="Death Incarnate"

@@ -26,6 +26,10 @@ var array<ContinentFaction> ContinentFactions;
 /// The Chapter this campaign fights as (an X2CountryTemplate name). '' = use the config default.
 var name ChapterCountry;
 
+// The Chapter Master (Astartes_ChapterMaster): one at a time; lost ones are counted for the replacement cost.
+var StateObjectReference ChapterMasterRef;
+var int ChapterMastersLost;
+
 static function XComGameState_AstartesChapter GetChapter(optional bool bAllowNone = false)
 {
 	return XComGameState_AstartesChapter(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_AstartesChapter', bAllowNone));

@@ -34,6 +34,19 @@ var config array<string> CommanderEncounterPrefixes;
 /// SitRep templates the faction mods inject on their own (raids). Removed from missions on continents we own.
 var config array<name> ForeignRaidSitReps;
 
+// Extra spawn entries appended at load, only when their character template exists (our daemon variants
+// depend on another mod). Lets Chaos pods field daemons without breaking when that mod is absent.
+struct DaemonSpawn
+{
+	var name ListID;
+	var name Template;
+	var int MinForceLevel;
+	var int MaxForceLevel;
+	var int MaxCharactersPerGroup;
+	var float SpawnWeight;
+};
+var config array<DaemonSpawn> DaemonSpawns;
+
 static function bool IsNeverRewritten(name EncounterID)
 {
 	return default.NeverRewriteEncounters.Find(EncounterID) != INDEX_NONE;
@@ -225,4 +238,53 @@ static function name WeightedPick(const out array<SpawnDistributionListEntry> En
 		}
 	}
 	return '';
+}
+
+/// Append the configured daemon entries to their spawn lists, skipping templates that are not loaded.
+static function AddDaemonSpawns()
+{
+	local XComTacticalMissionManager MissionMgr;
+	local X2CharacterTemplateManager CharMgr;
+	local SpawnDistributionListEntry Entry;
+	local int i, j, k, Added;
+	local bool bPresent;
+
+	MissionMgr = `TACTICALMISSIONMGR;
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+	for (i = 0; i < default.DaemonSpawns.Length; i++)
+	{
+		if (CharMgr.FindCharacterTemplate(default.DaemonSpawns[i].Template) == none)
+		{
+			`log("Astartes: daemon spawn" @ default.DaemonSpawns[i].Template @ "skipped: template not loaded",, 'Astartes');
+			continue;
+		}
+		for (j = 0; j < MissionMgr.SpawnDistributionLists.Length; j++)
+		{
+			if (MissionMgr.SpawnDistributionLists[j].ListID != default.DaemonSpawns[i].ListID)
+			{
+				continue;
+			}
+			bPresent = false;
+			for (k = 0; k < MissionMgr.SpawnDistributionLists[j].SpawnDistribution.Length; k++)
+			{
+				if (MissionMgr.SpawnDistributionLists[j].SpawnDistribution[k].Template == default.DaemonSpawns[i].Template)
+				{
+					bPresent = true;
+				}
+			}
+			if (bPresent)
+			{
+				break;
+			}
+			Entry.Template = default.DaemonSpawns[i].Template;
+			Entry.MinForceLevel = default.DaemonSpawns[i].MinForceLevel;
+			Entry.MaxForceLevel = default.DaemonSpawns[i].MaxForceLevel;
+			Entry.MaxCharactersPerGroup = default.DaemonSpawns[i].MaxCharactersPerGroup;
+			Entry.SpawnWeight = default.DaemonSpawns[i].SpawnWeight;
+			MissionMgr.SpawnDistributionLists[j].SpawnDistribution.AddItem(Entry);
+			Added++;
+			break;
+		}
+	}
+	`log("Astartes: daemon spawn entries added:" @ Added @ "of" @ default.DaemonSpawns.Length,, 'Astartes');
 }
