@@ -298,6 +298,13 @@ Already exists (per user / search): Space Marine armor, Chaos Marine armor, Drea
 - **Implemented 2026-10-17:** `Astartes_FactionConfig` + `RewritePodForContinent` in the DLCInfo; Tyranids use our own full-range lists (`Astartes_TyranidLeaders/Followers`, FL 1-20: cult hybrids -> rippers/drones -> swarm) because The Hive's lists start at FL 5.
 - Existing data: Ork Raiders / Dark Eldar Raiders / Black Legion already ship Weak/Normal/Strong/Boss encounter lists per force level.
 
+### 7.1c Garrisons replace "make contact" (idea 2026-10-17, Phase 4)
+- Vanilla region contact -> **establish a garrison**: an Astra Militarum regiment lands and builds a firebase. Haven militia = Guardsmen (Guardsman Militia mod). Retaliation = defend the firebase.
+- Garrisoned regions are the Imperium's; ungarrisoned ones are the war front. Factions push back: an overrun garrison is a lost region (feeds §7.3 pressure and the "enemies can actually win" requirement).
+- Garrison = where an **Imperial Officer** is stationed (the haven-advisor slot, §4.7b).
+- Possible garrison upgrades in place of LWOTC haven jobs: more Guard, supply lines, intel, orbital uplink.
+- **Win condition candidate (answers open question 6):** every region garrisoned and every faction stronghold destroyed / overlords dead.
+
 ### 7.2 Liberation structure (two tiers)
 1. **System strongholds** (≈ Avatar facilities): each system has a faction stronghold — Ork fortress, Chaos shrine, Tyranid hive node. Destroying it **clears that system**.
 2. **Faction overlords** (≈ Chosen): found via a chain of skirmishes / covert actions (like WotC's "hunt the Chosen" chain), culminating in a stronghold assault (like a Chosen stronghold / Blacksite-style story mission). Killing the overlord removes that faction's leadership permanently.
