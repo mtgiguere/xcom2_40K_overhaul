@@ -16,6 +16,8 @@ struct UnitVariant
 	var name CharacterGroup;   // optional: different CharacterGroupName (for AI / target icons)
 	var string BehaviorTree;   // optional: different AI root (XComAI.ini), e.g. Astartes_ChaosSorcerer::CharacterRoot
 	var array<name> ExtraAbilities; // added to the base's abilities when their templates exist
+	var bool bAppearanceDefinesPawn; // soldier body dressed in cosmetic parts (pawn from the appearance, not the base's archetype)
+	var string CharacterGenerator;   // optional: generator class path, e.g. Astartes.Astartes_CharGen_Dressed
 };
 
 var config array<UnitVariant> Variants;
@@ -55,6 +57,7 @@ static function CreateVariants()
 static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, const out UnitVariant Def)
 {
 	local X2CharacterTemplate T;
+	local class<XGCharacterGenerator> GenClass;
 	local int i;
 
 	`CREATE_X2CHARACTER_TEMPLATE(T, Def.NewName);
@@ -65,6 +68,18 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 	T.strBehaviorTree = Def.BehaviorTree != "" ? Def.BehaviorTree : Base.strBehaviorTree;
 	T.strScamperBT = Base.strScamperBT;
 	T.CharacterGeneratorClass = Base.CharacterGeneratorClass;
+	if (Def.CharacterGenerator != "")
+	{
+		GenClass = class<XGCharacterGenerator>(DynamicLoadObject(Def.CharacterGenerator, class'Class'));
+		if (GenClass != none)
+		{
+			T.CharacterGeneratorClass = GenClass;
+		}
+		else
+		{
+			`log("Astartes: variant" @ Def.NewName @ "generator" @ Def.CharacterGenerator @ "not found; using the base's",, 'Astartes');
+		}
+	}
 
 	for (i = 0; i < Base.strPawnArchetypes.Length; i++)
 	{
@@ -137,6 +152,7 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 	T.bIsTurret = Base.bIsTurret;
 	T.bDontClearRemovedFromPlay = Base.bDontClearRemovedFromPlay;
 	T.bShouldCreateDifficultyVariants = false; // created after template init; difficulty variants are not generated
+	T.bAppearanceDefinesPawn = Def.bAppearanceDefinesPawn || Base.bAppearanceDefinesPawn;
 
 	T.ImmuneTypes = Base.ImmuneTypes;
 	T.SightedEvents = Base.SightedEvents;

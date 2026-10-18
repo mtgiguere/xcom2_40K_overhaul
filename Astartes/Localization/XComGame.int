@@ -892,6 +892,15 @@ strCharacterName="Chaos Sorcerer"
 [Astartes_DaemonPrince X2CharacterTemplate]
 strCharacterName="Daemon Prince"
 
+[Astartes_EldarWarlock X2CharacterTemplate]
+strCharacterName="Eldar Warlock"
+
+[Astartes_Destructor X2WeaponTemplate]
+FriendlyName="Destructor"
+FriendlyNamePlural="Destructors"
+BriefSummary="A hammer of telekinetic force hurled from the Warlock's mind."
+TacticalText="<Bullet/> The Eldar Warlock's ranged attack.<br/><Bullet/> Knocks the target back and may stun, on overwatch too."
+
 [Astartes_WarpLightning X2WeaponTemplate]
 FriendlyName="Warpfire"
 FriendlyNamePlural="Warpfire"

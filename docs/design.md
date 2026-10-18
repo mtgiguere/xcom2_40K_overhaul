@@ -460,6 +460,23 @@ single high-rank unique character with a class of their own, instead of the Mari
 Build order when picked up: Commissar and Canoness first (models and voices present), Inquisitor when a model turns up.
 The hero rewards in `Astartes_NoHeroes` then generate these characters by faction instead of a rookie.
 
+### 9.1d Eldar Warlock (built 2026-10-18) and the Eldar faction
+
+The first craftworld unit, and the technique every soldier-bodied enemy or ally will reuse. The Warlock is a Black Legion
+captain *frame* (enemy flags, cover AI) whose template says its appearance defines its pawn: the game then asks our
+`Astartes_CharGen_Dressed` for a look, and the config `Looks` entry dresses him in the EldarArmor mod's Warlock plate,
+Farseer robe and backpack (Ulthwe thigh plates, black and bone). He carries a **Destructor** (Force Weapons' Force Shove
+rifle: knockback, 80% stun on hit and on overwatch; a charging Assault Marine stunned mid-run is his whole point) and
+fights with the Dark Eldar leader's tree.
+
+A fourth territorial faction, **Eldar**, joins the continent pool: Dark Eldar Raiders' kabalites and wyches as followers
+(raiding parties), our leader and commander lists adding the Warlock from force level 4. Needs DarkEldar_Raiders and
+EldarArmor; Force Weapons for the Destructor (magnetic rifle fallback).
+
+**Next:** psychic powers with AI nodes (Mind War = Soulshock, Conceal/Reveal), Guardians and Dire Avengers as dressed
+soldier bodies with EldarWeapons' shuriken catapults so the faction turns craftworld, a Farseer commander, and the
+Lost-replacement webway incursions (9.2).
+
 ### 9.2 Eldar interventions (Lost-mechanic, reworked)
 
 **Decided 2026-10-18: the Lost are Eldar, full stop.** No Tyranid gaunt swap: gaunts on a Tyranid continent would read as the same faction twice. The Lost SitRep and Lost missions become Eldar incursions (webway raiders) once Eldar unit models are wired in.
