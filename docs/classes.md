@@ -176,6 +176,26 @@ force multiplier and the safest. Perils keeps Pyromancy from being "the damage c
 
 ---
 
+## Chaplain (crozius + bolt pistol)
+
+Role (decided 2026-10-18, a sixth class rather than a status): the Chapter's spiritual leader and a melee beast. Columns:
+**Crozius** (melee), **Litanies** (the squad fights harder around him), **Zeal** (he survives what he charges into).
+Skull helm from the Space Marine 2 Chaplain Armor pack; black armour tint is a follow-up. The Reclusiam ladder in
+design.md 4.4 (Reclusiarch, Master of Sanctity) sits on top of this class.
+
+| Rank | Crozius | Litanies | Zeal |
+|---|---|---|---|
+| 1 | **Crozius Mastery**: +2 damage, +15 crit with the crozius. | **Litany of Hate**: squad +10 melee crit. | **Rosarius**: +1 armour, +10 defence. |
+| 2 | Charge | Rally | Fortress (Iron Halo) |
+| 3 | Bladestorm | Inspire | Hold Fast |
+| 4 | Duelist | Chapter Banner | Power Armour Veteran |
+| 5 | Whirlwind | Combat Squads | Untouchable |
+| 6 | Decapitate | Tactical Doctrine | Implacable |
+| 7 | Reaper | For the Emperor | Undying (stand-in: Lightning Reflexes) |
+
+Hard-choice check: Crozius is the kill column, Litanies turns him into a second sergeant, Zeal keeps the Chapter's
+soul alive. Rank 7 is "one more kill" vs "the squad acts again" vs "he does not die."
+
 ## Cross-class synergies (deliberate)
 
 - Apothecary **Undying/Interment Rites** + Assault **Undying** = the Dreadnought pipeline.
@@ -256,6 +276,7 @@ Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were
 | Shared | Know No Fear, Astartes Physiology, Power Armour Mk VII stats | | |
 | Chapter Master | Death Incarnate (Assault), Rites of Battle (Tactical), The Emperor's Mercy (Apothecary) | | Orbital Bombardment (Devastator; needs strike visuals) |
 | Chief Librarian (separate unique) | Warp Mastery | | |
+| Chaplain | Crozius Mastery, Litany of Hate, Rosarius (rest reused from Assault/Tactical) | Fortress, Bladestorm, Untouchable, Implacable, Reaper | Undying |
 
 Weapon and ability clones are created as named objects (`new(none, string(Name))`) so their 40K localization loads; unnamed clones showed vanilla names in play (fixed 2026-10-17, guarded by `tests/test_wargear.py`).
 

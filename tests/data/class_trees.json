@@ -675,6 +675,123 @@
           }
         ]
       ]
+    },
+    "Astartes_Chaplain": {
+      "display_name": "Chaplain",
+      "summary": "The Chapter's spiritual leader and a melee beast. The Chaplain goes in with crozius and bolt pistol, and the brothers around him fight harder for it.",
+      "columns": [
+        "Crozius",
+        "Litanies",
+        "Zeal"
+      ],
+      "rank_set": "combat",
+      "icon": "img:///UILibrary_Common.class_ranger",
+      "loadout": [
+        "Astartes_Crozius_CV_Primary",
+        "Astartes_BoltPistol_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "sword"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "pistol"
+        ]
+      ],
+      "ranks": [
+        [
+          {
+            "name": "Astartes_CroziusMastery",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_LitanyOfHate"
+          },
+          {
+            "name": "Astartes_Rosarius"
+          },
+          {
+            "name": "Astartes_KnowNoFear"
+          },
+          {
+            "name": "Astartes_Physiology"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Charge"
+          },
+          {
+            "name": "Astartes_Rally"
+          },
+          {
+            "name": "Fortress"
+          }
+        ],
+        [
+          {
+            "name": "Bladestorm",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_Inspire"
+          },
+          {
+            "name": "Astartes_HoldFast"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Duelist",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_ChapterBanner"
+          },
+          {
+            "name": "Astartes_PowerArmourVeteran"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Whirlwind",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_CombatSquads"
+          },
+          {
+            "name": "Untouchable"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Decapitate",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_TacticalDoctrine"
+          },
+          {
+            "name": "Implacable"
+          }
+        ],
+        [
+          {
+            "name": "Reaper",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_ForTheEmperor"
+          },
+          {
+            "name": "Astartes_Undying",
+            "standin": "LightningReflexes"
+          }
+        ]
+      ]
     }
   },
   "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row. Astartes_Physiology (poison immunity) is also in every rank-1 row.",

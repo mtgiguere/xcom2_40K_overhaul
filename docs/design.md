@@ -98,8 +98,8 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 
 **Synergy idea:** Apothecary (body) + Chaplain (soul) in the same squad → bonus.
 
-**Chaplaincy ladder (decided 2026-10-18).** Like the Chapter Master and Chief Librarian, Chaplaincy is a *status* layered on a
-combat class, not a class of its own, and the Reclusiam has its own ladder with the unique at the top:
+**Chaplaincy ladder (decided 2026-10-18; revised the same day: the Chaplain is a sixth class, see docs/classes.md).** The Reclusiam
+ladder sits on top of that class, and the Reclusiam has its own ladder with the unique at the top:
 
 | Step | Who | What he gets | How many |
 |---|---|---|---|

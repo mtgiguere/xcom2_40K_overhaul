@@ -457,6 +457,32 @@ ShortNames[5]="Epi."
 ShortNames[6]="Lib."
 ShortNames[7]="SLb."
 
+[Astartes_Chaplain X2SoldierClassTemplate]
+DisplayName="Chaplain"
+ClassSummary="The Chapter's spiritual leader and a melee beast. The Chaplain goes in with crozius and bolt pistol, and the brothers around him fight harder for it."
+LeftAbilityTreeTitle="Crozius"
+RightAbilityTreeTitle="Litanies"
+AbilityTreeTitles[0]="Crozius"
+AbilityTreeTitles[1]="Litanies"
+AbilityTreeTitles[2]="Zeal"
+AbilityTreeTitles[3]="Chapter"
+RankNames[0]="Scout"
+RankNames[1]="Neophyte"
+RankNames[2]="Battle-Brother"
+RankNames[3]="Brother-Sergeant"
+RankNames[4]="Veteran Brother"
+RankNames[5]="Veteran Sergeant"
+RankNames[6]="Lieutenant"
+RankNames[7]="Captain"
+ShortNames[0]="Sct."
+ShortNames[1]="Neo."
+ShortNames[2]="Bro."
+ShortNames[3]="Sgt."
+ShortNames[4]="Vet."
+ShortNames[5]="VSg."
+ShortNames[6]="Lt."
+ShortNames[7]="Cpt."
+
 ; === END GENERATED: CLASSES ===
 
 ; --- Perils of the Warp (X2Ability_Astartes_Librarian) ---
@@ -788,3 +814,43 @@ LocLongDescription="Lightning tears from the Immaterium and leaps from enemy to 
 LocHelpText="Chain lightning across several enemies. Rolls for Perils."
 LocFlyOverText="Warp Storm"
 LocPromotionPopupText="<Bullet/> Lightning chains between several enemies.<br/><Bullet/> Cooldown. Warp Charge 3: 20% Perils.<br/>"
+
+; --- Chaplain (X2Ability_Astartes_Chaplain) ---
+[Astartes_CroziusMastery X2AbilityTemplate]
+LocFriendlyName="Crozius Mastery"
+LocLongDescription="The crozius arcanum is a power maul in a zealot's hands. +2 damage and +15 critical chance with it."
+LocHelpText="+2 damage and +15 crit with the crozius."
+LocFlyOverText="Crozius Mastery"
+LocPromotionPopupText="<Bullet/> Crozius attacks deal +2 damage and gain +15 critical chance.<br/>"
+
+[Astartes_LitanyOfHate X2AbilityTemplate]
+LocFriendlyName="Litany of Hate"
+LocLongDescription="The Chaplain's words carry across the field. Every Marine on the mission gains +10 critical chance in melee."
+LocHelpText="Squad: +10 melee crit."
+LocFlyOverText="Litany of Hate"
+LocPromotionPopupText="<Bullet/> Every Marine on the mission gains +10 critical chance on melee attacks while the Chaplain is on it.<br/>"
+
+[Astartes_Rosarius X2AbilityTemplate]
+LocFriendlyName="Rosarius"
+LocLongDescription="The Chaplain's conversion field. +1 armour and +10 defence."
+LocHelpText="+1 armour, +10 defence."
+LocFlyOverText="Rosarius"
+LocPromotionPopupText="<Bullet/> +1 armour and +10 defence.<br/>"
+
+[Astartes_Crozius_CV X2WeaponTemplate]
+FriendlyName="Crozius Arcanum"
+FriendlyNamePlural="Crozii Arcanum"
+BriefSummary="The Chaplain's power maul and badge of office. Hits like a power weapon and breaks what it does not kill."
+TacticalText="<Bullet/> The Chaplain's melee weapon.<br/><Bullet/> Hits harder than a chainsword.<br/>"
+
+[Astartes_Crozius_MG X2WeaponTemplate]
+FriendlyName="Crozius Arcanum Mk II"
+FriendlyNamePlural="Crozii Arcanum Mk II"
+BriefSummary="An improved crozius with a stronger power field."
+TacticalText="<Bullet/> The Chaplain's melee weapon, second mark.<br/>"
+
+[Astartes_Crozius_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Crozius"
+FriendlyNamePlural="Master-Crafted Crozii"
+BriefSummary="A master-crafted crozius arcanum, a relic of the Reclusiam."
+TacticalText="<Bullet/> The Chaplain's melee weapon, master-crafted.<br/>"
