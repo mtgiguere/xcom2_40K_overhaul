@@ -72,6 +72,10 @@ Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 
 - **Jedi Class Revised** (workshop 2031929512): the jump-arc visualization pattern (precomputed ballistic path + leap/flight/landing animations) that `X2Action_Astartes_JumpPack` is modelled on. Our implementation uses vanilla soldier animations and does not depend on that mod.
 
+## Dressing the Marines
+
+Generated Marines copy their armour parts from a character-pool soldier named in `MarineLookTemplates` (`Config/XComGame.ini`). Make one in the Character Pool wearing the Tacticus parts you want as the standard look (tintable pieces, standard pouches and seals, no power fist, no jump pack), save him, and list his full name. Several names give a random pick. Tints and the camo pattern still come from the Chapter livery; the Librarian hood is still applied on promotion. With no template found, parts are picked at random from the packs.
+
 ## Conventions
 
 - Prefer config (`.ini`) and Highlander event hooks over class overrides.

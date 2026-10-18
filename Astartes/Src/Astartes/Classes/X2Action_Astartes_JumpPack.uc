@@ -22,22 +22,9 @@ var private AudioComponent IgnitionSound;
 
 function Init()
 {
-	local XComGameStateContext_Ability Context;
 	local SoundCue Cue;
-	local vector Empty;
 
 	super.Init();
-	Context = XComGameStateContext_Ability(StateChangeContext);
-	if (DesiredLocation == Empty && Context != none && Context.InputContext.MovementPaths.Length > 0
-		&& Context.InputContext.MovementPaths[0].MovementData.Length > 1)
-	{
-		DesiredLocation = Context.InputContext.MovementPaths[0].MovementData[Context.InputContext.MovementPaths[0].MovementData.Length - 1].Position;
-	}
-	if (DesiredLocation == Empty)
-	{
-		DesiredLocation = UnitPawn.Location;
-		bSkipJump = true;
-	}
 	if (class'X2Ability_Astartes_Assault'.default.JUMP_SOUND_CUE != "")
 	{
 		Cue = SoundCue(`CONTENT.RequestGameArchetype(class'X2Ability_Astartes_Assault'.default.JUMP_SOUND_CUE));
@@ -46,6 +33,34 @@ function Init()
 			IgnitionSound = CreateAudioComponent(Cue, false);
 		}
 	}
+}
+
+/// The landing spot: what the visualization gave us, else the end of the ability's movement path.
+private function ResolveDestination()
+{
+	local XComGameStateContext_Ability Context;
+	local vector Empty;
+	local int Last;
+
+	Context = XComGameStateContext_Ability(StateChangeContext);
+	if (DesiredLocation == Empty && Context != none && Context.InputContext.MovementPaths.Length > 0)
+	{
+		Last = Context.InputContext.MovementPaths[0].MovementData.Length - 1;
+		if (Last > 0)
+		{
+			DesiredLocation = Context.InputContext.MovementPaths[0].MovementData[Last].Position;
+		}
+	}
+	if (DesiredLocation == Empty && Context != none && Context.InputContext.TargetLocations.Length > 0)
+	{
+		DesiredLocation = Context.InputContext.TargetLocations[0];
+	}
+	if (DesiredLocation == Empty)
+	{
+		DesiredLocation = UnitPawn.Location;
+		bSkipJump = true;
+	}
+	`log("Astartes: jump from" @ UnitPawn.Location @ "to" @ DesiredLocation @ (bSkipJump ? "(no destination: skipping)" : ""),, 'Astartes');
 }
 
 /// Start and end at pawn height on their tiles; flight time and apex scale with the distance.
@@ -103,6 +118,7 @@ simulated state Executing
 	}
 
 Begin:
+	ResolveDestination();
 	if (bSkipJump)
 	{
 		UnitPawn.SetLocation(DesiredLocation);
@@ -166,5 +182,6 @@ Begin:
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	UnitPawn.SetLocation(EndLocation);
 	Unit.ProcessNewPosition();
+	`log("Astartes: jump landed; pawn at" @ UnitPawn.Location @ "flight" @ FlightDuration $ "s apex" @ ApexHeight,, 'Astartes');
 	CompleteAction();
 }

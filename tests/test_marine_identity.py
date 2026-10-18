@@ -59,3 +59,10 @@ def test_marine_look_uses_only_tintable_parts(config):
     section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
     keywords = [unquote(v) for v in section.values("MarinePartNameKeywords")]
     assert "Tint" in keywords, "pre-painted chapter parts must be filtered out of the random Marine look"
+
+
+def test_marine_look_template_configured(config):
+    """Generated Marines copy a pool soldier's armour parts (random part picking produced power fists on everyone)."""
+    section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
+    names = [unquote(v) for v in section.values("MarineLookTemplates")]
+    assert names and all(" " in n for n in names), "list at least one pool soldier by full name"

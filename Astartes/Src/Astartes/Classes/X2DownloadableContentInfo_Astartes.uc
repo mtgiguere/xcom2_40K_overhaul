@@ -19,6 +19,10 @@ var config array<name> MarineArmorPartPacks;
 /// Only parts whose display name contains one of these are used (e.g. "Tint": the packs label tintable
 /// pieces, unlabelled ones are pre-painted for one Chapter). Empty = any part from the packs.
 var config array<string> MarinePartNameKeywords;
+// Character-pool soldiers whose armour parts every generated Marine copies (one is picked at random). The
+// player dresses a 'standard' Marine once in the pool; tints and pattern still come from the Chapter livery.
+// Empty, or none found: parts are picked at random from the packs (power fists and jump packs included).
+var config array<string> MarineLookTemplates;
 
 struct ChapterLivery
 {
@@ -317,6 +321,11 @@ static function ApplyMarineArmourLook(XGCharacterGenerator CharGen, name ArmorNa
 		return;
 	}
 
+	if (ApplyTemplateLook(CharGen))
+	{
+		return;
+	}
+
 	PartMgr = class'X2BodyPartTemplateManager'.static.GetBodyPartTemplateManager();
 	Gender = EGender(CharGen.kSoldier.kAppearance.iGender);
 	Race = ECharacterRace(CharGen.kSoldier.kAppearance.iRace);
@@ -366,6 +375,55 @@ static function ApplyMarineArmourLook(XGCharacterGenerator CharGen, name ArmorNa
 	{
 		CharGen.kSoldier.kAppearance.nmHelmet = Helmet;
 	}
+}
+
+/// Copy the armour parts of a character-pool template Marine (MarineLookTemplates). Tints, pattern, head, hair and
+/// everything personal stay as generated. Returns false when no template is configured or found.
+static function bool ApplyTemplateLook(XGCharacterGenerator CharGen)
+{
+	local CharacterPoolManager Pool;
+	local XComGameState_Unit Model;
+	local array<string> Names;
+	local string Picked;
+	local TAppearance T;
+
+	if (default.MarineLookTemplates.Length == 0)
+	{
+		return false;
+	}
+	Pool = CharacterPoolManager(`XENGINE.GetCharacterPoolManager());
+	if (Pool == none)
+	{
+		return false;
+	}
+	Names = default.MarineLookTemplates;
+	while (Names.Length > 0 && Model == none)
+	{
+		Picked = Names[`SYNC_RAND_STATIC(Names.Length)];
+		Model = Pool.GetCharacter(Picked);
+		Names.RemoveItem(Picked);
+	}
+	if (Model == none)
+	{
+		`log("Astartes: no MarineLookTemplates character found in the pool; picking parts at random",, 'Astartes');
+		return false;
+	}
+	T = Model.kAppearance;
+	CharGen.kSoldier.kAppearance.nmTorso = T.nmTorso;
+	CharGen.kSoldier.kAppearance.nmArms = T.nmArms;
+	CharGen.kSoldier.kAppearance.nmLeftArm = T.nmLeftArm;
+	CharGen.kSoldier.kAppearance.nmRightArm = T.nmRightArm;
+	CharGen.kSoldier.kAppearance.nmLeftArmDeco = T.nmLeftArmDeco;
+	CharGen.kSoldier.kAppearance.nmRightArmDeco = T.nmRightArmDeco;
+	CharGen.kSoldier.kAppearance.nmLeftForearm = T.nmLeftForearm;
+	CharGen.kSoldier.kAppearance.nmRightForearm = T.nmRightForearm;
+	CharGen.kSoldier.kAppearance.nmLegs = T.nmLegs;
+	CharGen.kSoldier.kAppearance.nmThighs = T.nmThighs;
+	CharGen.kSoldier.kAppearance.nmShins = T.nmShins;
+	CharGen.kSoldier.kAppearance.nmTorsoDeco = T.nmTorsoDeco;
+	CharGen.kSoldier.kAppearance.nmHelmet = T.nmHelmet;
+	`log("Astartes: Marine look copied from pool template" @ Picked,, 'Astartes');
+	return true;
 }
 
 /// A part matching the chosen torso's armour tier; falls back to any part from the Marine packs.
