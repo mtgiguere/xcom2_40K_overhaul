@@ -54,6 +54,8 @@ static function CreateClones()
 		Clone = new(none, string(default.Clones[i].NewName)) Base.Class (Base); // named: loc loads by object name
 		Clone.SetTemplateName(default.Clones[i].NewName);
 		Def = default.Clones[i]; // copy: array elements cannot be passed as out parameters
+		// Our trees define their own progression: a cloned Schism must not demand the vanilla Insanity.
+		Clone.PrerequisiteAbilities.Length = 0;
 		Tune(Clone, Def);
 		AbilityMgr.AddAbilityTemplate(Clone, true);
 		Created++;

@@ -50,7 +50,7 @@ static function X2AbilityTemplate ChainTeeth()
 	Effect.AbilityShooterConditions.AddItem(default.MatchingWeaponCondition);
 	Effect.AbilityShooterConditions.AddItem(default.MeleeCondition);
 
-	return Passive('Astartes_ChainTeeth', "img:///UILibrary_PerkIcons.UIPerk_blademaster", false, Effect);
+	return Passive('Astartes_ChainTeeth', "img:///UILibrary_PerkIcons.UIPerk_swordSlash", false, Effect);
 }
 
 /// Whirlwind: a melee kill refunds the action, up to a limit per turn.
@@ -83,7 +83,7 @@ static function X2AbilityTemplate Duelist()
 	Effect.AbilityShooterConditions.AddItem(default.MatchingWeaponCondition);
 	Effect.AbilityShooterConditions.AddItem(default.MeleeCondition);
 
-	return Passive('Astartes_Duelist', "img:///UILibrary_PerkIcons.UIPerk_slash", false, Effect);
+	return Passive('Astartes_Duelist', "img:///UILibrary_PerkIcons.UIPerk_bulletshred", false, Effect);
 }
 
 /// Decapitate: a chainsword strike that cannot miss. Cooldown.
@@ -207,7 +207,7 @@ static function X2AbilityTemplate HitAndRun()
 	Reset.AbilityNames.AddItem('Astartes_JumpPack');
 	Reset.AbilityNames.AddItem('Astartes_DeepJump');
 
-	Template = SelfTargetTrigger('Astartes_HitAndRun', "img:///UILibrary_PerkIcons.UIPerk_hitandrun", false, Reset, 'KillMail');
+	Template = SelfTargetTrigger('Astartes_HitAndRun', "img:///UILibrary_PerkIcons.UIPerk_implacable", false, Reset, 'KillMail');
 	AddTriggerShooterCondition(Template, default.MeleeCondition);
 	Template.bShowActivation = true;
 	return Template;
@@ -254,7 +254,7 @@ static function X2AbilityTemplate AngelOfDeath()
 	Mobility.DuplicateResponse = eDupe_Refresh;
 	Mobility.AddPersistentStatChange(eStat_Mobility, default.ANGEL_OF_DEATH_MOBILITY);
 
-	Template = SelfTargetActivated('Astartes_AngelOfDeath', "img:///UILibrary_PerkIcons.UIPerk_icarusjump", false, Actions, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
+	Template = SelfTargetActivated('Astartes_AngelOfDeath', "img:///UILibrary_DLC2Images.UIPerk_icarusjump", false, Actions, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
 	Template.AddTargetEffect(Reset);
 	Template.AddTargetEffect(Mobility);
 	AddCharges(Template, 1);

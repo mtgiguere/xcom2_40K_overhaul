@@ -60,6 +60,7 @@ static function CreateWeapons()
 		}
 		// Keep CreatorTemplateName: the vanilla schematic that creates the base tier also creates ours,
 		// and upgrades soldiers' items whose template equals our BaseItem.
+		StripUnknownAbilities(Clone);
 		if (default.Weapons[i].MeshFrom != '')
 		{
 			BorrowLook(Clone, default.Weapons[i].MeshFrom, ItemMgr);
@@ -137,4 +138,27 @@ static function HideDonors(X2ItemTemplateManager ItemMgr)
 	{
 		`log("Astartes: hid" @ Hidden @ "donor weapon templates/schematics",, 'Astartes');
 	}
+}
+
+/// Other mods add their abilities to the vanilla weapons we clone (e.g. a dual-wield mod's DualSlashSecondary).
+/// Keep only abilities the game can find, so the clone never fails template validation.
+static function StripUnknownAbilities(X2WeaponTemplate Clone)
+{
+	local X2AbilityTemplateManager AbilityMgr;
+	local array<name> Kept;
+	local int i;
+
+	AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	for (i = 0; i < Clone.Abilities.Length; i++)
+	{
+		if (AbilityMgr.FindAbilityTemplate(Clone.Abilities[i]) != none)
+		{
+			Kept.AddItem(Clone.Abilities[i]);
+		}
+		else
+		{
+			`log("Astartes: weapon" @ Clone.DataName @ "drops unknown ability" @ Clone.Abilities[i],, 'Astartes');
+		}
+	}
+	Clone.Abilities = Kept;
 }

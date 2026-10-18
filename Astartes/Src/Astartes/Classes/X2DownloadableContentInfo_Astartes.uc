@@ -796,3 +796,69 @@ exec function Astartes_ForcePerils(optional string Outcome)
 	class'X2Ability_Astartes_Librarian'.default.ForcedPerilsOutcome = OutcomeName;
 	Say("Astartes_ForcePerils: PASS the next psychic power triggers" @ OutcomeName);
 }
+
+/// Astartes_AP [Points]: give every barracks soldier this many unspent ability points (default 100), so every
+/// promotion choice can be bought for testing. Also tops up the shared XCOM pool.
+exec function Astartes_AP(optional int Points = 100)
+{
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState;
+	local int i, Count;
+
+	XComHQ = `XCOMHQ;
+	if (XComHQ == none)
+	{
+		Say("Astartes_AP: FAIL no XComHQ (strategy layer only)");
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: ability points");
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+	XComHQ.AddResource(NewGameState, 'AbilityPoint', Points); // the shared pool is a resource item
+	for (i = 0; i < XComHQ.Crew.Length; i++)
+	{
+		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Crew[i].ObjectID));
+		if (UnitState == none || !UnitState.IsSoldier())
+		{
+			continue;
+		}
+		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		UnitState.AbilityPoints = Max(UnitState.AbilityPoints, Points);
+		Count++;
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_AP: PASS" @ Count @ "soldiers have at least" @ Points @ "ability points; XCOM pool now" @ XComHQ.GetAbilityPoints());
+}
+
+/// Astartes_SquadSize <4|5|6>: set the squad cap by granting or removing the Guerrilla Tactics School squad-size unlocks.
+exec function Astartes_SquadSize(int Size)
+{
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local X2StrategyElementTemplateManager StratMgr;
+	local X2SoldierUnlockTemplate Unlock;
+
+	XComHQ = `XCOMHQ;
+	if (XComHQ == none)
+	{
+		Say("Astartes_SquadSize: FAIL no XComHQ (strategy layer only)");
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: squad size");
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+	StratMgr = class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager();
+	XComHQ.RemoveSoldierUnlockTemplate('SquadSizeIUnlock');
+	XComHQ.RemoveSoldierUnlockTemplate('SquadSizeIIUnlock');
+	if (Size >= 5)
+	{
+		Unlock = X2SoldierUnlockTemplate(StratMgr.FindStrategyElementTemplate('SquadSizeIUnlock'));
+		XComHQ.AddSoldierUnlockTemplate(NewGameState, Unlock, true);
+	}
+	if (Size >= 6)
+	{
+		Unlock = X2SoldierUnlockTemplate(StratMgr.FindStrategyElementTemplate('SquadSizeIIUnlock'));
+		XComHQ.AddSoldierUnlockTemplate(NewGameState, Unlock, true);
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_SquadSize: PASS squad cap is now" @ Clamp(Size, 4, 6) @ "(takes effect at the next squad select)");
+}

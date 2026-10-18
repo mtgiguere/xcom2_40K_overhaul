@@ -129,7 +129,7 @@ static function X2AbilityTemplate Rally()
 	Effect.NumActionPoints = 1;
 	Effect.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
 
-	Template = TargetedBuff('Astartes_Rally', "img:///UILibrary_PerkIcons.UIPerk_command", false, Effect, class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY, eCost_Single);
+	Template = TargetedBuff('Astartes_Rally', "img:///UILibrary_PerkIcons.UIPerk_aidprotocol", false, Effect, class'UIUtilities_Tactical'.const.CLASS_SQUADDIE_PRIORITY, eCost_Single);
 	AddCharges(Template, default.RALLY_CHARGES);
 
 	InRange = new class'X2Condition_UnitProperty';
@@ -185,7 +185,7 @@ static function X2AbilityTemplate ForTheEmperor()
 	local XMBAbilityMultiTarget_Radius Radius;
 	local X2Condition_UnitProperty Allies;
 
-	Template = SelfTargetActivated('Astartes_ForTheEmperor', "img:///UILibrary_PerkIcons.UIPerk_command", false, none, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Single);
+	Template = SelfTargetActivated('Astartes_ForTheEmperor', "img:///UILibrary_PerkIcons.UIPerk_solace", false, none, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Single);
 	AddCharges(Template, default.FOR_THE_EMPEROR_CHARGES);
 
 	Radius = new class'XMBAbilityMultiTarget_Radius';
@@ -219,7 +219,7 @@ static function X2AbilityTemplate TacticalDoctrine()
 	Effect.EffectName = 'Astartes_TacticalDoctrine_Effect';
 	Effect.AddPersistentStatChange(eStat_Mobility, default.TACTICAL_DOCTRINE_MOBILITY);
 
-	return SquadPassive('Astartes_TacticalDoctrine', "img:///UILibrary_PerkIcons.UIPerk_command", false, Effect);
+	return SquadPassive('Astartes_TacticalDoctrine', "img:///UILibrary_PerkIcons.UIPerk_squadsight", false, Effect);
 }
 
 /// Hold the Line: the squad holds its ground. Every Marine in full cover is harder to hit.
@@ -232,7 +232,7 @@ static function X2AbilityTemplate HoldTheLine()
 	Effect.AddToHitAsTargetModifier(-default.HOLD_THE_LINE_DEFENSE);
 	Effect.AbilityTargetConditionsAsTarget.AddItem(default.FullCoverCondition);
 
-	return SquadPassive('Astartes_HoldTheLine', "img:///UILibrary_PerkIcons.UIPerk_hunkerdown", false, Effect);
+	return SquadPassive('Astartes_HoldTheLine', "img:///UILibrary_PerkIcons.UIPerk_shieldwall", false, Effect);
 }
 
 /// Chapter Banner: the standard of the Chapter steels every brother's will (and steadies the Librarian: Perils of the Warp is less likely while the banner stands).

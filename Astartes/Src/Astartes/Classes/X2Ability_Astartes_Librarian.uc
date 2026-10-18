@@ -56,21 +56,14 @@ static function array<X2DataTemplate> CreateTemplates()
 
 // --- the watcher -----------------------------------------------------------------------------
 
-/// Perils of the Warp: squaddie-kit passive on the Librarian. Shows the icon, carries the outcome
-/// abilities, and listens for the Librarian's own psychic powers resolving.
+/// Perils of the Warp: squaddie-kit passive on the Librarian. Shows the icon and carries the outcome
+/// abilities. Astartes_WarpListener watches 'AbilityActivated' and calls RollPerils for units that have it.
 static function X2AbilityTemplate PerilsOfTheWarp()
 {
 	local X2AbilityTemplate Template;
-	local X2AbilityTrigger_EventListener Trigger;
 
 	Template = Passive('Astartes_PerilsOfTheWarp', "img:///UILibrary_PerkIcons.UIPerk_voidrift", false);
 
-	Trigger = new class'X2AbilityTrigger_EventListener';
-	Trigger.ListenerData.EventID = 'AbilityActivated';
-	Trigger.ListenerData.Deferral = ELD_OnStateSubmitted;
-	Trigger.ListenerData.Filter = eFilter_Unit;
-	Trigger.ListenerData.EventFn = PerilsListener;
-	Template.AbilityTriggers.AddItem(Trigger);
 
 	Template.AdditionalAbilities.AddItem(default.WarpSurgeName);
 	Template.AdditionalAbilities.AddItem(default.BacklashName);
@@ -81,45 +74,31 @@ static function X2AbilityTemplate PerilsOfTheWarp()
 	return Template;
 }
 
-/// Fires after any ability resolves on the Librarian. Rolls for Perils if it was a psychic power
-/// and, on failure, triggers one outcome ability on the Librarian himself.
-static function EventListenerReturn PerilsListener(Object EventData, Object EventSource, XComGameState GameState, Name EventID, Object CallbackData)
+/// Called by Astartes_WarpListener after one of the Librarian's abilities resolves. Rolls for Perils if it
+/// was a psychic power and, on failure, triggers one outcome ability on the Librarian himself.
+static function RollPerils(XComGameState_Ability ActivatedAbility, XComGameState_Unit Unit)
 {
-	local XComGameState_Ability ActivatedAbility, PerilsAbility, OutcomeAbility;
-	local XComGameStateContext_Ability Context;
-	local XComGameState_Unit Unit;
+	local XComGameState_Ability OutcomeAbility;
 	local XComGameStateHistory History;
 	local int WarpCharge, Chance, Roll;
 	local name Outcome;
 	local StateObjectReference OutcomeRef;
 
-	ActivatedAbility = XComGameState_Ability(EventData);
-	PerilsAbility = XComGameState_Ability(CallbackData);
-	Context = XComGameStateContext_Ability(GameState.GetContext());
-	if (ActivatedAbility == none || PerilsAbility == none || Context == none)
-	{
-		return ELR_NoInterrupt;
-	}
-	if (Context.InterruptionStatus == eInterruptionStatus_Interrupt)
-	{
-		return ELR_NoInterrupt; // wait for the resolved half of the activation
-	}
-	if (ActivatedAbility.OwnerStateObject.ObjectID != PerilsAbility.OwnerStateObject.ObjectID)
-	{
-		return ELR_NoInterrupt;
-	}
-
 	WarpCharge = GetWarpCharge(ActivatedAbility.GetMyTemplateName());
 	if (WarpCharge <= 0)
 	{
-		return ELR_NoInterrupt; // not a psychic power
+		if (default.ForcedPerilsOutcome != '' && default.bLogPerils)
+		{
+			`log("Astartes: Perils forced outcome pending;" @ ActivatedAbility.GetMyTemplateName() @ "is not a psychic power, waiting",, 'Astartes');
+		}
+		return; // not a psychic power
 	}
 
 	History = `XCOMHISTORY;
-	Unit = XComGameState_Unit(History.GetGameStateForObjectID(PerilsAbility.OwnerStateObject.ObjectID));
+	Unit = XComGameState_Unit(History.GetGameStateForObjectID(Unit.ObjectID));
 	if (Unit == none || Unit.IsDead() || Unit.bRemovedFromPlay)
 	{
-		return ELR_NoInterrupt;
+		return;
 	}
 
 	if (default.ForcedPerilsOutcome != '')
@@ -138,7 +117,7 @@ static function EventListenerReturn PerilsListener(Object EventData, Object Even
 		}
 		if (Roll >= Chance)
 		{
-			return ELR_NoInterrupt;
+			return;
 		}
 		Outcome = RollOutcome();
 		`log("Astartes: PERILS OF THE WARP ->" @ Outcome,, 'Astartes');
@@ -149,11 +128,9 @@ static function EventListenerReturn PerilsListener(Object EventData, Object Even
 	if (OutcomeAbility == none)
 	{
 		`log("Astartes: Perils outcome ability" @ Outcome @ "not found on unit",, 'Astartes');
-		return ELR_NoInterrupt;
+		return;
 	}
 	OutcomeAbility.AbilityTriggerAgainstSingleTarget(Unit.GetReference(), false);
-
-	return ELR_NoInterrupt;
 }
 
 /// The daemon tier for a force level: the entry with the highest MinForceLevel at or below it.

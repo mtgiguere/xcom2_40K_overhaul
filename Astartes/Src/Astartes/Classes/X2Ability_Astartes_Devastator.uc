@@ -70,7 +70,7 @@ static function X2AbilityTemplate Bipod()
 	Effect.AbilityShooterConditions.AddItem(default.ReactionFireCondition);
 	Effect.AbilityShooterConditions.AddItem(NotMovedCondition());
 
-	return Passive('Astartes_Bipod', "img:///UILibrary_PerkIcons.UIPerk_coveringfire", false, Effect);
+	return Passive('Astartes_Bipod', "img:///UILibrary_PerkIcons.UIPerk_coverfire", false, Effect);
 }
 
 // --- Gunner --------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ static function X2AbilityTemplate PlasmaOvercharge()
 	Bonus.AddDamageModifier(default.PLASMA_OVERCHARGE_DAMAGE);
 	Bonus.AbilityShooterConditions.AddItem(default.MatchingWeaponCondition);
 
-	Template = SelfTargetActivated('Astartes_PlasmaOvercharge', "img:///UILibrary_PerkIcons.UIPerk_overcharge", false, Bonus, class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY, eCost_Free);
+	Template = SelfTargetActivated('Astartes_PlasmaOvercharge', "img:///UILibrary_PerkIcons.UIPerk_capacitordischarge", false, Bonus, class'UIUtilities_Tactical'.const.CLASS_CORPORAL_PRIORITY, eCost_Free);
 	AddCooldown(Template, default.PLASMA_OVERCHARGE_COOLDOWN);
 	Template.bShowActivation = true;
 	return Template;
@@ -122,7 +122,7 @@ static function X2AbilityTemplate LascannonRound()
 	local X2AbilityTemplate Template;
 	local XMBEffect_ConditionalBonus Bonus;
 
-	Template = Attack('Astartes_LascannonRound', "img:///UILibrary_PerkIcons.UIPerk_lasrifle", false, none, class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY, eCost_WeaponConsumeAll);
+	Template = Attack('Astartes_LascannonRound', "img:///UILibrary_PerkIcons.UIPerk_shreddergun", false, none, class'UIUtilities_Tactical'.const.CLASS_SERGEANT_PRIORITY, eCost_WeaponConsumeAll);
 	AddCharges(Template, default.LASCANNON_CHARGES);
 	Bonus = AddBonusPassive(Template);
 	Bonus.AddArmorPiercingModifier(default.LASCANNON_PIERCE);
@@ -136,7 +136,7 @@ static function X2AbilityTemplate KrakMissile()
 	local X2AbilityTemplate Template;
 	local XMBEffect_ConditionalBonus Bonus;
 
-	Template = Attack('Astartes_KrakMissile', "img:///UILibrary_PerkIcons.UIPerk_rocketlauncher", false, none, class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY, eCost_WeaponConsumeAll);
+	Template = Attack('Astartes_KrakMissile', "img:///UILibrary_PerkIcons.UIPerk_firerocket", false, none, class'UIUtilities_Tactical'.const.CLASS_CAPTAIN_PRIORITY, eCost_WeaponConsumeAll);
 	AddCooldown(Template, default.KRAK_MISSILE_COOLDOWN);
 	Bonus = AddBonusPassive(Template);
 	Bonus.AddDamageModifier(default.KRAK_MISSILE_DAMAGE);

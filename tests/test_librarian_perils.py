@@ -90,10 +90,21 @@ def test_outcome_abilities_are_defined_and_carried_by_the_passive():
     src = (SRC_DIR / "X2Ability_Astartes_Librarian.uc").read_text(encoding="utf-8")
     for name in OUTCOMES:
         assert re.search(rf"HiddenSelfAbility\('{name}'", src), f"{name} is not defined"
-    passive = src[src.index("static function X2AbilityTemplate PerilsOfTheWarp") : src.index("static function EventListenerReturn PerilsListener")]
+    passive = src[src.index("static function X2AbilityTemplate PerilsOfTheWarp") : src.index("static function RollPerils")]
     assert passive.count("AdditionalAbilities.AddItem") == len(OUTCOMES), "the passive must carry every outcome as an additional ability"
 
 
 def test_lost_brothers_yield_no_geneseed():
     src = (SRC_DIR / "X2Ability_Astartes.uc").read_text(encoding="utf-8")
     assert "LostToTheWarpValueName" in src, "RecoverGeneseed must refuse a body dragged into the Warp"
+
+
+def test_perils_is_hooked_through_the_event_listener_template():
+    """Playtest 2026-10-17: an X2AbilityTrigger_EventListener with a custom EventFn on the passive never fired.
+    The roll must be driven by a CHEventListenerTemplate (Astartes_WarpListener), the pattern that works."""
+    listener = (SRC_DIR / "Astartes_WarpListener.uc").read_text(encoding="utf-8")
+    assert "CHEventListenerTemplate" in listener and "'AbilityActivated'" in listener
+    assert "RollPerils" in listener
+    librarian = (SRC_DIR / "X2Ability_Astartes_Librarian.uc").read_text(encoding="utf-8")
+    assert "static function RollPerils" in librarian
+    assert "X2AbilityTrigger_EventListener" not in librarian, "do not hook Perils through an ability trigger"
