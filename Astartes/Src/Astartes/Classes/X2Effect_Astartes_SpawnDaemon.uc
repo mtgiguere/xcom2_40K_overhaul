@@ -5,9 +5,37 @@
 //           lost to the Warp so the Apothecary cannot recover his geneseed; the ability kills him
 //           with a separate effect so the strategy layer records a normal KIA.
 //---------------------------------------------------------------------------------------
-class X2Effect_Astartes_SpawnDaemon extends X2Effect_SpawnUnit;
+class X2Effect_Astartes_SpawnDaemon extends X2Effect_SpawnUnit dependson(X2Ability_Astartes_Librarian);
 
 var name LostToTheWarpValueName;
+
+static function PerilsDaemonDef CurrentTier()
+{
+	local XComGameState_BattleData BattleData;
+	local int ForceLevel;
+
+	BattleData = XComGameState_BattleData(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_BattleData'));
+	ForceLevel = BattleData != none ? BattleData.GetForceLevel() : 1;
+	return class'X2Ability_Astartes_Librarian'.static.DaemonForForceLevel(ForceLevel);
+}
+
+function name GetUnitToSpawnName(const out EffectAppliedData ApplyEffectParameters)
+{
+	local PerilsDaemonDef Tier;
+
+	Tier = CurrentTier();
+	return Tier.Template;
+}
+
+simulated protected function OnEffectAdded(const out EffectAppliedData ApplyEffectParameters, XComGameState_BaseObject kNewTargetState, XComGameState NewGameState, XComGameState_Effect NewEffectState)
+{
+	local PerilsDaemonDef Tier;
+
+	// A possessed husk wears the Librarian's own body; a true daemon has its own.
+	Tier = CurrentTier();
+	bCopyTargetAppearance = Tier.bWearsTheLibrarian;
+	super.OnEffectAdded(ApplyEffectParameters, kNewTargetState, NewGameState, NewEffectState);
+}
 
 function ETeam GetTeam(const out EffectAppliedData ApplyEffectParameters)
 {

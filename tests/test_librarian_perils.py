@@ -75,7 +75,14 @@ def test_outcome_table_is_sane(perils_cfg):
     base = int(perils_cfg.first("PERILS_BASE_CHANCE"))
     per = int(perils_cfg.first("PERILS_CHANCE_PER_WARP_CHARGE"))
     assert 1 <= base <= 50 and 0 <= per <= 25, "Perils chance out of the sane range"
-    assert unquote(perils_cfg.first("PERILS_DAEMON_TEMPLATE") or ""), "PERILS_DAEMON_TEMPLATE must name a character template"
+
+
+def test_daemon_tiers(perils_cfg):
+    tiers = [(int(struct_field(v, "MinForceLevel")), struct_field(v, "Template")) for v in perils_cfg.values("PerilsDaemons")]
+    assert tiers, "PerilsDaemons must list at least one tier"
+    assert tiers[0][0] == 1, "the first daemon tier must start at force level 1 so possession always has a daemon"
+    assert [t[0] for t in tiers] == sorted(t[0] for t in tiers), "tiers must be listed in ascending force level"
+    assert all(t[1] for t in tiers), "every tier needs a character template"
 
 
 def test_outcome_abilities_are_defined_and_carried_by_the_passive():

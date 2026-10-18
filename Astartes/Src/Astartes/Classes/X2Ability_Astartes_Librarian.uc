@@ -19,12 +19,19 @@ struct PsychicPowerDef
 	var int WarpCharge;    // 1 minor, 2 major, 3 cataclysmic
 };
 
+struct PerilsDaemonDef
+{
+	var int MinForceLevel;
+	var name Template;
+	var bool bWearsTheLibrarian;
+};
+
 var config array<PsychicPowerDef> PsychicPowers;
+var config array<PerilsDaemonDef> PerilsDaemons;
 var config int PERILS_BASE_CHANCE, PERILS_CHANCE_PER_WARP_CHARGE;
 var config int PERILS_HOOD_REDUCTION_MG, PERILS_HOOD_REDUCTION_BM;
 var config int PERILS_WEIGHT_WARP_SURGE, PERILS_WEIGHT_BACKLASH, PERILS_WEIGHT_WARP_SHOCK, PERILS_WEIGHT_MENTAL_PURGE, PERILS_WEIGHT_POSSESSION;
 var config int PERILS_BACKLASH_DAMAGE, PERILS_BACKLASH_SPREAD, PERILS_SHOCK_STUN_ACTIONS, PERILS_PURGE_COOLDOWN;
-var config name PERILS_DAEMON_TEMPLATE;
 var config bool bLogPerils;
 
 // Dev only (Astartes_ForcePerils): the next psychic power suffers Perils with this outcome. '' = roll normally.
@@ -146,6 +153,26 @@ static function EventListenerReturn PerilsListener(Object EventData, Object Even
 	OutcomeAbility.AbilityTriggerAgainstSingleTarget(Unit.GetReference(), false);
 
 	return ELR_NoInterrupt;
+}
+
+/// The daemon tier for a force level: the entry with the highest MinForceLevel at or below it.
+static function PerilsDaemonDef DaemonForForceLevel(int ForceLevel)
+{
+	local PerilsDaemonDef Best;
+	local int i;
+
+	for (i = 0; i < default.PerilsDaemons.Length; i++)
+	{
+		if (default.PerilsDaemons[i].MinForceLevel <= ForceLevel && (Best.Template == '' || default.PerilsDaemons[i].MinForceLevel >= Best.MinForceLevel))
+		{
+			Best = default.PerilsDaemons[i];
+		}
+	}
+	if (Best.Template == '' && default.PerilsDaemons.Length > 0)
+	{
+		Best = default.PerilsDaemons[0];
+	}
+	return Best;
 }
 
 static function int GetWarpCharge(name AbilityName)
@@ -304,8 +331,7 @@ static function X2AbilityTemplate Possession()
 
 	Template = HiddenSelfAbility('Astartes_Perils_Possession', "img:///UILibrary_PerkIcons.UIPerk_voidrift");
 
-	Daemon = new class'X2Effect_Astartes_SpawnDaemon';
-	Daemon.UnitToSpawnName = default.PERILS_DAEMON_TEMPLATE;
+	Daemon = new class'X2Effect_Astartes_SpawnDaemon'; // picks the PerilsDaemons tier for the current force level
 	Daemon.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(Daemon);
 
