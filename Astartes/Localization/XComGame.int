@@ -895,6 +895,24 @@ strCharacterName="Daemon Prince"
 [Astartes_EldarWarlock X2CharacterTemplate]
 strCharacterName="Eldar Warlock"
 
+[Astartes_EldarGuardian X2CharacterTemplate]
+strCharacterName="Eldar Guardian"
+
+[Astartes_DireAvenger X2CharacterTemplate]
+strCharacterName="Dire Avenger"
+
+[Astartes_ShurikenCatapult X2WeaponTemplate]
+FriendlyName="Shuriken Catapult"
+FriendlyNamePlural="Shuriken Catapults"
+BriefSummary="A storm of monomolecular discs."
+TacticalText="<Bullet/> The Guardian's rifle."
+
+[Astartes_AvengerCatapult X2WeaponTemplate]
+FriendlyName="Avenger Shuriken Catapult"
+FriendlyNamePlural="Avenger Shuriken Catapults"
+BriefSummary="The Dire Avenger shrine's long-barrelled catapult."
+TacticalText="<Bullet/> The Dire Avenger's rifle."
+
 [Astartes_Destructor X2WeaponTemplate]
 FriendlyName="Singing Spear"
 FriendlyNamePlural="Singing Spears"

@@ -509,9 +509,13 @@ system is "Eldar"; neither craftworlds nor Commorragh sit anywhere we fight). Th
 Dark Eldar Raiders' followers) feed that system; the Eldar entry in `Factions` is kept commented as documentation.
 Needs DarkEldar_Raiders and EldarArmor; Force Weapons for the Destructor (magnetic rifle fallback).
 
-**Next:** psychic powers with AI nodes (Mind War = Soulshock, Conceal/Reveal), Guardians and Dire Avengers as dressed
-soldier bodies with EldarWeapons' shuriken catapults so the faction turns craftworld, a Farseer commander, and the
-Lost-replacement webway incursions (9.2).
+**Guardians and Dire Avengers (built 2026-10-18):** Black Legion line-marine frames dressed in EldarArmor's breastplate, bodysuit,
+gauntlets and greaves (Guardian helmet and chest decor; the Avenger's aspect helmet, pauldrons and thigh plates in shrine blue),
+with enemy-only clones of EldarWeapons' shuriken catapults and the Guardian voice. `Astartes_EldarFollowers` is the craftworld
+follower list for incursion pods: Guardians throughout, Avengers from force level 4, a few kabalites and wyches for flavour.
+
+**Next:** a Farseer commander (Mind War = Soulshock when Mitzruti's nodes exist), the Autarch ruler fight, and the
+Lost-replacement webway incursions themselves (9.2).
 
 ### 9.2 Eldar interventions (Lost-mechanic, reworked)
 

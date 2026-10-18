@@ -91,3 +91,30 @@ def test_warlock_ai_stats_names_project(config, loc_sections):
     names = {(x.template_name, x.template_class) for x in loc_sections}
     assert ("Astartes_EldarWarlock", "X2CharacterTemplate") in names and ("Astartes_Destructor", "X2WeaponTemplate") in names
     assert "Astartes_CharGen_Dressed.uc" in (REPO / "Astartes/Astartes.x2proj").read_text(encoding="utf-8")
+
+
+CRAFTWORLD = {"Astartes_EldarGuardian": "Astartes_ShurikenCatapult", "Astartes_DireAvenger": "Astartes_AvengerCatapult"}
+
+
+def test_craftworld_infantry_are_dressed_marine_frames_with_catapults(config):
+    variants = {struct_field(x, "NewName"): x for x in section(config, "XComAstartes.ini", "Astartes.Astartes_UnitVariants").values("Variants")}
+    looks = {struct_field(x, "Template"): x for x in section(config, "XComAstartes.ini", "Astartes.Astartes_CharGen_Dressed").values("Looks")}
+    loadouts = {struct_field(x, "LoadoutName"): x for x in section(config, "XComGameData.ini", "XComGame.X2ItemTemplateManager").values("Loadouts")}
+    weapons = {struct_field(x, "NewName"): x for x in section(config, "XComAstartes.ini", "Astartes.X2Item_AstartesWeapons").values("Weapons")}
+    content = WORKSHOP / "1872771143" / "Config" / "XComContent.ini"
+    available = set(re.findall(r'TemplateName="(\w+)"', content.read_text(encoding="utf-8", errors="replace"))) if content.is_file() else None
+    for unit, gun in CRAFTWORLD.items():
+        v = variants[unit]
+        assert struct_field(v, "BaseTemplate") == "BLMarineM1" and struct_field(v, "bAppearanceDefinesPawn") == "true"
+        look = looks[unit]
+        parts = [struct_field(look, k) for k in ("nmHead", "nmHelmet", "nmTorso", "nmLeftArm", "nmRightArm", "nmLegs", "nmShins") if struct_field(look, k)]
+        assert len(parts) == 7, f"{unit}: incomplete look {parts}"
+        assert struct_field(look, "nmVoice") == "DoW1EldarGuardianVoiceMale"
+        if available is not None:
+            assert set(parts) - {"EldarMaleHead"} <= available, f"{unit}: parts not in EldarArmor: {set(parts) - available}"
+        lo = loadouts[f"{unit}_Loadout"]
+        assert lo.index(gun) < lo.index("AssaultRifle"), f"{unit}: the catapult comes first, the XCOM rifle is the fallback"
+        assert struct_field(weapons[gun], "bEnemyOnly") == "true" and struct_field(weapons[gun], "BaseTemplate").startswith("AVENGERSHURIKENCATAPULT_")
+    mgr = section(config, "XComEncounterLists.ini", "XComGame.XComTacticalMissionManager")
+    followers = next(v for v in mgr.values("SpawnDistributionLists") if struct_field(v, "ListID") == "Astartes_EldarFollowers")
+    assert "Astartes_EldarGuardian" in followers and "Astartes_DireAvenger" in followers

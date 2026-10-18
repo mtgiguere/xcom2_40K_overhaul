@@ -160,7 +160,7 @@ Continent names: `Continent_NorthAmerica`, `Continent_SouthAmerica`, `Continent_
 | `KillAllAIs` | Kills all enemies; take an action afterwards to trigger mission end |
 | `GiveAbility <AbilityName>` | Grants the selected unit an ability for this mission |
 | `GiveItem <Template>` | Gives the selected unit an item (tactical only; in the Avenger use `AddItem`). An item only shows in the Armoury if some class can equip it in that slot: vanilla swords are secondary-slot, our Marines carry swords as primaries |
-| `DropUnit <Template> <TeamNumber>` | Spawns a unit at the cursor; teams: `0` XCOM, `1` alien, `3` Lost. e.g. `DropUnit OrkNobM1 1`, `DropUnit Astartes_GreaterDaemon 1`, `DropUnit Astartes_ChaosSorcerer 1` (watch him open a rift; kill him before the next enemy turn to collapse it), `DropUnit Astartes_EldarWarlock 1` |
+| `DropUnit <Template> <TeamNumber>` | Spawns a unit at the cursor; teams: `0` XCOM, `1` alien, `3` Lost. e.g. `DropUnit OrkNobM1 1`, `DropUnit Astartes_GreaterDaemon 1`, `DropUnit Astartes_ChaosSorcerer 1` (watch him open a rift; kill him before the next enemy turn to collapse it), `DropUnit Astartes_EldarWarlock 1`, `DropUnit Astartes_EldarGuardian 1`, `DropUnit Astartes_DireAvenger 1` |
 | `AICallReinforcements` | Calls an enemy reinforcement wave (tests the reinforcement rewrite) |
 | `TeleportUnitIDToCursor <id>` | Moves a unit to the cursor |
 | `Astartes_JumpThrusters <back> <side> <up> [bone]` | Moves the jump-pack flames live for tuning and prints the config lines to keep; no numbers = print current |
