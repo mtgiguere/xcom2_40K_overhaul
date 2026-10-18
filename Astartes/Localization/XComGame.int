@@ -452,3 +452,41 @@ ShortNames[6]="Lib."
 ShortNames[7]="SLb."
 
 ; === END GENERATED: CLASSES ===
+
+; --- Perils of the Warp (X2Ability_Astartes_Librarian) ---
+[Astartes_PerilsOfTheWarp X2AbilityTemplate]
+LocFriendlyName="Perils of the Warp"
+LocLongDescription="Every psychic power risks the Perils of the Warp once it has resolved. Minor powers are safest; the great workings of the Codicier and Epistolary are not. A better Psychic Hood lowers the risk. The Warp may surge in the Librarian's favour, lash back through his body, stun him, strip his powers for a time, or, rarely, drag him screaming into the Immaterium."
+LocHelpText="Psychic powers may backfire. A better Psychic Hood lowers the risk."
+LocFlyOverText="Perils of the Warp"
+LocPromotionPopupText="<Bullet/> Every psychic power rolls for Perils after it resolves.<br/><Bullet/> Warp Charge 1 powers: 8%. Charge 2: 14%. Charge 3: 20%. Mk II hood -3%, relic hood -6%.<br/><Bullet/> Outcomes: Warp Surge (free action), Psychic Backlash (armour-ignoring damage), Warp Shock (stun), Mental Purge (all powers on cooldown), Dragged into the Warp (a daemon takes him; he is lost).<br/>"
+
+[Astartes_Perils_WarpSurge X2AbilityTemplate]
+LocFriendlyName="Warp Surge"
+LocLongDescription="The Warp answers generously. The Librarian regains an action."
+LocHelpText="Perils outcome: the Librarian regains an action."
+LocFlyOverText="Warp Surge"
+
+[Astartes_Perils_Backlash X2AbilityTemplate]
+LocFriendlyName="Psychic Backlash"
+LocLongDescription="Warp energy earths itself through the Librarian's body. Damage that ignores armour."
+LocHelpText="Perils outcome: damage that ignores armour."
+LocFlyOverText="Psychic Backlash"
+
+[Astartes_Perils_WarpShock X2AbilityTemplate]
+LocFriendlyName="Warp Shock"
+LocLongDescription="The Librarian's mind reels from the Immaterium's touch. Stunned."
+LocHelpText="Perils outcome: stunned."
+LocFlyOverText="Warp Shock"
+
+[Astartes_Perils_MentalPurge X2AbilityTemplate]
+LocFriendlyName="Mental Purge"
+LocLongDescription="The Librarian's powers slip from his grasp. Every psychic power goes on cooldown."
+LocHelpText="Perils outcome: every psychic power on cooldown."
+LocFlyOverText="Mental Purge"
+
+[Astartes_Perils_Possession X2AbilityTemplate]
+LocFriendlyName="Dragged into the Warp"
+LocLongDescription="A daemon claims the Librarian's soul and bursts from his body onto the battlefield. The brother is lost, and his geneseed with him."
+LocHelpText="Perils outcome: the Librarian is lost and a daemon takes the field."
+LocFlyOverText="Dragged into the Warp"

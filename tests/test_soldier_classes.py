@@ -27,7 +27,7 @@ _MOD_ABILITY_RE = re.compile(
     r"""(?:CreateTemplate\s*\(\s*class'X2AbilityTemplate'\s*,\s*'(\w+)'"""
     r"""|CREATE_X2ABILITY_TEMPLATE\s*\(\s*\w+\s*,\s*'(\w+)'"""
     r"""|PurePassive\s*\(\s*'(\w+)'"""
-    r"""|(?:Passive|SelfTargetTrigger|SelfTargetActivated|Attack|MeleeAttack|TargetedDebuff|TargetedBuff|SquadPassive)\s*\(\s*'(\w+)')"""
+    r"""|(?:Passive|SelfTargetTrigger|SelfTargetActivated|Attack|MeleeAttack|TargetedDebuff|TargetedBuff|SquadPassive|HiddenSelfAbility)\s*\(\s*'(\w+)')"""
 )
 
 

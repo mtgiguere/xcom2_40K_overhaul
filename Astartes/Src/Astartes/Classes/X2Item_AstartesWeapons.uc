@@ -45,7 +45,7 @@ static function CreateWeapons()
 			continue;
 		}
 
-		Clone = new Base.Class (Base);
+		Clone = new(none, string(default.Weapons[i].NewName)) Base.Class (Base); // named: loc + PerObjectConfig load by object name
 		Clone.SetTemplateName(default.Weapons[i].NewName);
 		Clone.BaseItem = default.Weapons[i].BaseItem;
 		Clone.BaseDamage.Damage += default.Weapons[i].DamageBonus;

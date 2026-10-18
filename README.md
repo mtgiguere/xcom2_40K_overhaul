@@ -126,8 +126,8 @@ Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 | Command | Does |
 |---|---|
 | `Astartes_Chapter Country_BloodAngels` | Sets the campaign's Chapter (flag, names, colours) and redresses the barracks |
-| `Astartes_Livery 14 19` | Applies armour tints (primary, secondary palette indices) to everyone, for tuning |
-| `Astartes_Livery 14 19 Pattern_Name` | Same, plus an armour pattern |
+| `Astartes_Livery 35 35` | Applies armour tints (primary, secondary palette indices) to everyone, for tuning |
+| `Astartes_Livery 35 35 Pattern_Name` | Same, plus an armour pattern |
 
 Chapter countries come from the flag mods: `Country_Ultramarines`, `Country_BloodAngels`, `Country_DarkAngels`,
 `Country_ImperialFists`, `Country_Salamanders`, `Country_SpaceWolves`, `Country_BlackTemplars`, `Country_RavenGuard`,
@@ -148,6 +148,7 @@ Continent names: `Continent_NorthAmerica`, `Continent_SouthAmerica`, `Continent_
 | `DropUnit <Template> <TeamNumber>` | Spawns a unit at the cursor; teams: `0` XCOM, `1` alien, `3` Lost. e.g. `DropUnit OrkNobM1 1` |
 | `AICallReinforcements` | Calls an enemy reinforcement wave (tests the reinforcement rewrite) |
 | `TeleportUnitIDToCursor <id>` | Moves a unit to the cursor |
+| `Astartes_ForcePerils Possession` | The next psychic power any Librarian casts suffers Perils with that outcome (`WarpSurge`, `Backlash`, `WarpShock`, `MentalPurge`, `Possession`); no argument = normal rolls again |
 
 ### Reading results
 The log is `Documents\My Games\XCOM2 War of the Chosen\XComGame\Logs\Launch.log`. Lines from this mod are tagged

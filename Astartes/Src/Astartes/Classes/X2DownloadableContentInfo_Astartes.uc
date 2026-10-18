@@ -774,3 +774,25 @@ exec function Astartes_Redress()
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	Say("Astartes_Redress: PASS redressed" @ Count @ "soldiers");
 }
+
+/// Astartes_ForcePerils [WarpSurge|Backlash|WarpShock|MentalPurge|Possession]
+/// The next psychic power any Librarian casts suffers Perils of the Warp with this outcome. No argument = normal rolls.
+exec function Astartes_ForcePerils(optional string Outcome)
+{
+	local name OutcomeName;
+
+	if (Outcome == "")
+	{
+		class'X2Ability_Astartes_Librarian'.default.ForcedPerilsOutcome = '';
+		Say("Astartes_ForcePerils: PASS back to normal Perils rolls");
+		return;
+	}
+	OutcomeName = name("Astartes_Perils_" $ Outcome);
+	if (class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate(OutcomeName) == none)
+	{
+		Say("Astartes_ForcePerils: FAIL unknown outcome" @ Outcome @ "(WarpSurge, Backlash, WarpShock, MentalPurge, Possession)");
+		return;
+	}
+	class'X2Ability_Astartes_Librarian'.default.ForcedPerilsOutcome = OutcomeName;
+	Say("Astartes_ForcePerils: PASS the next psychic power triggers" @ OutcomeName);
+}

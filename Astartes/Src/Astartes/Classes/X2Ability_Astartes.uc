@@ -119,7 +119,7 @@ static function X2AbilityTemplate RecoverGeneseed()
 	local X2AbilityCost_ActionPoints ActionPointCost;
 	local X2AbilityTarget_Single SingleTarget;
 	local X2Condition_UnitProperty ShooterCondition, TargetCondition;
-	local X2Condition_UnitValue NotYetHarvested;
+	local X2Condition_UnitValue NotYetHarvested, NotLostToTheWarp;
 	local X2Effect_Astartes_RecoverGeneseed HarvestEffect;
 
 	`CREATE_X2ABILITY_TEMPLATE(Template, 'Astartes_RecoverGeneseed');
@@ -168,6 +168,11 @@ static function X2AbilityTemplate RecoverGeneseed()
 	NotYetHarvested = new class'X2Condition_UnitValue';
 	NotYetHarvested.AddCheckValue(class'X2Effect_Astartes_RecoverGeneseed'.default.HarvestedValueName, 1, eCheck_LessThan);
 	Template.AbilityTargetConditions.AddItem(NotYetHarvested);
+
+	// A brother dragged into the Warp leaves nothing to harvest.
+	NotLostToTheWarp = new class'X2Condition_UnitValue';
+	NotLostToTheWarp.AddCheckValue(class'X2Effect_Astartes_SpawnDaemon'.default.LostToTheWarpValueName, 1, eCheck_LessThan);
+	Template.AbilityTargetConditions.AddItem(NotLostToTheWarp);
 
 	HarvestEffect = new class'X2Effect_Astartes_RecoverGeneseed';
 	HarvestEffect.GeneseedAmount = default.GENESEED_PER_RECOVERY;

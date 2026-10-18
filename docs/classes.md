@@ -129,8 +129,26 @@ is explicitly "today vs. tomorrow vs. right now."
 Role: the psyker. Columns are the three classic disciplines so the fantasy itself is the choice:
 **Pyromancy** (damage and area denial), **Telepathy** (control and Will warfare),
 **Biomancy/Telekinesis** (bodies and objects). Every psychic power carries a **Perils of the Warp**
-risk: on a failed roll the Librarian takes Will damage, scaling with the power's rank. Chaos-heavy
-systems increase the risk. This is the shared cost that keeps raw power honest.
+risk. This is the shared cost that keeps raw power honest.
+
+**Perils of the Warp (built 2026-10-17, `X2Ability_Astartes_Librarian`).** Decision: no Warp Charge *pool*;
+cooldowns stay vanilla and the resource is *risk*. Each power has a Warp Charge rating (1 minor, 2 major,
+3 cataclysmic) and rolls for Perils after it resolves: 8% / 14% / 20%, less 3% with a Mk II Psychic Hood
+and 6% with a relic hood (so the hood is the Librarian's real upgrade). A failed roll draws from a weighted
+table modelled on the tabletop one (weights in `XComAstartes.ini`):
+
+| Outcome | Weight | Effect |
+|---|---|---|
+| Warp Surge | 1 | The power succeeds *and* the Librarian regains an action |
+| Psychic Backlash | 3 | 2-4 damage that ignores armour |
+| Warp Shock | 3 | Stunned |
+| Mental Purge | 2 | Every psychic power goes on a 3-turn cooldown |
+| Dragged into the Warp | 1 | A daemon (vanilla Spectre until a daemon model is wired in) bursts out on his tile, hostile. The Librarian is KIA and his geneseed is lost (the Apothecary cannot harvest him) |
+
+Overall a minor power loses the Librarian 0.8% of the time, a cataclysmic one 2%; over a campaign of
+hundreds of casts that is a real chance, which is the point. Future hooks: Chaos-heavy regions raise the
+base chance; the Tactical **Chapter Banner** lowers it; a Chapter relic could let a lost brother be
+rescued from the daemon instead of killed. Dev command: `Astartes_ForcePerils <Outcome>`.
 
 | Rank | Pyromancy | Telepathy | Biomancy / Telekinesis |
 |---|---|---|---|
@@ -138,7 +156,7 @@ systems increase the risk. This is the shared cost that keeps raw power honest.
 | 2 | **Flame Breath (new)**: cone of fire, sets tiles burning. 1 charge. | **Psychic Scream (new)**: all enemies in 4 tiles lose Will and may panic. Cooldown. | `Inspire` re-skin, **Might of Heroes**: ally gets +damage and +mobility for a turn. |
 | 3 | **Molten Beam (new)**: line attack through cover, armor pierce. | `MindControl` re-skin, **Dominate**: control a non-elite enemy for 2 turns. | **Telekine Shield (new)**: ally gains 3 shield HP, absorbs the first hit. |
 | 4 | **Fire Shield (new)**: self aura, adjacent attackers take fire damage. | `Fuse`: detonate a target's explosives. | `Stasis` real: a unit is removed from the fight for a turn. |
-| 5 | **Fury of the Ancients (new)**: 3-tile burst, heavy damage, Perils risk doubled. | **Puppet Master (new)**: Dominate works on elites, 1 charge. | **Smite the Earth (new)**: destroy a 3x3 of cover and knock back units. |
+| 5 | **Fury of the Ancients (new)**: 3-tile burst, heavy damage, Warp Charge 3 (Perils 20%). | **Puppet Master (new)**: Dominate works on elites, 1 charge. | **Smite the Earth (new)**: destroy a 3x3 of cover and knock back units. |
 | 6 | `Sustain`: survive one lethal hit per mission at 1 HP (lore: warp-fuelled vigour). | **Hallucination (new)**: target attacks its own side next turn. | **Vortex of Doom (new)**: large area, pulls enemies to the center and damages. Once per mission. |
 | 7 | **Firestorm (new)**: every enemy in sight is set on fire; Will cost scales with count. Once per mission. | **Null Zone** `NullZone` re-skin, **Psychic Hood**: all enemy psykers in 8 tiles lose their powers for 2 turns; counters Chaos sorcerers and Eldar seers. | `VoidRift` re-skin, **Warp Quake**: a huge burst that also stuns daemons and Warp-dependent units for a turn. |
 
@@ -224,8 +242,10 @@ Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were
 | Assault | Chain Teeth, Whirlwind, Duelist, Decapitate, Power Armour Veteran | Fortress (Iron Halo), Quickdraw, Bladestorm, Implacable, Untouchable | Jump Pack line (needs jump movement), Charge, Hit and Run, Hold Fast, Hammer of Wrath, Undying, Deep Jump, Last Stand, Death from Above, Angel of Death |
 | Devastator | Brace, Bipod, Tank Hunter | Suppression, Shredder, Holo Targeting, Chain Shot, Sentinel | ammo/zone mechanics: Plasma Overcharge, Lascannon Round, Sandbag, Grinding Advance, Heavy Stance, Fire Lane, Krak Missile, Weapon Mount, Hunker Them Down, Melta Round, Whirlwind Barrage, Castellan, Sweeping Fire |
 | Apothecary | Recover Geneseed, Stimm Shot, Warrior Medic | Medical Protocol (Narthecium), Aid Protocol (Combat Stims), Restorative Mist (Mass Triage), Revival Protocol | geneseed-linked: Interment Rites, Reductor Mastery, Preservation, Purity Check, Honour the Fallen, Harvest, Miracle, Last Rites; Field Surgery, Augmentic Repair, Guardian, Combat Doctrine, Chirurgeon's Fury |
-| Librarian | Smite, Flame Breath, Molten Beam, Fury of the Ancients, Terrify, Psychic Scream, Dominate, Quickening, Might of Heroes (clones of vanilla psionics under 40K names, via `Astartes_AbilityVariants`) | Fuse, Fortress | Fire Shield, Warp Bind, Puppet Master, Smite the Earth, Warp Vigour, Hallucination, Vortex of Doom, Firestorm, Psychic Hood power, Warp Quake. **Perils of the Warp / Warp Charge not yet implemented** (pending decision). |
+| Librarian | Smite, Flame Breath, Molten Beam, Fury of the Ancients, Terrify, Psychic Scream, Dominate, Quickening, Might of Heroes (clones of vanilla psionics under 40K names, via `Astartes_AbilityVariants`) | Fuse, Fortress | Fire Shield, Warp Bind, Puppet Master, Smite the Earth, Warp Vigour, Hallucination, Vortex of Doom, Firestorm, Psychic Hood power, Warp Quake. Perils of the Warp is live (passive + 5 outcomes incl. daemonic possession); no Warp Charge pool by decision. |
 | Shared | Know No Fear, Astartes Physiology, Power Armour Mk VII stats | | |
+
+Weapon and ability clones are created as named objects (`new(none, string(Name))`) so their 40K localization loads; unnamed clones showed vanilla names in play (fixed 2026-10-17, guarded by `tests/test_wargear.py`).
 
 Librarians wear the Tacticus Hood on promotion (Astartes_ClassLook). Wargear: Bolter, Bolt Pistol, Chainsword/Power Sword/Relic Blade, Heavy Bolter, Force Sword, Psychic Hood, Narthecium as vanilla clones (X2Item_AstartesWeapons).
 

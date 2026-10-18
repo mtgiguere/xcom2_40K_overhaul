@@ -162,7 +162,7 @@ Existing weapon mods (bolt pistols, plasma pistols, power claws, bolters, plasma
 - **Geneseed purity** (idea): geneseed from Chaos-heavy systems may be tainted → better recruit stats but corruption risk later.
 
 ### 4.7b Panic, Know No Fear, and the Imperial Officer (decided 2026-10-17)
-- **Marines never panic.** Passive *Know No Fear* on every Marine: immune to panicked / berserk / shattered. Will still exists and is spent on Chaos corruption (§8) and Perils of the Warp. Fatigue stays.
+- **Marines never panic.** Passive *Know No Fear* on every Marine: immune to panicked / berserk / shattered. Will still exists and is spent on Chaos corruption (§8). Perils of the Warp (classes.md, Librarian) is an outcome table rather than Will damage: its worst result drags the Librarian into the Warp and spawns a daemon in his place (decided 2026-10-17). Fatigue stays.
 - **Sisters frenzy instead of panicking.** A would-be panic becomes a charge at the nearest enemy.
 - **Imperial Guard (haven militia, civilians) panic easily:** low Will in config.
 - **Imperial Officer class** - a third promotion path (Novice/Scout stays human). Ranks: Lieutenant, Captain, Major, Colonel... with **Commissar** as the rank-7 title. Three columns: **Command** (orders, give actions, call a Guard fire team), **Commissariat** (aura: Guard in range cannot panic; **Summary Execution**: shoot a panicked allied Guardsman, all friendlies in sight shed panic and gain Will), **Tactician** (artillery, smoke, intel). Ordinary human (scale 0.85, human stats): bringing one is a Marine you did not bring. Mixed-gender human line.

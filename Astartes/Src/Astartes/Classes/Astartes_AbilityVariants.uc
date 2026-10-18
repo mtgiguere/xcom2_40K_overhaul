@@ -34,7 +34,7 @@ static function CreateClones()
 			`log("Astartes: ability clone" @ default.Clones[i].NewName @ "skipped: base" @ default.Clones[i].BaseAbility @ "not found",, 'Astartes');
 			continue;
 		}
-		Clone = new Base.Class (Base);
+		Clone = new(none, string(default.Clones[i].NewName)) Base.Class (Base); // named: loc loads by object name
 		Clone.SetTemplateName(default.Clones[i].NewName);
 		AbilityMgr.AddAbilityTemplate(Clone, true);
 		Created++;
