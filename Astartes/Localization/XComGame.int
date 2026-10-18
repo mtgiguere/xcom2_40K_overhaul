@@ -8,6 +8,28 @@ strCharacterName="Chaos Cultist"
 [Astartes_CultHybrid X2CharacterTemplate]
 strCharacterName="Genestealer Cult Hybrid"
 
+; ---------------------------------------------------------------- armour (vanilla tiers renamed as power armour marks)
+[KevlarArmor X2ArmorTemplate]
+FriendlyName="Power Armour Mk VII"
+FriendlyNamePlural="Power Armour Mk VII"
+BriefSummary="Mk VII 'Aquila' pattern power armour: ceramite plate over an adamantium skeleton, fibre-bundle muscles, a sealed life-support system. The standard wargear of a battle-brother."
+TacticalText="<Bullet/> Every Marine wears power armour as part of his basic kit.\n<Bullet/> The Forge can produce heavier marks and artificer plate."
+
+[MediumPlatedArmor X2ArmorTemplate]
+FriendlyName="Artificer Power Armour"
+FriendlyNamePlural="Artificer Power Armour"
+BriefSummary="Power armour reworked by the Chapter's artificers: thicker ceramite, reinforced joints, and room for a second wargear slot."
+
+[MediumPoweredArmor X2ArmorTemplate]
+FriendlyName="Relic Power Armour"
+FriendlyNamePlural="Relic Power Armour"
+BriefSummary="Ancient plate from the Chapter's reliquary, maintained for ten thousand years. The finest protection a battle-brother can wear short of Tactical Dreadnought Armour."
+
+[Astartes_PowerArmourStats X2AbilityTemplate]
+LocFriendlyName="Power Armour"
+LocHelpText="Power armour plating."
+LocLongDescription="Ceramite plate and an adamantium skeleton give the wearer additional health and armour."
+
 ; ---------------------------------------------------------------- shared Marine abilities
 [Astartes_KnowNoFear X2AbilityTemplate]
 LocFriendlyName="Know No Fear"

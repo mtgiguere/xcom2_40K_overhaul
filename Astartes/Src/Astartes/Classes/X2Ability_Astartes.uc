@@ -7,6 +7,8 @@ class X2Ability_Astartes extends X2Ability config(Astartes);
 
 var config int GENESEED_PER_RECOVERY;
 var config int GENESEED_RECOVERY_RANGE_TILES;
+var config int POWER_ARMOUR_HEALTH_BONUS;
+var config int POWER_ARMOUR_MITIGATION;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -15,8 +17,60 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(KnowNoFear());
 	Templates.AddItem(AstartesPhysiology());
 	Templates.AddItem(RecoverGeneseed());
+	Templates.AddItem(PowerArmourStats());
 
 	return Templates;
+}
+
+/// Power Armour Mk VII: the stats of the Marines' basic armour. Attached to the vanilla KevlarArmor
+/// template at load (the armour packs' body parts are bound to the vanilla armour names, so the vanilla
+/// tiers *are* the power armour marks). Hidden item ability, same pattern as MediumPlatedArmorStats.
+static function X2AbilityTemplate PowerArmourStats()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_PersistentStatChange StatEffect;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Astartes_PowerArmourStats');
+	Template.AbilitySourceName = 'eAbilitySource_Item';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.Hostility = eHostility_Neutral;
+	Template.bDisplayInUITacticalText = false;
+	Template.AbilityToHitCalc = default.DeadEye;
+	Template.AbilityTargetStyle = new class'X2AbilityTarget_Self';
+	Template.AbilityTriggers.AddItem(new class'X2AbilityTrigger_UnitPostBeginPlay');
+
+	StatEffect = new class'X2Effect_PersistentStatChange';
+	StatEffect.BuildPersistentEffect(1, true, false, false);
+	StatEffect.AddPersistentStatChange(eStat_HP, default.POWER_ARMOUR_HEALTH_BONUS);
+	StatEffect.AddPersistentStatChange(eStat_ArmorMitigation, default.POWER_ARMOUR_MITIGATION);
+	Template.AddTargetEffect(StatEffect);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	return Template;
+}
+
+/// Turn vanilla Kevlar into Power Armour Mk VII: grant the stat ability and show the numbers in the armoury.
+static function MakeKevlarPowerArmour()
+{
+	local X2ItemTemplateManager ItemMgr;
+	local array<X2DataTemplate> Templates;
+	local X2ArmorTemplate Armor;
+	local int i;
+
+	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	ItemMgr.FindDataTemplateAllDifficulties('KevlarArmor', Templates);
+	for (i = 0; i < Templates.Length; i++)
+	{
+		Armor = X2ArmorTemplate(Templates[i]);
+		if (Armor == none || Armor.Abilities.Find('Astartes_PowerArmourStats') != INDEX_NONE)
+		{
+			continue;
+		}
+		Armor.Abilities.AddItem('Astartes_PowerArmourStats');
+		Armor.SetUIStatMarkup(class'XLocalizedData'.default.HealthLabel, eStat_HP, default.POWER_ARMOUR_HEALTH_BONUS, true);
+		Armor.SetUIStatMarkup(class'XLocalizedData'.default.ArmorLabel, eStat_ArmorMitigation, default.POWER_ARMOUR_MITIGATION, true);
+	}
+	`log("Astartes: KevlarArmor is now Power Armour Mk VII (+" $ default.POWER_ARMOUR_HEALTH_BONUS @ "HP, +" $ default.POWER_ARMOUR_MITIGATION @ "armour)",, 'Astartes');
 }
 
 /// Astartes Physiology: the oolitic kidney and multi-lung filter toxins. Marines are immune to

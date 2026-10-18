@@ -108,6 +108,15 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 - **Deep strike:** unit is not placed at mission start and teleports onto a chosen tile during the player's turn (Iridar's Jet Packs "Dynamic Deployment" demonstrates the pattern). A short tactical teleport with long cooldown is a relic-tier option.
 - Art: Gravis parts + Thousand Sons Terminator helmet as placeholder (§4.9).
 
+### 4.5a Armour marks (implemented 2026-10-17)
+The armour packs bind their body parts to the **vanilla armour template names** (Kevlar / Plated / Powered), so the vanilla tiers *are* the power armour marks rather than new items:
+| Vanilla | 40K | Stats |
+|---|---|---|
+| KevlarArmor | **Power Armour Mk VII** | +2 HP, +1 armour via `Astartes_PowerArmourStats` (config in XComAstartes.ini); vanilla kevlar gives nothing |
+| MediumPlatedArmor | Artificer Power Armour | vanilla (+4 HP, extra slot) - retune later |
+| MediumPoweredArmor | Relic Power Armour | vanilla - retune later |
+Terminator armour stays a separate item (§4.5). Chaos parity (§6.3) should be re-checked with Mk VII in play.
+
 ### 4.5b Weapon lines
 | Class | Primary | Secondary | Upgrade path / notes |
 |---|---|---|---|

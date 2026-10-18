@@ -44,3 +44,12 @@ def test_chapter_country_and_liveries(config):
                 pass
         missing = countries - defined
         assert not missing, f"livery countries not defined by any installed flag mod: {sorted(missing)}"
+
+
+def test_power_armour_is_configured_and_named(config, loc_sections):
+    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Ability_Astartes"][0]
+    assert int(section.first("POWER_ARMOUR_HEALTH_BONUS")) >= 1
+    assert int(section.first("POWER_ARMOUR_MITIGATION")) >= 1
+    armour_loc = {s.template_name: s for s in loc_sections if s.template_class == "X2ArmorTemplate"}
+    assert "KevlarArmor" in armour_loc, "KevlarArmor must be renamed to power armour"
+    assert "Power Armour" in unquote(armour_loc["KevlarArmor"].first("FriendlyName"))

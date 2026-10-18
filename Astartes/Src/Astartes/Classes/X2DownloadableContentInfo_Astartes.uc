@@ -158,6 +158,7 @@ static event OnPostTemplatesCreated()
 {
 	`log("Astartes: OnPostTemplatesCreated",, 'Astartes');
 	class'Astartes_UnitVariants'.static.CreateVariants();
+	class'X2Ability_Astartes'.static.MakeKevlarPowerArmour();
 }
 
 // ---------------------------------------------------------------------------------------
@@ -267,6 +268,7 @@ static function ApplyMarineArmourLook(XGCharacterGenerator CharGen, name ArmorNa
 	local X2BodyPartTemplate Torso;
 	local EGender Gender;
 	local ECharacterRace Race;
+	local name Helmet;
 
 	if (default.MarineArmorPartPacks.Length == 0)
 	{
@@ -315,18 +317,32 @@ static function ApplyMarineArmourLook(XGCharacterGenerator CharGen, name ArmorNa
 	CharGen.kSoldier.kAppearance.nmLeftForearm = PickMarinePart(PartMgr, Filter, "LeftForearm");
 	CharGen.kSoldier.kAppearance.nmRightForearm = PickMarinePart(PartMgr, Filter, "RightForearm");
 
-	// Marines wear helmets. Keep the vanilla head if the pack has none.
-	if (PickMarinePart(PartMgr, Filter, "Helmets") != '')
+	// Marines fight helmeted. Helmets are not bound to an armour tier, so match on pack + gender only.
+	Helmet = PickMarineAnyPart(PartMgr, Filter, "Helmets");
+	if (Helmet != '')
 	{
-		CharGen.kSoldier.kAppearance.nmHelmet = PickMarinePart(PartMgr, Filter, "Helmets");
+		CharGen.kSoldier.kAppearance.nmHelmet = Helmet;
 	}
 }
 
+/// A part matching the chosen torso's armour tier; falls back to any part from the Marine packs.
 static function name PickMarinePart(X2BodyPartTemplateManager PartMgr, Astartes_BodyPartFilter Filter, string PartType)
 {
 	local X2BodyPartTemplate Part;
 
 	Part = PartMgr.GetRandomUberTemplate(PartType, Filter, Filter.FilterMarinePart);
+	if (Part == none)
+	{
+		Part = PartMgr.GetRandomUberTemplate(PartType, Filter, Filter.FilterMarineAny);
+	}
+	return Part == none ? '' : Part.DataName;
+}
+
+static function name PickMarineAnyPart(X2BodyPartTemplateManager PartMgr, Astartes_BodyPartFilter Filter, string PartType)
+{
+	local X2BodyPartTemplate Part;
+
+	Part = PartMgr.GetRandomUberTemplate(PartType, Filter, Filter.FilterMarineAny);
 	return Part == none ? '' : Part.DataName;
 }
 
@@ -629,7 +645,7 @@ exec function Astartes_Chapter(string CountryStr)
 
 /// Astartes_Livery <PrimaryTint> <SecondaryTint> [Pattern]
 /// Applies armour tints to every barracks soldier right now, for tuning ChapterLiveries values by eye.
-exec function Astartes_Livery(int PrimaryTint, int SecondaryTint, optional string PatternStr)
+exec function Astartes_Livery(int PrimaryTint, optional int SecondaryTint = -1, optional string PatternStr)
 {
 	local XComGameStateHistory History;
 	local XComGameState NewGameState;
@@ -644,6 +660,10 @@ exec function Astartes_Livery(int PrimaryTint, int SecondaryTint, optional strin
 	{
 		Say("Astartes_Livery: FAIL no XComHQ");
 		return;
+	}
+	if (SecondaryTint < 0)
+	{
+		SecondaryTint = PrimaryTint; // one colour on both channels = uniform Chapter livery
 	}
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: Livery");
 	for (idx = 0; idx < XComHQ.Crew.Length; idx++)

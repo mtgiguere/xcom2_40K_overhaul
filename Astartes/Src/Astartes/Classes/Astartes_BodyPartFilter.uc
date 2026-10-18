@@ -22,3 +22,9 @@ function bool FilterMarinePart(X2BodyPartTemplate Template)
 {
 	return IsFromRequiredPack(Template) && FilterByTorsoAndArmorMatch(Template);
 }
+
+/// Pack + gender only. For parts that are not bound to an armour tier (helmets, deco), and as a fallback.
+function bool FilterMarineAny(X2BodyPartTemplate Template)
+{
+	return IsFromRequiredPack(Template) && FilterByGenderAndNonSpecialized(Template);
+}
