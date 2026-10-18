@@ -74,7 +74,9 @@ Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 
 ## Dressing the Marines
 
-Generated Marines copy their armour parts from a character-pool soldier named in `MarineLookTemplates` (`Config/XComGame.ini`). Make one in the Character Pool wearing the Tacticus parts you want as the standard look (tintable pieces, standard pouches and seals, no power fist, no jump pack), save him, and list his full name. Several names give a random pick. Tints and the camo pattern still come from the Chapter livery; the Librarian hood is still applied on promotion. With no template found, parts are picked at random from the packs.
+Generated Marines copy their armour parts from a character-pool soldier named in `MarineLookTemplates` (`Config/XComGame.ini`). Make one in the Character Pool wearing the Tacticus parts you want as the standard look (tintable pieces, standard pouches and seals, no power fist, no jump pack), save him, and list his full name. Several names give a random pick. Tints and the camo pattern still come from the Chapter livery; the Librarian hood is still applied on promotion. With no template found, the shipped `MarineLookParts` line is used; with neither, parts are picked at random from the packs.
+
+To ship a look: `Astartes_ExportLook Arthur Ward` on the Avenger prints a `+MarineLookParts=(...)` line; paste it under `[Astartes.X2DownloadableContentInfo_Astartes]` in `Config/XComGame.ini`.
 
 ## Conventions
 
@@ -106,6 +108,7 @@ Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 | `Astartes_SquadSize 5` | Squad cap 4, 5 or 6 by granting the GTS squad-size unlocks; takes effect at the next squad select |
 | `Astartes_AppointCommander` | Appoints the first rank-7 Marine (or `Astartes_AppointCommander Hudson` by name) as Chapter Master; he gains his class's relic ability (Assault: Death Incarnate) |
 | `Astartes_AppointChiefLibrarian` | Appoints the first rank-7 Librarian (or by name) as Chief Librarian, a separate unique; he gains Warp Mastery. Librarians cannot be Chapter Master |
+| `Astartes_ExportLook Arthur Ward` | Prints a pool soldier's armour parts as a config line for `MarineLookParts` |
 | `LevelUpBarracks 7` | Promotes every existing soldier 7 ranks |
 | `MakeSoldierAClass "First Last" Astartes_Librarian` | Forces a soldier into a class |
 | `MakeAllSoldiersReady` | Clears wounds, fatigue and shaken status |

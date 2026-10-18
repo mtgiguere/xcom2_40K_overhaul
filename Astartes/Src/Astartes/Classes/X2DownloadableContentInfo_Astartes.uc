@@ -23,6 +23,25 @@ var config array<string> MarinePartNameKeywords;
 // player dresses a 'standard' Marine once in the pool; tints and pattern still come from the Chapter livery.
 // Empty, or none found: parts are picked at random from the packs (power fists and jump packs included).
 var config array<string> MarineLookTemplates;
+// The same look as explicit part names, shipped with the mod so players without the pool template get it
+// (Astartes_ExportLook <pool name> prints a ready-to-paste line). Used when no pool template is found.
+struct MarineLook
+{
+	var name nmTorso;
+	var name nmArms;
+	var name nmLeftArm;
+	var name nmRightArm;
+	var name nmLeftArmDeco;
+	var name nmRightArmDeco;
+	var name nmLeftForearm;
+	var name nmRightForearm;
+	var name nmLegs;
+	var name nmThighs;
+	var name nmShins;
+	var name nmTorsoDeco;
+	var name nmHelmet;
+};
+var config array<MarineLook> MarineLookParts;
 
 struct ChapterLivery
 {
@@ -405,8 +424,7 @@ static function bool ApplyTemplateLook(XGCharacterGenerator CharGen)
 	}
 	if (Model == none)
 	{
-		`log("Astartes: no MarineLookTemplates character found in the pool; picking parts at random",, 'Astartes');
-		return false;
+		return ApplyConfiguredLook(CharGen);
 	}
 	T = Model.kAppearance;
 	CharGen.kSoldier.kAppearance.nmTorso = T.nmTorso;
@@ -423,6 +441,34 @@ static function bool ApplyTemplateLook(XGCharacterGenerator CharGen)
 	CharGen.kSoldier.kAppearance.nmTorsoDeco = T.nmTorsoDeco;
 	CharGen.kSoldier.kAppearance.nmHelmet = T.nmHelmet;
 	`log("Astartes: Marine look copied from pool template" @ Picked,, 'Astartes');
+	return true;
+}
+
+/// The shipped look (MarineLookParts): used when the pool template is absent. Returns false if none is configured.
+static function bool ApplyConfiguredLook(XGCharacterGenerator CharGen)
+{
+	local MarineLook L;
+
+	if (default.MarineLookParts.Length == 0 || default.MarineLookParts[0].nmTorso == '')
+	{
+		`log("Astartes: no pool template and no MarineLookParts; picking parts at random",, 'Astartes');
+		return false;
+	}
+	L = default.MarineLookParts[`SYNC_RAND_STATIC(default.MarineLookParts.Length)];
+	CharGen.kSoldier.kAppearance.nmTorso = L.nmTorso;
+	CharGen.kSoldier.kAppearance.nmArms = L.nmArms;
+	CharGen.kSoldier.kAppearance.nmLeftArm = L.nmLeftArm;
+	CharGen.kSoldier.kAppearance.nmRightArm = L.nmRightArm;
+	CharGen.kSoldier.kAppearance.nmLeftArmDeco = L.nmLeftArmDeco;
+	CharGen.kSoldier.kAppearance.nmRightArmDeco = L.nmRightArmDeco;
+	CharGen.kSoldier.kAppearance.nmLeftForearm = L.nmLeftForearm;
+	CharGen.kSoldier.kAppearance.nmRightForearm = L.nmRightForearm;
+	CharGen.kSoldier.kAppearance.nmLegs = L.nmLegs;
+	CharGen.kSoldier.kAppearance.nmThighs = L.nmThighs;
+	CharGen.kSoldier.kAppearance.nmShins = L.nmShins;
+	CharGen.kSoldier.kAppearance.nmTorsoDeco = L.nmTorsoDeco;
+	CharGen.kSoldier.kAppearance.nmHelmet = L.nmHelmet;
+	`log("Astartes: Marine look applied from MarineLookParts",, 'Astartes');
 	return true;
 }
 
@@ -1024,4 +1070,24 @@ exec function Astartes_AppointChiefLibrarian(optional string NameFragment)
 	}
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	Say("Astartes_AppointChiefLibrarian: PASS" @ Pick.GetFullName() @ "heads the Librarius; relic" @ class'Astartes_ChapterMaster'.default.CHIEF_LIBRARIAN_ABILITY);
+}
+
+/// Astartes_ExportLook <Pool soldier name>: prints that character's armour parts as a +MarineLookParts config line,
+/// ready to paste into XComGame.ini so the look ships with the mod.
+exec function Astartes_ExportLook(string PoolName)
+{
+	local CharacterPoolManager Pool;
+	local XComGameState_Unit Model;
+	local TAppearance T;
+
+	Pool = CharacterPoolManager(`XENGINE.GetCharacterPoolManager());
+	Model = Pool == none ? none : Pool.GetCharacter(PoolName);
+	if (Model == none)
+	{
+		Say("Astartes_ExportLook: FAIL no pool character named" @ PoolName);
+		return;
+	}
+	T = Model.kAppearance;
+	Say("Astartes_ExportLook: PASS paste into [Astartes.X2DownloadableContentInfo_Astartes]:");
+	Say("+MarineLookParts=(" $ "nmTorso=\"" $ T.nmTorso $ "\"" $ ", " $ "nmArms=\"" $ T.nmArms $ "\"" $ ", " $ "nmLeftArm=\"" $ T.nmLeftArm $ "\"" $ ", " $ "nmRightArm=\"" $ T.nmRightArm $ "\"" $ ", " $ "nmLeftArmDeco=\"" $ T.nmLeftArmDeco $ "\"" $ ", " $ "nmRightArmDeco=\"" $ T.nmRightArmDeco $ "\"" $ ", " $ "nmLeftForearm=\"" $ T.nmLeftForearm $ "\"" $ ", " $ "nmRightForearm=\"" $ T.nmRightForearm $ "\"" $ ", " $ "nmLegs=\"" $ T.nmLegs $ "\"" $ ", " $ "nmThighs=\"" $ T.nmThighs $ "\"" $ ", " $ "nmShins=\"" $ T.nmShins $ "\"" $ ", " $ "nmTorsoDeco=\"" $ T.nmTorsoDeco $ "\"" $ ", " $ "nmHelmet=\"" $ T.nmHelmet $ "\"" $ ")");
 }

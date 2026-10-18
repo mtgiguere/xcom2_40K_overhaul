@@ -372,6 +372,8 @@ static function X2AbilityTemplate WarpMastery()
 	local X2AbilityTemplate Template;
 	local X2Effect_Persistent Mastery;
 	local X2Effect_Astartes_ResetCooldown Reset;
+	local XMBEffect_AbilityCostRefund Free;
+	local XMBCondition_AbilityName Powers;
 	local int i;
 
 	Mastery = new class'X2Effect_Persistent';
@@ -388,6 +390,20 @@ static function X2AbilityTemplate WarpMastery()
 		Reset.AbilityNames.AddItem(default.PsychicPowers[i].Ability);
 	}
 	Template.AddTargetEffect(Reset);
+
+	// Powers cast this turn cost no action: with the cooldowns cleared, every power in his arsenal can go once.
+	Powers = new class'XMBCondition_AbilityName';
+	for (i = 0; i < default.PsychicPowers.Length; i++)
+	{
+		Powers.IncludeAbilityNames.AddItem(default.PsychicPowers[i].Ability);
+	}
+	Free = new class'XMBEffect_AbilityCostRefund';
+	Free.EffectName = 'Astartes_WarpMastery_Free';
+	Free.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Free.DuplicateResponse = eDupe_Refresh;
+	Free.bFreeCost = true;
+	Free.AbilityShooterConditions.AddItem(Powers);
+	Template.AddTargetEffect(Free);
 	Template.bShowActivation = true;
 	return Template;
 }
