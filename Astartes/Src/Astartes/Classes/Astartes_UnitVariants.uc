@@ -155,6 +155,27 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 	T.bDontClearRemovedFromPlay = Base.bDontClearRemovedFromPlay;
 	T.bShouldCreateDifficultyVariants = false; // created after template init; difficulty variants are not generated
 	T.bAppearanceDefinesPawn = Def.bAppearanceDefinesPawn || Base.bAppearanceDefinesPawn;
+	// Soldier plumbing (heroes are clones of Soldier): barracks, staffing, will, wounds, carrying, customisation.
+	T.bStaffingAllowed = Base.bStaffingAllowed;
+	T.bAppearInBase = Base.bAppearInBase;
+	T.bUsePoolSoldiers = Base.bUsePoolSoldiers;
+	T.bUsesWillSystem = Base.bUsesWillSystem;
+	T.bCanBeCriticallyWounded = Base.bCanBeCriticallyWounded;
+	T.bCanBeCarried = Base.bCanBeCarried;
+	T.bCanBeRevived = Base.bCanBeRevived;
+	T.RequiredLoadout = Base.RequiredLoadout;
+	T.XpKillscore = Base.XpKillscore;
+	T.strIntroMatineeSlotPrefix = Base.strIntroMatineeSlotPrefix;
+	T.strLoadingMatineeSlotPrefix = Base.strLoadingMatineeSlotPrefix;
+	T.strAutoRunNonAIBT = Base.strAutoRunNonAIBT;
+	T.CustomizationManagerClass = Base.CustomizationManagerClass;
+	T.UICustomizationMenuClass = Base.UICustomizationMenuClass;
+	T.UICustomizationInfoClass = Base.UICustomizationInfoClass;
+	T.UICustomizationPropsClass = Base.UICustomizationPropsClass;
+	T.UICustomizationHeadClass = Base.UICustomizationHeadClass;
+	T.UICustomizationBodyClass = Base.UICustomizationBodyClass;
+	T.UICustomizationWeaponClass = Base.UICustomizationWeaponClass;
+	T.PhotoboothPersonality = Base.PhotoboothPersonality;
 
 	T.ImmuneTypes = Base.ImmuneTypes;
 	T.SightedEvents = Base.SightedEvents;

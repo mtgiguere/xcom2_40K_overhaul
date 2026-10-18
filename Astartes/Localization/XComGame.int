@@ -483,6 +483,58 @@ ShortNames[5]="Cnf."
 ShortNames[6]="SCh."
 ShortNames[7]="Rcl."
 
+[Astartes_Canoness X2SoldierClassTemplate]
+DisplayName="Canoness"
+ClassSummary="A leader of the Adepta Sororitas, sent to fight beside the Chapter. Faith is her armour and her blade does not falter."
+LeftAbilityTreeTitle="Faith"
+RightAbilityTreeTitle="Zeal"
+AbilityTreeTitles[0]="Faith"
+AbilityTreeTitles[1]="Zeal"
+AbilityTreeTitles[2]="Command"
+AbilityTreeTitles[3]="Chapter"
+RankNames[0]="Novitiate"
+RankNames[1]="Sister"
+RankNames[2]="Celestian"
+RankNames[3]="Sister Superior"
+RankNames[4]="Palatine"
+RankNames[5]="Canoness"
+RankNames[6]="Canoness Preceptor"
+RankNames[7]="Canoness Superior"
+ShortNames[0]="Nov."
+ShortNames[1]="Sis."
+ShortNames[2]="Cel."
+ShortNames[3]="SSp."
+ShortNames[4]="Pal."
+ShortNames[5]="Can."
+ShortNames[6]="CPr."
+ShortNames[7]="CSu."
+
+[Astartes_Commissar X2SoldierClassTemplate]
+DisplayName="Commissar"
+ClassSummary="An officer of the Officio Prefectus, attached to the Chapter by the Departmento Munitorum. He keeps the line, and he keeps it at gunpoint."
+LeftAbilityTreeTitle="Discipline"
+RightAbilityTreeTitle="Command"
+AbilityTreeTitles[0]="Discipline"
+AbilityTreeTitles[1]="Command"
+AbilityTreeTitles[2]="Executioner"
+AbilityTreeTitles[3]="Chapter"
+RankNames[0]="Cadet"
+RankNames[1]="Cadet-Commissar"
+RankNames[2]="Junior Commissar"
+RankNames[3]="Commissar"
+RankNames[4]="Senior Commissar"
+RankNames[5]="Lord Commissar"
+RankNames[6]="Lord Commissar Veteran"
+RankNames[7]="Commissar-General"
+ShortNames[0]="Cdt."
+ShortNames[1]="CCm."
+ShortNames[2]="JCm."
+ShortNames[3]="Cms."
+ShortNames[4]="SCm."
+ShortNames[5]="LCm."
+ShortNames[6]="LCV."
+ShortNames[7]="CGn."
+
 ; === END GENERATED: CLASSES ===
 
 ; --- Perils of the Warp (X2Ability_Astartes_Librarian) ---
@@ -894,6 +946,47 @@ strCharacterName="Daemon Prince"
 
 [Astartes_EldarWarlock X2CharacterTemplate]
 strCharacterName="Eldar Warlock"
+
+[Astartes_Canoness X2CharacterTemplate]
+strCharacterName="Canoness"
+
+[Astartes_Commissar X2CharacterTemplate]
+strCharacterName="Commissar"
+
+[Astartes_DivineGuidance X2AbilityTemplate]
+LocFriendlyName="Divine Guidance"
+LocLongDescription="The Emperor guides her hand. For the rest of this turn her attacks cannot miss and always score critical hits. Free action, twice per mission."
+LocHelpText="This turn, every attack hits and crits."
+LocFlyOverText="Divine Guidance"
+LocPromotionPopupText="<Bullet/> Free action.<br/><Bullet/> Until the end of the turn, attacks always hit and always crit.<br/><Bullet/> Two charges per mission.<br/>"
+
+[Astartes_SpiritOfTheMartyr X2AbilityTemplate]
+LocFriendlyName="Spirit of the Martyr"
+LocLongDescription="Pain is a prayer. Whenever she takes damage she deals 2 more damage and gains +20 critical chance for two turns."
+LocHelpText="Wounded: +2 damage and +20 crit for two turns."
+LocFlyOverText="Spirit of the Martyr"
+LocPromotionPopupText="<Bullet/> Triggers whenever she is damaged.<br/><Bullet/> +2 damage, +20 critical chance, two turns.<br/>"
+
+[Astartes_AuraOfDiscipline X2AbilityTemplate]
+LocFriendlyName="Aura of Discipline"
+LocLongDescription="No one breaks while the Commissar watches. Every member of the squad is immune to panic."
+LocHelpText="The squad cannot panic."
+LocFlyOverText="Aura of Discipline"
+LocPromotionPopupText="<Bullet/> Passive, squad-wide.<br/><Bullet/> Immunity to panic.<br/>"
+
+[Astartes_SummaryExecution X2AbilityTemplate]
+LocFriendlyName="Summary Execution"
+LocLongDescription="Cowardice and corruption share one cure. A bolt-pistol round kills a panicked or mind-controlled unit outright, friend or foe. A brother seized by an enemy psyker is not spared. Cannot miss; twice per mission."
+LocHelpText="Kill a panicked or mind-controlled unit outright, friend or foe."
+LocFlyOverText="Summary Execution"
+LocPromotionPopupText="<Bullet/> Targets only units that are panicked or mind-controlled, on either side.<br/><Bullet/> Kills outright; cannot miss.<br/><Bullet/> Two charges per mission.<br/>"
+
+[Astartes_StandYourGround X2AbilityTemplate]
+LocFriendlyName="Stand Your Ground"
+LocLongDescription="The Commissar plants his feet and the line holds. Allies within 6 tiles gain +20 defence until his next turn."
+LocHelpText="Allies nearby gain +20 defence until your next turn."
+LocFlyOverText="Stand Your Ground"
+LocPromotionPopupText="<Bullet/> Allies within 6 tiles, the Commissar included.<br/><Bullet/> +20 defence until his next turn.<br/><Bullet/> 3-turn cooldown.<br/>"
 
 [Astartes_EldarGuardian X2CharacterTemplate]
 strCharacterName="Eldar Guardian"

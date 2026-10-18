@@ -1102,3 +1102,27 @@ exec function Astartes_JumpThrusters(optional float Back = 0, optional float Sid
 	}
 	Say("Astartes_JumpThrusters: PASS jump again to see the flames there");
 }
+
+/// Astartes_GiveHero <Canoness|Commissar>: in the Avenger, adds that Imperial hero to the barracks at a rank fit for the
+/// campaign's progress, as a faction contact would. For testing the hero classes without waiting for the reward.
+exec function Astartes_GiveHero(string Which)
+{
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit Unit;
+	local name CharName;
+
+	CharName = name("Astartes_" $ Which);
+	if (class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate(CharName) == none)
+	{
+		Say("Astartes_GiveHero: FAIL no character" @ CharName @ "(try Canoness or Commissar)");
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: give hero");
+	XComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
+	Unit = class'X2StrategyElement_DefaultRewards'.static.CreatePersonnelUnit(NewGameState, CharName, '', false);
+	XComHQ.AddToCrew(NewGameState, Unit);
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_GiveHero: PASS" @ Unit.GetFullName() @ "joins as" @ Unit.GetSoldierClassTemplateName() @ "rank" @ Unit.GetRank());
+}

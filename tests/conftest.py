@@ -36,3 +36,9 @@ def localization() -> dict[str, list[Section]]:
 @pytest.fixture(scope="session")
 def loc_sections(localization) -> list[Section]:
     return [s for sections in localization.values() for s in sections]
+
+
+@pytest.fixture(scope="session")
+def class_sections_raw(config):
+    """X2SoldierClassTemplate sections of XComClassData.ini by class name."""
+    return {s.template_name: s for s in config["XComClassData.ini"] if s.template_class == "X2SoldierClassTemplate"}
