@@ -845,6 +845,35 @@
       "items": [
         "MilitiaRifle_CV"
       ]
+    },
+    {
+      "name": "Astartes_ChaosSorcerer_Loadout",
+      "items": [
+        "Astartes_WarpLightning",
+        "BLCaptainM1_WPN"
+      ]
+    },
+    {
+      "name": "Astartes_EldarWarlock_Loadout",
+      "items": [
+        "Astartes_Destructor",
+        "AssaultRifle_MG",
+        "PsiAmp_MG"
+      ]
+    },
+    {
+      "name": "Astartes_EldarGuardian_Loadout",
+      "items": [
+        "Astartes_ShurikenCatapult",
+        "AssaultRifle_CV"
+      ]
+    },
+    {
+      "name": "Astartes_DireAvenger_Loadout",
+      "items": [
+        "Astartes_AvengerCatapult",
+        "AssaultRifle_MG"
+      ]
     }
   ],
   "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent. 'Jedi' is Jedi Class Revised's class: that mod may be enabled for its jump animations.",
@@ -896,5 +925,6 @@
       ]
     }
   ],
-  "_fallback_note": "fallback: a vanilla ability used for the slot when the named ability (from an optional mod) is not loaded; mirrored in XComAstartes.ini +Fallbacks and applied at template init."
+  "_fallback_note": "fallback: a vanilla ability used for the slot when the named ability (from an optional mod) is not loaded; mirrored in XComAstartes.ini +Fallbacks and applied at template init.",
+  "_extra_loadouts_note": "Enemy loadouts live here too: XComGameData.ini is generated, hand edits are lost. Order matters: the first item is the weapon, later ones are fallbacks when a mod is absent."
 }

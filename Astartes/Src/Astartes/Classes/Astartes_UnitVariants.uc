@@ -18,6 +18,7 @@ struct UnitVariant
 	var array<name> ExtraAbilities; // added to the base's abilities when their templates exist
 	var bool bAppearanceDefinesPawn; // soldier body dressed in cosmetic parts (pawn from the appearance, not the base's archetype)
 	var string CharacterGenerator;   // optional: generator class path, e.g. Astartes.Astartes_CharGen_Dressed
+	var name DefaultSoldierClass;    // optional: the class this soldier is created as (faction heroes)
 };
 
 var config array<UnitVariant> Variants;
@@ -64,6 +65,7 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 
 	T.CharacterGroupName = Def.CharacterGroup != '' ? Def.CharacterGroup : Base.CharacterGroupName;
 	T.DefaultLoadout = Def.LoadoutOverride != '' ? Def.LoadoutOverride : Base.DefaultLoadout;
+	T.DefaultSoldierClass = Def.DefaultSoldierClass != '' ? Def.DefaultSoldierClass : Base.DefaultSoldierClass;
 	T.BehaviorClass = Base.BehaviorClass;
 	T.strBehaviorTree = Def.BehaviorTree != "" ? Def.BehaviorTree : Base.strBehaviorTree;
 	T.strScamperBT = Base.strScamperBT;

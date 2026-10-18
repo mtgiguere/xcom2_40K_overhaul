@@ -492,6 +492,52 @@ the gauntlet, Culexus hunting the Librarian, Callidus appearing mid-pod. One tem
 
 Model still needed for the Inquisitor (a coat-and-rosette cosmetic). Mechanics after Chaos corruption exists.
 
+### 9.1f Hero classes: Canoness and Commissar (proposal 2026-10-18, awaiting the user's eye)
+
+Both are faction heroes in the game's sense (no AWC roll, not in the recruit deck, one per campaign unless lost), rewarded
+by the Sororitas (ex-Templar) and Militarum (ex-Skirmisher) factions. Both fight like the Chaplain: blade primary, bolt
+pistol secondary. Each tree is three columns, every rank a real choice; abilities already in the mod are reused under their
+existing names (localization is per ability, so a rename would rename it for Marines too), new ones are marked **NEW**.
+
+**Canoness** (Adepta Sororitas; Sister of Battle armour and voice, Canoness voice at the top ranks). Ranks: Novitiate,
+Sister, Celestian, Sister Superior, Palatine, Canoness, Canoness Preceptor, Canoness Superior. Squaddie: Rosarius (armour and
+defence), Know No Fear.
+
+| Rank | Faith | Zeal | Command |
+|---|---|---|---|
+| 1 | Solace: allies near her shrug off mental attacks | Charge | Rally |
+| 2 | Inspire: an ally acts again | Duelist | Hold Fast |
+| 3 | Fortress (Armour of Contempt): fire, poison, acid cannot touch her | Whirlwind | Codex Volley (Faceoff) |
+| 4 | Litany of Hate: squad melee crit | Decapitate | Hold the Line |
+| 5 | **NEW Divine Guidance**: her next attack cannot miss and crits (2 charges) | Bladestorm | Tactical Doctrine |
+| 6 | **NEW Spirit of the Martyr**: wounded this turn, +2 damage and +20 crit until the end of next turn | Hit and Run | Chapter Banner (Simulacrum Imperialis) |
+| 7 | Litany of the Devout (Martyrdom) | Reaper (vanilla Ranger capstone: melee kill chain) | Rites of Battle |
+
+**Commissar** (Officio Prefectus; Cadian coat, cap and gloves, Commissar Lord voice). Ranks: Cadet, Cadet-Commissar, Junior
+Commissar, Commissar, Senior Commissar, Lord Commissar, Lord Commissar Veteran, Commissar-General. Squaddie: **NEW Aura of
+Discipline** (allies within 6 tiles cannot panic, +10 will), pistol shot.
+
+| Rank | Discipline | Command | Executioner |
+|---|---|---|---|
+| 1 | Hold Fast | Rally | Quickdraw |
+| 2 | Know No Fear (Unflinching) | Inspire (Get Moving) | Lightning Hands |
+| 3 | Chapter Banner (Regimental Standard) | Tactical Doctrine | **NEW Summary Execution**: a pistol shot that kills an organic target at or below 4 HP outright (2 charges) |
+| 4 | **NEW Stand Your Ground**: allies within 6 who do not move gain +20 defence until your next turn (cooldown 3) | Combat Squads | Codex Volley (Faceoff) |
+| 5 | Solace (Iron Will) | Hold the Line | Duelist |
+| 6 | Fortress | **NEW For the Emperor!**: allies within 8 gain +2 mobility and +10 aim this turn (cooldown 4) | Fan Fire |
+| 7 | Litany of the Devout | Rites of Battle | Reaper (Blade of the Prefectus) |
+
+**Trade-offs by design.** Faith vs Zeal vs Command on the Canoness is support vs blender vs squad leader, and the capstones
+mirror that (the Zeal capstone kills, the others save). The Commissar's Discipline column is defensive and squad-wide,
+Command is tempo, Executioner is a pistol duellist; Summary Execution at rank 3 is the strongest single pick in the tree and
+costs the player Tactical Doctrine or the Regimental Standard.
+
+**Plumbing (built with this proposal):** class spec `hero` block (not in the deck, no AWC, bound to its character
+template), hero character templates as variants of `Soldier` with a default soldier class and a dressed look, and the hero
+rewards generating that character per faction (`Astartes_NoHeroes.HeroCharacters`). Six new abilities to write once the
+trees are agreed: Divine Guidance, Spirit of the Martyr, Aura of Discipline, Summary Execution, Stand Your Ground, For the
+Emperor!
+
 ### 9.1d Eldar Warlock (built 2026-10-18) and the Eldar faction
 
 The first craftworld unit, and the technique every soldier-bodied enemy or ally will reuse. The Warlock is a Black Legion

@@ -14,6 +14,15 @@ var config bool bNoFactionHeroes;
 var config array<name> HeroRewardTemplates;   // reward templates that generate a faction hero
 var config name RecruitCharacterTemplate;    // what they generate instead (a rookie: our Marine classes take over on promotion)
 
+/// Imperial heroes by faction (design.md 9.1c/9.1f): the Sororitas' Canoness, the Militarum's Commissar. Used only when
+/// the character template exists (its class and look are built); otherwise the faction's reward is a recruit.
+struct HeroCharacter
+{
+	var name Faction;     // resistance faction template, e.g. Faction_Templars
+	var name Character;   // character template, e.g. Astartes_Canoness
+};
+var config array<HeroCharacter> HeroCharacters;
+
 static function Apply()
 {
 	local X2StrategyElementTemplateManager Mgr;
@@ -75,7 +84,7 @@ static function GenerateRecruitReward(XComGameState_Reward RewardState, XComGame
 	local XComGameState_CovertAction ActionState;
 	local XComGameState_ResistanceFaction FactionState;
 	local XComGameState_Unit NewUnitState;
-	local name nmCountry;
+	local name nmCountry, nmCharacter;
 
 	History = `XCOMHISTORY;
 	ActionState = XComGameState_CovertAction(NewGameState.GetGameStateForObjectID(AuxRef.ObjectID));
@@ -96,9 +105,30 @@ static function GenerateRecruitReward(XComGameState_Reward RewardState, XComGame
 	{
 		nmCountry = RegionState.GetMyTemplate().GetRandomCountryInRegion();
 	}
-	NewUnitState = class'X2StrategyElement_DefaultRewards'.static.CreatePersonnelUnit(NewGameState, default.RecruitCharacterTemplate, nmCountry, true);
+	if (ActionState != none && FactionState == none)
+	{
+		FactionState = ActionState.GetFaction();
+	}
+	nmCharacter = HeroCharacterFor(FactionState);
+	NewUnitState = class'X2StrategyElement_DefaultRewards'.static.CreatePersonnelUnit(NewGameState, nmCharacter, nmCountry, nmCharacter == default.RecruitCharacterTemplate);
 	RewardState.RewardObjectReference = NewUnitState.GetReference();
-	`log("Astartes: hero reward" @ RewardState.GetMyTemplateName() @ "generated a Marine recruit instead:" @ NewUnitState.GetFullName(),, 'Astartes');
+	`log("Astartes: hero reward" @ RewardState.GetMyTemplateName() @ "generated" @ nmCharacter @ "instead of the faction hero:" @ NewUnitState.GetFullName(),, 'Astartes');
+}
+
+/// The faction's Imperial hero when its template is loaded, else the recruit template.
+static function name HeroCharacterFor(XComGameState_ResistanceFaction FactionState)
+{
+	local int i;
+
+	if (FactionState != none)
+	{
+		i = default.HeroCharacters.Find('Faction', FactionState.GetMyTemplateName());
+		if (i != INDEX_NONE && class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate(default.HeroCharacters[i].Character) != none)
+		{
+			return default.HeroCharacters[i].Character;
+		}
+	}
+	return default.RecruitCharacterTemplate;
 }
 
 /// Hand the recruit over; if the reward belonged to a faction XCOM has not met, meet it (the Find Faction path).

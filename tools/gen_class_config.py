@@ -52,8 +52,8 @@ def render_class(class_name: str, c: dict) -> str:
         "+bMultiplayerOnly=0",
         "+ClassPoints=4",
         f'+IconImage="{c["icon"]}"',
-        "+NumInForcedDeck=1",
-        "+NumInDeck=4",
+        "+NumInForcedDeck=0" if c.get("hero") else "+NumInForcedDeck=1",
+        "+NumInDeck=0" if c.get("hero") else "+NumInDeck=4",
         "+KillAssistsPerKill=4",
         f'+SquaddieLoadout="Squaddie{class_name}"',
     ]
@@ -61,11 +61,18 @@ def render_class(class_name: str, c: dict) -> str:
         out.append(f'+AllowedWeapons=(SlotType={slot_type}, WeaponType="{weapon_type}")')
     out += [
         '+AllowedArmors="soldier"',
-        "+bAllowAWCAbilities=1",
+        "+bAllowAWCAbilities=0" if c.get("hero") else "+bAllowAWCAbilities=1",
         "+bHasClassMovie=false",
         "+bCanHaveBonds=true",
         "+BaseAbilityPointsPerPromotion=3",
     ]
+    if c.get("hero"):
+        # a faction hero: one character template may become this class, and only this class
+        out += [
+            f'+AcceptedCharacterTemplates="{c["hero"]["character"]}"',
+            f'+RequiredCharacterClass="{c["hero"]["character"]}"',
+            f'+UnfavoredClasses="{class_name}"',
+        ]
     for rank_index, rank in enumerate(c["ranks"]):
         slots = ", \\\\\n\t\t\t\t".join(ability_entry(s) for s in rank)
         out.append(f"+SoldierRanks=(AbilitySlots=({slots}), \\\\\n\t\t\t\taStatProgression=({STAT_PROGRESSION[rank_index]}))")
