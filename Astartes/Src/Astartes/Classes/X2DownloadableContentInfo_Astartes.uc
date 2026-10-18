@@ -152,6 +152,10 @@ static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, cons
 	if (CharacterTemplateName == 'Astartes_Cultist')
 	{
 		CharGen.CreateTSoldier('CivilianMilitia', eForceGender, nmCountry, iRace, ArmorName);
+		// Cultists are nameless heretics: the generated "Shane Dixon" becomes the unit label instead.
+		CharGen.kSoldier.strFirstName = "";
+		CharGen.kSoldier.strNickName = "";
+		CharGen.kSoldier.strLastName = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate('Astartes_Cultist').strCharacterName;
 		return;
 	}
 
