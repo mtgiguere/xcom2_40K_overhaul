@@ -472,4 +472,5 @@ Still without a 40K model: Psychic Hood and Narthecium (vanilla psi amp and grem
 ## Animation sources
 | Mod | ID | Use |
 |---|---|---|
+| *Alien Hunters DLC (vanilla)* | DLC_2 | **In use (2026-10-18)**: Jump Pack jet sounds (`DLC_60_SoundCharacterFX.IcarusJump_Burst_On`, `IcarusJump_High_Air`, `IcarusJetLand`) and flames (`DLC_2_FX_Icarus_Suit.P_Launch`, `P_Hover_Burst`, `P_Thruster_Main_L/R`). Found by reading the imports of Iridar's WOTC Jet Packs (1576958692), which uses the same assets; nothing of that mod is needed. |
 | Jedi Class Revised | 2031929512 | Force Jump animation set (`AS_ForcePowers`: HL_ForceJumpStart/Loop/Stop) and ignition cue for the Jump Pack arc; optional, loaded by path when enabled. Its `Jedi` class is removed from our deck. Known crashers (Reflect, Lightsaber Telekinesis) are Jedi abilities we never grant. |

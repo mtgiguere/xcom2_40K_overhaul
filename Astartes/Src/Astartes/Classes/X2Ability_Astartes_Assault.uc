@@ -20,7 +20,18 @@ var config int ANGEL_OF_DEATH_ACTIONS, ANGEL_OF_DEATH_MOBILITY;
 var config name JUMP_ANIM_START, JUMP_ANIM_LOOP, JUMP_ANIM_STOP;
 var config float JUMP_START_PLAYRATE, JUMP_STOP_PLAYRATE, JUMP_START_FRACTION, JUMP_LANDING_LEAD;
 var config float JUMP_ARC_HEIGHT_TILES, JUMP_SECONDS_PER_TILE, JUMP_MIN_FLIGHT_SECONDS, JUMP_MAX_FLIGHT_SECONDS;
-var config string JUMP_SOUND_CUE;    // optional SoundCue path for the ignition (empty = none)
+var config string JUMP_SOUND_CUE;    // optional extra SoundCue for the ignition (empty = none)
+// Jump pack sound and flame: Wwise events and particle systems, by object path. Defaults are the Alien Hunters
+// Icarus Suit assets (vanilla DLC content, no other mod needed). Empty = none; missing assets are skipped.
+struct JumpThruster
+{
+	var string FX;        // ParticleSystem path
+	var vector Offset;    // from the attach bone (or the pawn), in the pawn's frame
+};
+var config string JUMP_TAKEOFF_SOUND, JUMP_FLIGHT_SOUND, JUMP_LAND_SOUND;
+var config string JUMP_TAKEOFF_FX, JUMP_LAND_FX;
+var config array<JumpThruster> JUMP_THRUSTERS;
+var config name JUMP_THRUSTER_BONE;  // bone the thrusters ride on; falls back to the pawn itself if absent
 var config string JUMP_ANIMSET_PATH; // optional extra AnimSet granted to Assault Marines (e.g. a jump animation pack)
 var config array<name> JumpAbilities; // abilities whose visualization becomes the arc
 

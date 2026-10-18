@@ -66,3 +66,26 @@ def test_jump_visualization_has_no_cover_bracket():
     vis = src[start:end]
     assert "X2Action_EnterCover'.static" not in vis, "EnterCover after the jump teleports the pawn to the origin"
     assert "X2Action_ExitCover'.static" not in vis
+
+
+def test_jump_effects_come_from_vanilla_alien_hunters(config):
+    """Jet sounds and flames are Icarus Suit assets (DLC content everyone with WotC owns), not another mod's."""
+    sec = next(x for x in config["XComAstartes.ini"] if x.name == "Astartes.X2Ability_Astartes_Assault")
+    for key in ("JUMP_TAKEOFF_SOUND", "JUMP_FLIGHT_SOUND", "JUMP_LAND_SOUND"):
+        assert sec.values(key)[0].strip('"').startswith("DLC_60_SoundCharacterFX."), key
+    for key in ("JUMP_TAKEOFF_FX", "JUMP_LAND_FX"):
+        assert sec.values(key)[0].strip('"').startswith("DLC_2_FX_Icarus_Suit."), key
+    thrusters = sec.values("JUMP_THRUSTERS")
+    assert len(thrusters) == 2 and all(struct_field(t, "FX").startswith("DLC_2_FX_Icarus_Suit.") for t in thrusters)
+    assert sec.values("JUMP_SOUND_CUE")[0].strip('"') == "", "the Jedi ignition cue is no longer a dependency"
+
+
+def test_jump_thrusters_are_guarded_and_stop_on_landing():
+    src = (SRC_DIR / "X2Action_Astartes_JumpPack.uc").read_text(encoding="utf-8")
+    assert "DynamicLoadObject(Path, class'AkEvent')" in src and "DynamicLoadObject(Path, class'ParticleSystem')" in src
+    loaders = src[src.index("private function AkEvent LoadSound"):src.index("private function PlayJumpSound")]
+    assert loaders.count("== none") >= 2, "every asset load must tolerate a missing asset"
+    assert "if (Event != none)" in src and "if (System != none)" in src
+    landing = src.index("// landing")
+    assert "StopThrusters();" in src[landing:], "thruster flames must be switched off when the Marine lands"
+    assert "DeactivateSystem()" in src

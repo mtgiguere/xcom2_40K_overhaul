@@ -7,7 +7,8 @@
 //           here against vanilla soldier animations and a self-computed arc, so no other mod's
 //           content and no shared engine path object is involved (the shared grenade path sent the
 //           first version to the world origin). Animation names, play rates, arc shape and an
-//           optional ignition sound are config (X2Ability_Astartes_Assault).
+//           optional ignition sound are config (X2Ability_Astartes_Assault). Jet sounds and flames are the
+//           Alien Hunters Icarus Suit assets by default (vanilla DLC content), also config.
 //---------------------------------------------------------------------------------------
 class X2Action_Astartes_JumpPack extends X2Action_Move;
 
@@ -19,6 +20,10 @@ var private CustomAnimParams Params;
 var private AnimNodeSequence PlayingSequence;
 var private bool bFlying, bLanded, bSkipJump;
 var private AudioComponent IgnitionSound;
+var private AkEvent TakeoffSound, FlightSound, LandSound;
+var private ParticleSystem TakeoffFX, LandFX;
+var private array<ParticleSystem> ThrusterFX;
+var private array<ParticleSystemComponent> Thrusters;
 
 function Init()
 {
@@ -33,6 +38,121 @@ function Init()
 			IgnitionSound = CreateAudioComponent(Cue, false);
 		}
 	}
+	TakeoffSound = LoadSound(class'X2Ability_Astartes_Assault'.default.JUMP_TAKEOFF_SOUND);
+	FlightSound = LoadSound(class'X2Ability_Astartes_Assault'.default.JUMP_FLIGHT_SOUND);
+	LandSound = LoadSound(class'X2Ability_Astartes_Assault'.default.JUMP_LAND_SOUND);
+	TakeoffFX = LoadFX(class'X2Ability_Astartes_Assault'.default.JUMP_TAKEOFF_FX);
+	LandFX = LoadFX(class'X2Ability_Astartes_Assault'.default.JUMP_LAND_FX);
+	LoadThrusters();
+}
+
+private function AkEvent LoadSound(string Path)
+{
+	local AkEvent Event;
+
+	if (Path == "")
+	{
+		return none;
+	}
+	Event = AkEvent(DynamicLoadObject(Path, class'AkEvent'));
+	if (Event == none)
+	{
+		`log("Astartes: jump sound" @ Path @ "not found; flying without it",, 'Astartes');
+	}
+	return Event;
+}
+
+private function ParticleSystem LoadFX(string Path)
+{
+	local ParticleSystem System;
+
+	if (Path == "")
+	{
+		return none;
+	}
+	System = ParticleSystem(DynamicLoadObject(Path, class'ParticleSystem'));
+	if (System == none)
+	{
+		`log("Astartes: jump effect" @ Path @ "not found; flying without it",, 'Astartes');
+	}
+	return System;
+}
+
+private function LoadThrusters()
+{
+	local int i;
+	local ParticleSystem System;
+
+	for (i = 0; i < class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS.Length; i++)
+	{
+		System = LoadFX(class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[i].FX);
+		if (System != none)
+		{
+			ThrusterFX.AddItem(System);
+		}
+	}
+}
+
+private function PlayJumpSound(AkEvent Event)
+{
+	if (Event != none)
+	{
+		UnitPawn.PlayAkEvent(Event);
+	}
+}
+
+/// A one-shot effect at the pawn's feet.
+private function SpawnBurst(ParticleSystem System, vector At)
+{
+	if (System != none)
+	{
+		At.Z -= UnitPawn.CollisionHeight;
+		WorldInfo.MyEmitterPool.SpawnEmitter(System, At, UnitPawn.Rotation);
+	}
+}
+
+/// Thruster flames ride the configured bone for the whole flight (the pawn itself if the bone is missing).
+private function StartThrusters()
+{
+	local ParticleSystemComponent Component;
+	local name Bone;
+	local vector Offset;
+	local bool bOnBone;
+	local int i;
+
+	Bone = class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONE;
+	bOnBone = Bone != '' && UnitPawn.Mesh.MatchRefBone(Bone) != INDEX_NONE;
+	if (Bone != '' && !bOnBone)
+	{
+		`log("Astartes: jump thruster bone" @ Bone @ "not on this pawn; flames attached to the pawn instead",, 'Astartes');
+	}
+	for (i = 0; i < ThrusterFX.Length; i++)
+	{
+		Offset = class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[Min(i, class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS.Length - 1)].Offset;
+		if (bOnBone)
+		{
+			Component = WorldInfo.MyEmitterPool.SpawnEmitterMeshAttachment(ThrusterFX[i], UnitPawn.Mesh, Bone, false, Offset);
+		}
+		else
+		{
+			Component = WorldInfo.MyEmitterPool.SpawnEmitter(ThrusterFX[i], UnitPawn.Location + (Offset >> UnitPawn.Rotation), UnitPawn.Rotation, UnitPawn);
+		}
+		if (Component != none)
+		{
+			Thrusters.AddItem(Component);
+		}
+	}
+}
+
+private function StopThrusters()
+{
+	local int i;
+
+	for (i = 0; i < Thrusters.Length; i++)
+	{
+		Thrusters[i].DeactivateSystem();
+	}
+	Thrusters.Length = 0;
 }
 
 /// The landing spot: what the visualization gave us, else the end of the ability's movement path.
@@ -152,7 +272,9 @@ Begin:
 	UnitPawn.EnableRMAInteractPhysics(false);
 	UnitPawn.bSkipIK = true;
 
-	// leap
+	// leap: ignition sound and launch burst at the feet
+	PlayJumpSound(TakeoffSound);
+	SpawnBurst(TakeoffFX, UnitPawn.Location);
 	PlayingSequence = PlayIfAvailable(class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_START, class'X2Ability_Astartes_Assault'.default.JUMP_START_PLAYRATE, false);
 	if (IgnitionSound != none)
 	{
@@ -166,6 +288,8 @@ Begin:
 	// flight
 	StartLocation = UnitPawn.Location;
 	bFlying = true;
+	StartThrusters();
+	PlayJumpSound(FlightSound);
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	PlayingSequence = PlayIfAvailable(class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_LOOP, 1.0, true);
 	while (!bLanded)
@@ -178,9 +302,12 @@ Begin:
 		PlayingSequence.StopAnim();
 	}
 
-	// landing
+	// landing: flames off, landing sound, hover burst at the feet
+	StopThrusters();
 	UnitPawn.SetLocation(EndLocation);
 	UnitPawn.SnapToGround();
+	PlayJumpSound(LandSound);
+	SpawnBurst(LandFX, UnitPawn.Location);
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	PlayingSequence = PlayIfAvailable(class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_STOP, class'X2Ability_Astartes_Assault'.default.JUMP_STOP_PLAYRATE, false);
 	if (PlayingSequence != none)
