@@ -479,7 +479,14 @@ Still without a 40K model: Psychic Hood and Narthecium (vanilla psi amp and grem
 | Mitzruti Perk Pack | 1561030099 | `MZ*` elemental psi abilities: Fireball, Burning Hands, Cinder Bolt, Fire Whip, Hellish Rebuke (fire); Poisonball, Fetid Breath, Malaise, Venom Bolt, Acid Bolt, Acid Spray, Evil Gaze (poison/acid); Ball Lightning, Stun Bolt, Electric Fingers, Thunderous Roar (shock); Soulshock, Psionic Bomb, Pandemonium, Kinetic Pull, Boulder Crush, Marionette Control | God-flavoured Chaos Sorcerers (Tzeentch fire, Nurgle plague), Tyranid synapse creatures (Zoanthrope: Soulshock / Psionic Bomb; Venom Cannon = Venom Bolt), Eldar Farseer (Pandemonium, Mind War = Soulshock). Enemy use needs behaviour-tree nodes per ability in XComAI.ini; optional with existence checks like the Jedi powers. UTF-16 loc file |
 | Fate's Psionic Elementalist | 3481038872 | a soldier class built from the MZ abilities above (+ Iridar Null Ward / Phase Walk); ice powers come from the Cryo Perk Pack (2066389408) | Not needed itself: the abilities live in Mitzruti's pack. Remove from the class deck if enabled |
 
-**Autarch candidate (noted 2026-10-18, not yet downloaded):** a "Psionic Swordmaster" class mod (psi + melee + speed). Reviewed when
+**Autarch kit (2026-10-18): psionic_swordman (3725158285).** A full psi-sword class (focus pool, Psi Blade Cut / Nova / Strike / Warp,
+teleport, deflect, reflect, counter guard, intercept, precognition, awakening). It ships no AI behaviour nodes: as an enemy Autarch the
+reactive pieces (Deflect, Reflect, Counter Guard, Precognition) work as they are, the active ones need nodes we write. Its class is
+removed from our recruit deck (`remove_from_deck`); its abilities stay available. Look: Overpharah (2841395404) winged armour.
+Also noted: Overmccree (2840915275) + Overashe (2874436359) for the Inquisitor; Fallout_Deathclaws (3358025333) as lesser daemons;
+GOW4_Skorge (3558395254) as a Chaos champion. All soldier-body cosmetics for Astartes_CharGen_Dressed.
+
+(Superseded note:) a "Psionic Swordmaster" class mod (psi + melee + speed). Reviewed when
 Steam has it: its abilities as the kit of an **Autarch** ruler-style fight for the Eldar incursions (the Alien Ruler analogue), with
 EldarArmor's Autarch helmets and the dressed-body technique. Whether its abilities carry AI nodes decides how much work that is.
 

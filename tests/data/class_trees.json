@@ -1103,7 +1103,10 @@
     "AA_Chaplain",
     "AA_Librarian",
     "AA_Dreadnought",
-    "Jedi"
+    "Jedi",
+    "PsionicSwordman",
+    "LWS_PsionicSwordman",
+    "PsionicElementalist"
   ],
   "extra_loadouts": [
     {
