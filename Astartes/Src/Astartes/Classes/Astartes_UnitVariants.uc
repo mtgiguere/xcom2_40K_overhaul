@@ -14,6 +14,8 @@ struct UnitVariant
 	var name BaseTemplate;     // template to copy, e.g. ChrysHybrid (The Hive)
 	var name LoadoutOverride;  // optional: different DefaultLoadout
 	var name CharacterGroup;   // optional: different CharacterGroupName (for AI / target icons)
+	var string BehaviorTree;   // optional: different AI root (XComAI.ini), e.g. Astartes_ChaosSorcerer::CharacterRoot
+	var array<name> ExtraAbilities; // added to the base's abilities when their templates exist
 };
 
 var config array<UnitVariant> Variants;
@@ -60,7 +62,7 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 	T.CharacterGroupName = Def.CharacterGroup != '' ? Def.CharacterGroup : Base.CharacterGroupName;
 	T.DefaultLoadout = Def.LoadoutOverride != '' ? Def.LoadoutOverride : Base.DefaultLoadout;
 	T.BehaviorClass = Base.BehaviorClass;
-	T.strBehaviorTree = Base.strBehaviorTree;
+	T.strBehaviorTree = Def.BehaviorTree != "" ? Def.BehaviorTree : Base.strBehaviorTree;
 	T.strScamperBT = Base.strScamperBT;
 	T.CharacterGeneratorClass = Base.CharacterGeneratorClass;
 
@@ -71,6 +73,15 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 	for (i = 0; i < Base.Abilities.Length; i++)
 	{
 		T.Abilities.AddItem(Base.Abilities[i]);
+	}
+	for (i = 0; i < Def.ExtraAbilities.Length; i++)
+	{
+		if (class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager().FindAbilityTemplate(Def.ExtraAbilities[i]) == none)
+		{
+			`log("Astartes: variant" @ Def.NewName @ "skips ability" @ Def.ExtraAbilities[i] @ "(template not loaded)",, 'Astartes');
+			continue;
+		}
+		T.Abilities.AddItem(Def.ExtraAbilities[i]);
 	}
 	for (i = 0; i < Base.strMatineePackages.Length; i++)
 	{

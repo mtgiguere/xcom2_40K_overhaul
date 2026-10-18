@@ -879,3 +879,21 @@ LocPromotionPopupText="<Bullet/> Granted to every Chaplain who reaches Reclusiar
 [Astartes_ItemSlots]
 HoodSlotName="Psychic Hood"
 HoodSlotLocked="Only a Librarian wears a psychic hood."
+
+[Astartes_OpenTheWarp X2AbilityTemplate]
+LocFriendlyName="Open the Warp"
+LocLongDescription="The Sorcerer tears the veil at a point within 14 tiles. A rift opens at once and a pod of daemons pours out of it at the start of the next enemy turn. Kill the Sorcerer before then and the rift collapses."
+LocHelpText="Opens a rift: daemons arrive through it next turn unless the Sorcerer dies first."
+LocFlyOverText="Open the Warp"
+
+[Astartes_ChaosSorcerer X2CharacterTemplate]
+strCharacterName="Chaos Sorcerer"
+
+[Astartes_WarpLightning X2WeaponTemplate]
+FriendlyName="Warpfire"
+FriendlyNamePlural="Warpfire"
+BriefSummary="Lightning torn from the Warp and hurled from the Sorcerer's hands."
+TacticalText="<Bullet/> The Chaos Sorcerer's ranged attack.<br/><Bullet/> Electrical damage."
+
+[Astartes_RiftListener]
+RiftCollapsesText="The rift collapses"

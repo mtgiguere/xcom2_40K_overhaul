@@ -19,6 +19,7 @@ struct WeaponDef
 	var int AimBonus;          // added to the base's Aim
 	var name MeshFrom;         // optional: another mod's weapon template whose model/icon/attachments we borrow
 	var EInventorySlot SlotOverride; // optional: inventory slot (e.g. eInvSlot_PsiAmp for the Psychic Hood slot)
+	var bool bEnemyOnly;       // an enemy's weapon: never in XCOM's armoury, build list or starting gear
 	structdefaultproperties
 	{
 		ClipSizeOverride = -1
@@ -73,6 +74,12 @@ static function CreateWeapons()
 		if (default.Weapons[i].SlotOverride != eInvSlot_Unknown)
 		{
 			Clone.InventorySlot = default.Weapons[i].SlotOverride;
+		}
+		if (default.Weapons[i].bEnemyOnly)
+		{
+			Clone.StartingItem = false;
+			Clone.bInfiniteItem = false;
+			Clone.CanBeBuilt = false;
 		}
 		StripUnknownAbilities(Clone);
 		AddExtraAbilities(Clone);

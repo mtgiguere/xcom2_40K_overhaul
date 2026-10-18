@@ -44,7 +44,8 @@ def test_daemon_spawns_point_at_our_variants_and_real_lists(config):
     for v in spawns:
         assert struct_field(v, "Template") in variants, "daemon spawns must use our variant templates (skipped safely when absent)"
         assert struct_field(v, "ListID") in lists, f"unknown spawn list {struct_field(v, 'ListID')}"
-        assert int(struct_field(v, "MinForceLevel")) >= 9, "no daemons in the first months' Chaos pods"
+        floor = 9 if "Daemon" in struct_field(v, "Template") else 5
+        assert int(struct_field(v, "MinForceLevel")) >= floor, "no daemons (or Sorcerers) in the first months' Chaos pods"
 
 
 def seats(config):

@@ -420,6 +420,26 @@ They run covert actions and give resources/favors. (WotC's hero classes — Reap
 - **Tuning work:** enemy AI tends to prioritize XCOM; configure AI so factions genuinely target each other when close. Needs testing.
 - **Verify:** how many extra hostile team slots WotC exposes for modders (believed to exist beyond XCOM/Alien/Lost — confirm in the SDK).
 
+### 9.1b Chaos Sorcerer (built 2026-10-18)
+
+The first enemy psyker. A Black Legion captain's frame carrying **Warpfire** (hand-cast lightning: the Imperial Surplus
+Force Weapons rifle, so the AI fires it like a gun) and two powers:
+
+- **Open the Warp.** Cursor-targeted within 14 tiles. The game's own reinforcement system opens a psi gate at the point at
+  once, and a daemon pod (`Astartes_DaemonRift_Lesser`: three lesser daemons; `_Greater` from force level 15: a Greater
+  Daemon and two lesser) walks out at the start of the next enemy turn. The rift is bound to the Sorcerer: kill him before
+  the gate opens and it collapses. Once per mission (config). The AI aims it like a grenade, at the densest cluster of Marines.
+- **Perils of the Warp.** The rift is a psychic power with Warp charge 3, so the Sorcerer rolls Perils like a Librarian.
+  Chaos is as dangerous to its own; a possessed Sorcerer becomes a daemon on the spot.
+
+Leads Chaos pods from force level 6. Stats in `XComGameData_CharacterStats.ini`; AI root in `XComAI.ini`
+(`Astartes_ChaosSorcerer::CharacterRoot`: rift first, then the captain's behaviour). Needs the Black Legion mod; Warpfire
+falls back to the captain's bolter without Force Weapons.
+
+**Next:** god-flavoured variants on Mitzruti's elemental psi (Tzeentch: Fireball, Cinder Bolt; Nurgle: Poisonball, Fetid
+Breath), each a behaviour-tree node away; a Sorcerer who can re-open a collapsed rift at a cost; Eldar Warlock on the same
+pattern with Force Shove.
+
 ### 9.2 Eldar interventions (Lost-mechanic, reworked)
 
 **Decided 2026-10-18: the Lost are Eldar, full stop.** No Tyranid gaunt swap: gaunts on a Tyranid continent would read as the same faction twice. The Lost SitRep and Lost missions become Eldar incursions (webway raiders) once Eldar unit models are wired in.

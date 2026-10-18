@@ -63,8 +63,11 @@ def test_every_psychic_power_in_the_tree_has_a_warp_charge(config, perils_cfg):
     assert not bad, f"WarpCharge must be 1..3: {bad}"
 
 
+ENEMY_PSYKER_POWERS = {"Astartes_OpenTheWarp"}  # X2Ability_Astartes_Chaos: Chaos Sorcerers roll Perils too
+
+
 def test_warp_charge_entries_point_at_tree_abilities(perils_cfg):
-    stray = sorted(set(warp_charges(perils_cfg)) - librarian_abilities())
+    stray = sorted(set(warp_charges(perils_cfg)) - librarian_abilities() - ENEMY_PSYKER_POWERS)
     assert not stray, f"PsychicPowers entries not in the Librarian tree: {stray}"
 
 
