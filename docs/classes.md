@@ -89,7 +89,7 @@ and shock), **Bulwark** (survive what you dive into).
 
 **Playtest 2026-10-18, evening (Sorcerer build).** Bolt pistols sit slightly inside the thigh armour on the Marine body
 (holster socket offset; to do). A Skirmisher turned up in a fresh start: faction heroes (Reaper/Skirmisher/Templar) are
-untouched so far; decide whether they become Scouts or are removed in the 40K setting (to do). Jump Pack jets: light and
+untouched so far. **Decided 2026-10-18: Skirmishers are out** (ADVENT hybrids are xenos; Imperial troops do not abide them). Reapers (human: Scouts?) and Templars (human psykers: Librarius or out) still to decide; removal is the resistance-faction/hero-class config, to do. Jump Pack jets: light and
 sound confirmed; the flames fall back to the pawn centre (spine bone name unknown on this skeleton) and may hide inside a
 bulky pack; the next jump logs the torso bone candidates.
 
