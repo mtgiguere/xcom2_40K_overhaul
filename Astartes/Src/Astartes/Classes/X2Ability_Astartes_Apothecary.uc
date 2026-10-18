@@ -8,6 +8,7 @@ class X2Ability_Astartes_Apothecary extends XMBAbility config(Astartes);
 
 var config int STIMM_SHOT_COOLDOWN, STIMM_SHOT_RANGE_TILES;
 var config int FIELD_SURGERY_CHARGES, REDUCTOR_MASTERY_BONUS_GENESEED;
+var config int EMPERORS_MERCY_RADIUS_TILES, EMPERORS_MERCY_HEAL;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -18,6 +19,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(FieldSurgery());
 	Templates.AddItem(ReductorMastery());
 	Templates.AddItem(ChirurgeonsFury());
+	Templates.AddItem(EmperorsMercy());
 
 	return Templates;
 }
@@ -119,6 +121,57 @@ static function X2AbilityTemplate ChirurgeonsFury()
 	// are plain unit checks). A shooter-side filter here let the ability re-trigger on its own activation forever
 	// and crashed the game at mission start (playtest 2026-10-17).
 	AddTriggerTargetCondition(Template, Heals);
+	Template.bShowActivation = true;
+	return Template;
+}
+
+// --- Chapter Master capstone ------------------------------------------------------------------
+
+/// The Emperor's Mercy: every brother within reach is healed, bleeding-out and unconscious brothers stand up with
+/// their actions restored. The Apothecary-born Chapter Master's relic ability. Free action, once per mission.
+static function X2AbilityTemplate EmperorsMercy()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityMultiTarget_Radius Radius;
+	local X2Effect_ApplyMedikitHeal Heal;
+	local X2Effect_RemoveEffects Revive;
+	local X2Condition_UnitProperty Brothers;
+
+	Template = SelfTargetActivated('Astartes_EmperorsMercy', "img:///UILibrary_PerkIcons.UIPerk_revivalprotocol", false, none, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
+	AddCharges(Template, 1);
+
+	Radius = new class'X2AbilityMultiTarget_Radius';
+	Radius.fTargetRadius = default.EMPERORS_MERCY_RADIUS_TILES * 1.5;
+	Radius.bIgnoreBlockingCover = true;
+	Radius.bExcludeSelfAsTargetIfWithinRadius = false;
+	Radius.bAllowDeadMultiTargetUnits = false;
+	Template.AbilityMultiTargetStyle = Radius;
+
+	Brothers = new class'X2Condition_UnitProperty';
+	Brothers.ExcludeDead = true;
+	Brothers.ExcludeHostileToSource = true;
+	Brothers.ExcludeFriendlyToSource = false;
+	Brothers.ExcludeRobotic = true;
+	Brothers.ExcludeAlive = false;
+	Template.AbilityMultiTargetConditions.AddItem(Brothers);
+
+	Revive = new class'X2Effect_RemoveEffects';
+	Revive.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.BleedingOutName);
+	Revive.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.UnconsciousName);
+	Revive.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+	Revive.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.StunnedName);
+	Revive.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.BurningName);
+	Revive.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.PoisonedName);
+	Revive.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.AcidBurningName);
+	Template.AddMultiTargetEffect(Revive);
+
+	Heal = new class'X2Effect_ApplyMedikitHeal';
+	Heal.PerUseHP = default.EMPERORS_MERCY_HEAL;
+	Template.AddMultiTargetEffect(Heal);
+
+	Template.AddMultiTargetEffect(new class'X2Effect_RestoreActionPoints');
+
+	Template.ActivationSpeech = 'HealingAlly';
 	Template.bShowActivation = true;
 	return Template;
 }

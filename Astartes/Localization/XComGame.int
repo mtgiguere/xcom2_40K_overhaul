@@ -694,3 +694,61 @@ LocFriendlyName="Jump Pack Rig"
 LocLongDescription="The jump pack's harness and thrusters."
 LocHelpText="Jump pack harness."
 LocFlyOverText="Jump Pack Rig"
+
+; --- plasma wargear ---
+[Astartes_PlasmaGun_CV X2WeaponTemplate]
+FriendlyName="Plasma Gun"
+FriendlyNamePlural="Plasma Guns"
+BriefSummary="A Mk I plasma gun. A miniature sun in every shot: hits far harder than a bolter, two shots to a flask, and the coils punish a hurried aim."
+TacticalText="<Bullet/> +3 damage over the bolter, -5 aim, 2-shot flask.<br/><Bullet/> Trades volume of fire for stopping power."
+
+[Astartes_PlasmaGun_MG X2WeaponTemplate]
+FriendlyName="Plasma Gun Mk II"
+FriendlyNamePlural="Plasma Gun Mk IIs"
+BriefSummary="An improved plasma gun with better coils and a steadier flask."
+TacticalText="<Bullet/> +3 damage over the bolter, -5 aim, 2-shot flask.<br/><Bullet/> Trades volume of fire for stopping power."
+
+[Astartes_PlasmaGun_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Plasma Gun"
+FriendlyNamePlural="Master-Crafted Plasma Guns"
+BriefSummary="A master-crafted plasma gun, the pride of a Chapter armoury."
+TacticalText="<Bullet/> +3 damage over the bolter, -5 aim, 2-shot flask.<br/><Bullet/> Trades volume of fire for stopping power."
+
+[Astartes_PlasmaPistol_CV X2WeaponTemplate]
+FriendlyName="Plasma Pistol"
+FriendlyNamePlural="Plasma Pistols"
+BriefSummary="A plasma pistol: a sidearm that hits like a rifle, two shots to a flask."
+TacticalText="<Bullet/> +2 damage over the bolt pistol, 2-shot flask.<br/>"
+
+[Astartes_PlasmaPistol_MG X2WeaponTemplate]
+FriendlyName="Plasma Pistol Mk II"
+FriendlyNamePlural="Plasma Pistol Mk IIs"
+BriefSummary="An improved plasma pistol."
+TacticalText="<Bullet/> +2 damage over the bolt pistol, 2-shot flask.<br/>"
+
+[Astartes_PlasmaPistol_BM X2WeaponTemplate]
+FriendlyName="Master-Crafted Plasma Pistol"
+FriendlyNamePlural="Master-Crafted Plasma Pistols"
+BriefSummary="A master-crafted plasma pistol."
+TacticalText="<Bullet/> +2 damage over the bolt pistol, 2-shot flask.<br/>"
+
+[Astartes_RitesOfBattle X2AbilityTemplate]
+LocFriendlyName="Rites of Battle"
+LocLongDescription="The Chapter Master's word. Every Marine within 10 tiles regains all actions and gains +20 aim for the rest of the turn. Free action, once per mission."
+LocHelpText="Marines within 10 tiles regain all actions and gain +20 aim this turn. Once per mission."
+LocFlyOverText="Rites of Battle"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Every Marine within 10 tiles regains all actions.<br/><Bullet/> They gain +20 aim for the rest of the turn.<br/>"
+
+[Astartes_EmperorsMercy X2AbilityTemplate]
+LocFriendlyName="The Emperor's Mercy"
+LocLongDescription="Every brother within 10 tiles is healed, cleansed of burning, poison, stun and disorientation, and the bleeding-out and unconscious stand up with their actions restored. Free action, once per mission."
+LocHelpText="Heal and revive every brother within 10 tiles. Once per mission."
+LocFlyOverText="The Emperor's Mercy"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Brothers within 10 tiles are healed and cleansed.<br/><Bullet/> Bleeding-out and unconscious brothers stand up with full actions.<br/>"
+
+[Astartes_WarpMastery X2AbilityTemplate]
+LocFriendlyName="Warp Mastery"
+LocLongDescription="For the rest of this turn the Chapter Master's powers roll no Perils of the Warp, and every psychic power is ready again now. Free action, once per mission."
+LocHelpText="This turn: no Perils, all psychic cooldowns cleared. Once per mission."
+LocFlyOverText="Warp Mastery"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Psychic powers cast this turn roll no Perils of the Warp.<br/><Bullet/> Every psychic power's cooldown is cleared.<br/>"

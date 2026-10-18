@@ -13,6 +13,7 @@ var config int RALLY_CHARGES, RALLY_RANGE_TILES;
 var config int INSPIRE_RADIUS_TILES, INSPIRE_COOLDOWN;
 var config int FOR_THE_EMPEROR_RADIUS_TILES, FOR_THE_EMPEROR_CHARGES;
 var config int TACTICAL_DOCTRINE_MOBILITY, HOLD_THE_LINE_DEFENSE, CHAPTER_BANNER_WILL, COMBAT_SQUADS_CHARGES;
+var config int RITES_OF_BATTLE_RADIUS_TILES, RITES_OF_BATTLE_AIM;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -29,6 +30,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HoldTheLine());
 	Templates.AddItem(ChapterBanner());
 	Templates.AddItem(CombatSquads());
+	Templates.AddItem(RitesOfBattle());
 
 	return Templates;
 }
@@ -272,6 +274,42 @@ static function X2AbilityTemplate CombatSquads()
 	NotSelf.ExcludeFriendlyToSource = false;
 	NotSelf.RequireSquadmates = true;
 	Template.AbilityTargetConditions.AddItem(NotSelf);
+
+	Template.ActivationSpeech = 'Inspire';
+	Template.bShowActivation = true;
+	return Template;
+}
+
+// --- Chapter Master capstone ------------------------------------------------------------------
+
+/// Rites of Battle: the Chapter Master's word. Every Marine within reach regains all actions and gains aim for the
+/// turn. The Tactical-born Chapter Master's relic ability. Free action, once per mission.
+static function X2AbilityTemplate RitesOfBattle()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityMultiTarget_Radius Radius;
+	local X2Effect_RestoreActionPoints Restore;
+	local XMBEffect_ConditionalBonus Aim;
+
+	Template = SelfTargetActivated('Astartes_RitesOfBattle', "img:///UILibrary_PerkIcons.UIPerk_inspire", false, none, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
+	AddCharges(Template, 1);
+
+	Radius = new class'X2AbilityMultiTarget_Radius';
+	Radius.fTargetRadius = default.RITES_OF_BATTLE_RADIUS_TILES * 1.5;
+	Radius.bIgnoreBlockingCover = true;
+	Radius.bExcludeSelfAsTargetIfWithinRadius = false;
+	Template.AbilityMultiTargetStyle = Radius;
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingFriendlyTargetProperty);
+
+	Restore = new class'X2Effect_RestoreActionPoints';
+	Template.AddMultiTargetEffect(Restore);
+
+	Aim = new class'XMBEffect_ConditionalBonus';
+	Aim.EffectName = 'Astartes_RitesOfBattle_Aim';
+	Aim.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Aim.DuplicateResponse = eDupe_Refresh;
+	Aim.AddToHitModifier(default.RITES_OF_BATTLE_AIM);
+	Template.AddMultiTargetEffect(Aim);
 
 	Template.ActivationSpeech = 'Inspire';
 	Template.bShowActivation = true;

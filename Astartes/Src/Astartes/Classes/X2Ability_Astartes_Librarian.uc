@@ -39,6 +39,7 @@ var config bool bLogPerils;
 var config name ForcedPerilsOutcome; // config so the dev command may write the class default at runtime
 
 var name WarpSurgeName, BacklashName, WarpShockName, MentalPurgeName, PossessionName;
+var name WarpMasteryEffectName;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -50,6 +51,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(WarpShock());
 	Templates.AddItem(MentalPurge());
 	Templates.AddItem(Possession());
+	Templates.AddItem(WarpMastery());
 
 	return Templates;
 }
@@ -98,6 +100,15 @@ static function RollPerils(XComGameState_Ability ActivatedAbility, XComGameState
 	Unit = XComGameState_Unit(History.GetGameStateForObjectID(Unit.ObjectID));
 	if (Unit == none || Unit.IsDead() || Unit.bRemovedFromPlay)
 	{
+		return;
+	}
+
+	if (Unit.IsUnitAffectedByEffectName(default.WarpMasteryEffectName))
+	{
+		if (default.bLogPerils)
+		{
+			`log("Astartes: Perils skipped: Warp Mastery",, 'Astartes');
+		}
 		return;
 	}
 
@@ -349,4 +360,34 @@ defaultproperties
 	WarpShockName="Astartes_Perils_WarpShock"
 	MentalPurgeName="Astartes_Perils_MentalPurge"
 	PossessionName="Astartes_Perils_Possession"
+	WarpMasteryEffectName="Astartes_WarpMastery_Effect"
+}
+
+// --- Chapter Master capstone ------------------------------------------------------------------
+
+/// Warp Mastery: for the rest of the turn the Chapter Master's powers roll no Perils, and every psychic power
+/// is ready again now. The Librarian-born Chapter Master's relic ability. Free action, once per mission.
+static function X2AbilityTemplate WarpMastery()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_Persistent Mastery;
+	local X2Effect_Astartes_ResetCooldown Reset;
+	local int i;
+
+	Mastery = new class'X2Effect_Persistent';
+	Mastery.EffectName = default.WarpMasteryEffectName;
+	Mastery.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Mastery.DuplicateResponse = eDupe_Refresh;
+
+	Template = SelfTargetActivated('Astartes_WarpMastery', "img:///UILibrary_PerkIcons.UIPerk_solace", false, Mastery, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
+	AddCharges(Template, 1);
+
+	Reset = new class'X2Effect_Astartes_ResetCooldown';
+	for (i = 0; i < default.PsychicPowers.Length; i++)
+	{
+		Reset.AbilityNames.AddItem(default.PsychicPowers[i].Ability);
+	}
+	Template.AddTargetEffect(Reset);
+	Template.bShowActivation = true;
+	return Template;
 }
