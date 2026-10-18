@@ -1025,3 +1025,34 @@ exec function Astartes_ExportLook(string PoolName)
 	Say("Astartes_ExportLook: PASS paste into [Astartes.X2DownloadableContentInfo_Astartes]:");
 	Say("+MarineLookParts=(" $ "nmTorso=\"" $ T.nmTorso $ "\"" $ ", " $ "nmArms=\"" $ T.nmArms $ "\"" $ ", " $ "nmLeftArm=\"" $ T.nmLeftArm $ "\"" $ ", " $ "nmRightArm=\"" $ T.nmRightArm $ "\"" $ ", " $ "nmLeftArmDeco=\"" $ T.nmLeftArmDeco $ "\"" $ ", " $ "nmRightArmDeco=\"" $ T.nmRightArmDeco $ "\"" $ ", " $ "nmLeftForearm=\"" $ T.nmLeftForearm $ "\"" $ ", " $ "nmRightForearm=\"" $ T.nmRightForearm $ "\"" $ ", " $ "nmLegs=\"" $ T.nmLegs $ "\"" $ ", " $ "nmThighs=\"" $ T.nmThighs $ "\"" $ ", " $ "nmShins=\"" $ T.nmShins $ "\"" $ ", " $ "nmTorsoDeco=\"" $ T.nmTorsoDeco $ "\"" $ ", " $ "nmHelmet=\"" $ T.nmHelmet $ "\"" $ ")");
 }
+
+/// Astartes_JumpThrusters <back> <side> <up> [bone]: moves the jump-pack flames live for tuning (no restart). Offsets
+/// are in the bone's frame; the two thrusters mirror on <side>. With a bone name, that bone is tried first. Prints the
+/// config lines to paste once the flames sit right. Astartes_JumpThrusters with no numbers prints the current values.
+exec function Astartes_JumpThrusters(optional float Back = 0, optional float Side = 0, optional float Up = 0, optional string Bone = "")
+{
+	local int i;
+	local vector Offset;
+
+	for (i = 0; i < class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS.Length; i++)
+	{
+		if (Back != 0 || Side != 0 || Up != 0)
+		{
+			Offset.X = Back;
+			Offset.Y = (i % 2 == 0 ? -1 : 1) * Side;
+			Offset.Z = Up;
+			class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[i].Offset = Offset;
+		}
+		Say("+JUMP_THRUSTERS=(FX=\"" $ class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[i].FX $ "\", Offset=(X=" $ class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[i].Offset.X
+			$ ", Y=" $ class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[i].Offset.Y $ ", Z=" $ class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTERS[i].Offset.Z $ "))");
+	}
+	if (Bone != "")
+	{
+		class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONES.InsertItem(0, name(Bone));
+	}
+	for (i = 0; i < class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONES.Length; i++)
+	{
+		Say("+JUMP_THRUSTER_BONES=\"" $ class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONES[i] $ "\"");
+	}
+	Say("Astartes_JumpThrusters: PASS jump again to see the flames there");
+}

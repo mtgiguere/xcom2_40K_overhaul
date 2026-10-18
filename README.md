@@ -163,6 +163,7 @@ Continent names: `Continent_NorthAmerica`, `Continent_SouthAmerica`, `Continent_
 | `DropUnit <Template> <TeamNumber>` | Spawns a unit at the cursor; teams: `0` XCOM, `1` alien, `3` Lost. e.g. `DropUnit OrkNobM1 1`, `DropUnit Astartes_GreaterDaemon 1`, `DropUnit Astartes_ChaosSorcerer 1` (watch him open a rift; kill him before the next enemy turn to collapse it) |
 | `AICallReinforcements` | Calls an enemy reinforcement wave (tests the reinforcement rewrite) |
 | `TeleportUnitIDToCursor <id>` | Moves a unit to the cursor |
+| `Astartes_JumpThrusters <back> <side> <up> [bone]` | Moves the jump-pack flames live for tuning and prints the config lines to keep; no numbers = print current |
 | `Astartes_ForcePerils Possession` | The next psychic power any Librarian casts suffers Perils with that outcome (`WarpSurge`, `Backlash`, `WarpShock`, `MentalPurge`, `Possession`); no argument = normal rolls again |
 
 ### Reading results
