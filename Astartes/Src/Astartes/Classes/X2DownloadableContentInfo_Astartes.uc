@@ -38,7 +38,7 @@ static event InstallNewCampaign(XComGameState StartState)
 /// Called per pod when a mission's encounter data is cached. SourceObject is the mission site.
 static function PostEncounterCreation(out name EncounterName, out PodSpawnInfo Encounter, int ForceLevel, int AlertLevel, optional XComGameState_BaseObject SourceObject)
 {
-	RewritePodForContinent(Encounter, ForceLevel, XComGameState_MissionSite(SourceObject), "pod" @ EncounterName);
+	RewritePodForContinent(Encounter, EncounterName, ForceLevel, XComGameState_MissionSite(SourceObject), "pod" @ EncounterName);
 }
 
 /// Called per reinforcement group. SourceObject is the BattleData, which knows the mission.
@@ -52,11 +52,11 @@ static function PostReinforcementCreation(out name EncounterName, out PodSpawnIn
 	{
 		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(BattleData.m_iMissionID));
 	}
-	RewritePodForContinent(Encounter, ForceLevel, MissionSite, "reinforcements" @ EncounterName);
+	RewritePodForContinent(Encounter, EncounterName, ForceLevel, MissionSite, "reinforcements" @ EncounterName);
 }
 
 /// Replace an alien-team pod with a same-sized pod from the faction that owns the mission's continent.
-static function RewritePodForContinent(out PodSpawnInfo Encounter, int ForceLevel, XComGameState_MissionSite MissionSite, string Context)
+static function RewritePodForContinent(out PodSpawnInfo Encounter, name EncounterName, int ForceLevel, XComGameState_MissionSite MissionSite, string Context)
 {
 	local XComGameState_AstartesChapter Chapter;
 	local XComGameState_Continent Continent;
@@ -72,6 +72,11 @@ static function RewritePodForContinent(out PodSpawnInfo Encounter, int ForceLeve
 	}
 	if (Encounter.Team != eTeam_Alien || Encounter.StrategyUnitTag != '' || Encounter.SelectedCharacterTemplateNames.Length == 0)
 	{
+		return;
+	}
+	if (class'Astartes_FactionConfig'.static.IsNeverRewritten(EncounterName))
+	{
+		`log("Astartes: leaving special encounter" @ EncounterName @ "untouched",, 'Astartes');
 		return;
 	}
 
@@ -93,7 +98,7 @@ static function RewritePodForContinent(out PodSpawnInfo Encounter, int ForceLeve
 		return;
 	}
 
-	if (!class'Astartes_FactionConfig'.static.BuildPod(Def, ForceLevel, Encounter.SelectedCharacterTemplateNames.Length, NewTemplates))
+	if (!class'Astartes_FactionConfig'.static.BuildPod(Def, ForceLevel, Encounter.SelectedCharacterTemplateNames.Length, NewTemplates, class'Astartes_FactionConfig'.static.IsCommanderEncounter(EncounterName)))
 	{
 		`log("Astartes: faction" @ FactionName @ "has no eligible units at force level" @ ForceLevel @ "for" @ Context $ ". Leaving it vanilla.",, 'Astartes');
 		return;

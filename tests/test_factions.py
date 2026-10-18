@@ -104,3 +104,25 @@ def test_variant_and_cultist_have_stats_and_localization(config, loc_sections):
     for n in names:
         assert n in stats, f"{n} has no [X2CharacterTemplate] stats block"
         assert n in loc, f"{n} has no strCharacterName localization"
+
+
+def test_special_encounters_are_protected_and_commanders_defined(config, faction_section, factions):
+    never = {unquote(v) for v in faction_section.values("NeverRewriteEncounters")}
+    assert "SPCx1_Faceless" in never, "the hidden Faceless encounter must never be rewritten"
+    prefixes = {unquote(v) for v in faction_section.values("CommanderEncounterPrefixes")}
+    assert "SPCx" in prefixes
+    mgr = [s for s in config["XComEncounterLists.ini"] if s.name == "XComGame.XComTacticalMissionManager"][0]
+    lists = {struct_field(v, "ListID") for v in mgr.values("SpawnDistributionLists")}
+    for faction, v in factions.items():
+        cl = struct_field(v, "CommanderList")
+        assert cl, f"{faction} has no CommanderList"
+        assert cl in lists, f"{faction}: commander list {cl} not defined"
+
+
+def test_cultist_has_pawn_parts_for_both_genders(config):
+    """bAppearanceDefinesPawn templates need Pawn body parts tagged with their template name or they spawn invisible."""
+    mgr = [s for s in config.get("XComContent.ini", []) if s.name == "XComGame.X2BodyPartTemplateManager"]
+    assert mgr, "missing [XComGame.X2BodyPartTemplateManager] in XComContent.ini"
+    pawns = [v for v in mgr[0].values("BodyPartTemplateConfig") if struct_field(v, "PartType") == "Pawn" and struct_field(v, "CharacterTemplate") == "Astartes_Cultist"]
+    genders = {struct_field(v, "Gender") for v in pawns}
+    assert genders == {"eGender_Male", "eGender_Female"}, f"cultist pawn parts: {genders}"

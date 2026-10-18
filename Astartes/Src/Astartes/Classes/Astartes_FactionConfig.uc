@@ -12,6 +12,7 @@ struct FactionDef
 	var name FactionName;
 	var name LeaderList;
 	var name FollowerList;
+	var name CommanderList;    // optional: leaders for special "commander" encounters (Field Commander etc.)
 	var name RequiredDLC;
 };
 
@@ -25,6 +26,30 @@ var config bool bEnableContinentFactions;
 var config bool bLogPodRewrites;
 var config array<FactionDef> Factions;
 var config array<ContinentFactionOverride> ContinentFactionOverrides;
+
+/// Encounter IDs that are never rewritten (hidden Faceless, swarm VIPs...). Chosen/VIP pods are skipped by tag anyway.
+var config array<name> NeverRewriteEncounters;
+/// Encounter ID prefixes whose leader is drawn from the faction's CommanderList (e.g. "SPCx" = Field Commander groups).
+var config array<string> CommanderEncounterPrefixes;
+
+static function bool IsNeverRewritten(name EncounterID)
+{
+	return default.NeverRewriteEncounters.Find(EncounterID) != INDEX_NONE;
+}
+
+static function bool IsCommanderEncounter(name EncounterID)
+{
+	local string Prefix;
+
+	foreach default.CommanderEncounterPrefixes(Prefix)
+	{
+		if (Left(string(EncounterID), Len(Prefix)) ~= Prefix)
+		{
+			return true;
+		}
+	}
+	return false;
+}
 
 static function bool GetFaction(name FactionName, out FactionDef Def)
 {
@@ -95,9 +120,9 @@ static function bool GetSpawnList(name ListID, out array<SpawnDistributionListEn
 
 /// Build a pod of PodSize units from the faction's lists. Returns false (and leaves OutTemplates empty)
 /// if the lists are missing or nothing is eligible at this force level.
-static function bool BuildPod(const out FactionDef Def, int ForceLevel, int PodSize, out array<name> OutTemplates)
+static function bool BuildPod(const out FactionDef Def, int ForceLevel, int PodSize, out array<name> OutTemplates, optional bool bCommanderPod = false)
 {
-	local array<SpawnDistributionListEntry> Leaders, Followers;
+	local array<SpawnDistributionListEntry> Leaders, Followers, Commanders;
 	local array<name> PickedNames;
 	local array<int> PickedCounts;
 	local name Picked;
@@ -109,7 +134,15 @@ static function bool BuildPod(const out FactionDef Def, int ForceLevel, int PodS
 		return false;
 	}
 
-	Picked = WeightedPick(Leaders, ForceLevel, PickedNames, PickedCounts);
+	// Commander pods (Field Commander objectives etc.) lead with a real faction leader when one is configured.
+	if (bCommanderPod && Def.CommanderList != '' && GetSpawnList(Def.CommanderList, Commanders))
+	{
+		Picked = WeightedPick(Commanders, ForceLevel, PickedNames, PickedCounts);
+	}
+	if (Picked == '')
+	{
+		Picked = WeightedPick(Leaders, ForceLevel, PickedNames, PickedCounts);
+	}
 	if (Picked == '')
 	{
 		Picked = WeightedPick(Followers, ForceLevel, PickedNames, PickedCounts);
