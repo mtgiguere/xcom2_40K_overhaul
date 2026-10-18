@@ -483,6 +483,10 @@ Still without a 40K model: Psychic Hood and Narthecium (vanilla psi amp and grem
 Steam has it: its abilities as the kit of an **Autarch** ruler-style fight for the Eldar incursions (the Alien Ruler analogue), with
 EldarArmor's Autarch helmets and the dressed-body technique. Whether its abilities carry AI nodes decides how much work that is.
 
+**Officio Assassinorum (1943755557, noted 2026-10-18):** four temple assassins' armour (M/F) and weapons (Exitus rifle/pistol, Phase Sword,
+Neural Shredder, Executioner pistol, Neuro Gauntlet, Animus Speculum anti-psyker gun). Use: the Inquisition's strike teams in the Taint
+*Refuse* branch (design.md 9.1e), dressed soldier bodies with enemy-only weapon clones; Culexus vs Librarians. Content likely in CookedPCConsole.
+
 ## Animation sources
 | Mod | ID | Use |
 |---|---|---|

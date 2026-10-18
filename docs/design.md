@@ -483,7 +483,14 @@ grows with the Chapter's exposure to the Warp, and when it crosses a threshold a
 the lost squad member, Chaos corruption gets its payoff, and the Inquisitor hero arrives with a story instead of a covert
 action. A pious Chapter that never loses a Librarian simply never meets the Inquisition, which is also correct.
 
-Model still needed (a coat-and-rosette cosmetic). Mechanics after Chaos corruption exists.
+**The Inquisition's blades (found 2026-10-18): 40k Officio Assassinorum (workshop 1943755557).** Armour sets for all four temples
+(Callidus, Culexus, Eversor, Vindicare; Death Cult for female bodies) plus their weapons: Exitus rifle and pistol, Phase Sword and
+Neural Shredder, Executioner pistol and Neuro Gauntlet, and the Culexus **Animus Speculum**, which disorients and punishes psionic
+targets: the perfect anti-Librarian weapon for a purge. The *Refuse* branch's strike teams are these four, as dressed soldier bodies
+(Astartes_CharGen_Dressed) with enemy-only clones of the pack's weapons: Vindicare on overwatch from range, Eversor rushing with
+the gauntlet, Culexus hunting the Librarian, Callidus appearing mid-pod. One temple per strike team at first, all four for Exterminatus.
+
+Model still needed for the Inquisitor (a coat-and-rosette cosmetic). Mechanics after Chaos corruption exists.
 
 ### 9.1d Eldar Warlock (built 2026-10-18) and the Eldar faction
 
