@@ -32,6 +32,7 @@ var config bool bEnableIncursions;
 var config FactionDef Incursion;
 var config array<string> IncursionEncounterPrefixes;
 var config int IncursionMaxPodSize;
+var config name IncursionArrival;   // reinforcement visual for incursion swarms: PsiGate (the webway); '' keeps the Lost run-in
 
 /// Encounter IDs that are never rewritten (hidden Faceless, swarm VIPs...). Chosen/VIP pods are skipped by tag anyway.
 var config array<name> NeverRewriteEncounters;

@@ -521,8 +521,9 @@ Lost-replacement webway incursions themselves (9.2).
 
 **Built 2026-10-18 (first slice):** every Lost pod and Lost swarm (encounter IDs starting `TheLost`) is rebuilt by our pod hooks
 from the incursion faction (Warlock-led craftworld pods: `Astartes_EldarLeaders` / `Astartes_EldarFollowers`), on the alien team,
-capped at five. The Lost's own noise-driven escalation stays, read as the Eldar sensing the fighting; the swarm arrival (units run
-in from the map edge) stays for now, a psi-gate (webway) arrival is the next refinement, as is renaming the Lost SitRep.
+capped at five. The Lost's own noise-driven escalation stays, read as the Eldar sensing the fighting. **Arrival (same day):** an immediate
+listener on the spawner's creation switches a Lost swarm's visual from the run-in to the psi gate, so the webway opens and the
+pod walks out of it (config `IncursionArrival`). The Lost SitRep reads *Webway Incursion*.
 
 **Decided 2026-10-18: the Lost are Eldar, full stop.** And the Lost and Abandoned analogue is the Eldar first-contact
 mission: the Chapter meets the Eldar in the field and comes away with its first two Imperial heroes (9.1c: the Canoness and

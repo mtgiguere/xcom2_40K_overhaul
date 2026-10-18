@@ -117,6 +117,10 @@ def test_lost_pods_become_eldar_incursions(faction_section):
     assert src.count("if (RewriteIncursion(Encounter, EncounterName, ForceLevel,") == 2, "both the pod and the reinforcement hooks"
     body = src[src.index("static function bool RewriteIncursion"):]
     assert "Encounter.Team = eTeam_Alien;" in body and "IncursionMaxPodSize" in body
+    assert unquote(faction_section.first("IncursionArrival") or "") == "PsiGate", "incursions come through the webway, not the Lost run-in"
+    rift = (SRC_DIR / "Astartes_RiftListener.uc").read_text(encoding="utf-8")
+    assert "AddCHEvent('ReinforcementSpawnerCreated', OnReinforcementSpawnerCreated, ELD_Immediate)" in rift, "must run before the spawner's own listener (state-submitted)"
+    assert "Spawner.SpawnVisualizationType != 'TheLostSwarm'" in rift
 
 
 def test_special_encounters_are_protected_and_commanders_defined(config, faction_section, factions):

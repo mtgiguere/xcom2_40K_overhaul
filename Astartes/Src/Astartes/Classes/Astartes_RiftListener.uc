@@ -7,6 +7,8 @@
 //           Sorcerer; if he dies before the countdown ends the spawner is removed and the gate closes.
 //           The spawner is NOT created inside the ability's own game state: the spawner's creation code
 //           casts the state's context to a ChangeContainer without a guard.
+//           Also the webway: a Lost swarm spawner (an incursion, Astartes_FactionConfig) has its arrival switched
+//           from the Lost run-in to the psi gate the moment it is created, before the spawner's own listener runs.
 //---------------------------------------------------------------------------------------
 class Astartes_RiftListener extends X2EventListener;
 
@@ -28,6 +30,7 @@ static function CHEventListenerTemplate CreateRiftListener()
 	Template.RegisterInTactical = true;
 	Template.AddCHEvent('AbilityActivated', OnAbilityActivated, ELD_OnStateSubmitted);
 	Template.AddCHEvent('UnitDied', OnUnitDied, ELD_OnStateSubmitted);
+	Template.AddCHEvent('ReinforcementSpawnerCreated', OnReinforcementSpawnerCreated, ELD_Immediate);
 	return Template;
 }
 
@@ -98,6 +101,30 @@ static function OpenRift(XComGameState_Unit Sorcerer, vector Location)
 	NewSorcerer.SetUnitFloatValue('Astartes_OpenRift', Newest.ObjectID, eCleanup_BeginTactical);
 	`TACTICALRULES.SubmitGameState(NewGameState);
 	`log("Astartes:" @ Sorcerer.GetMyTemplateName() @ "opened the Warp:" @ EncounterID @ "at" @ Newest.SpawnInfo.SpawnLocation @ "(spawner" @ Newest.ObjectID $ ")",, 'Astartes');
+}
+
+/// 'ReinforcementSpawnerCreated' (immediate, inside InitiateReinforcements' own game state): a Lost swarm that the
+/// incursion rules will turn into Eldar arrives through the webway, i.e. the game's psi gate, not the Lost run-in.
+/// The spawner's own creation listener runs on submission and reads this value from the submitted state.
+static function EventListenerReturn OnReinforcementSpawnerCreated(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+{
+	local XComGameState_AIReinforcementSpawner Spawner;
+
+	Spawner = XComGameState_AIReinforcementSpawner(EventData);
+	if (Spawner == none || GameState == none || !class'Astartes_FactionConfig'.default.bEnableIncursions
+		|| class'Astartes_FactionConfig'.default.IncursionArrival == '' || Spawner.SpawnVisualizationType != 'TheLostSwarm'
+		|| !class'Astartes_FactionConfig'.static.IsIncursionEncounter(Spawner.SpawnInfo.EncounterID))
+	{
+		return ELR_NoInterrupt;
+	}
+	Spawner = XComGameState_AIReinforcementSpawner(GameState.GetGameStateForObjectID(Spawner.ObjectID));
+	if (Spawner == none)
+	{
+		return ELR_NoInterrupt;
+	}
+	Spawner.SpawnVisualizationType = class'Astartes_FactionConfig'.default.IncursionArrival;
+	`log("Astartes: incursion" @ Spawner.SpawnInfo.EncounterID @ "arrives by" @ Spawner.SpawnVisualizationType @ "(webway)",, 'Astartes');
+	return ELR_NoInterrupt;
 }
 
 /// 'UnitDied': EventData is the dead unit. A Sorcerer who dies with a rift still forming takes it with him.

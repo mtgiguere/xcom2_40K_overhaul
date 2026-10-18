@@ -928,6 +928,10 @@ TacticalText="<Bullet/> The Chaos Sorcerer's ranged attack.<br/><Bullet/> Electr
 [Astartes_RiftListener]
 RiftCollapsesText="The rift collapses"
 
+[TheLost X2SitRepTemplate]
+FriendlyName="Webway Incursion"
+Description="Eldar raiders are active in this region. Expect them to arrive through the webway in numbers, drawn to the sound of battle."
+
 [Mindspin X2AbilityTemplate]
 LocFriendlyName="Horrify"
 LocLongDescription="The Warlock floods a mind with dread. Panics, disorients, or briefly seizes a living target."
