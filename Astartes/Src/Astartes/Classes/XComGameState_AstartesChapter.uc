@@ -23,6 +23,9 @@ var int BrothersFallen;
 /// Which enemy faction owns each continent (design.md 7.1b). Assigned at campaign start.
 var array<ContinentFaction> ContinentFactions;
 
+/// The Chapter this campaign fights as (an X2CountryTemplate name). '' = use the config default.
+var name ChapterCountry;
+
 static function XComGameState_AstartesChapter GetChapter(optional bool bAllowNone = false)
 {
 	return XComGameState_AstartesChapter(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_AstartesChapter', bAllowNone));

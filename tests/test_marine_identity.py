@@ -21,3 +21,26 @@ def test_gender_policy_is_configurable(config):
     assert unquote(section[0].first("bAllowFemaleMarines") or "").lower() in ("true", "false")
     packs = [unquote(v) for v in section[0].values("MarineArmorPartPacks")]
     assert "SM2Tacticus" in packs, "the Space Marine 2 Tacticus pack must be the default Marine look"
+
+
+def test_chapter_country_and_liveries(config):
+    import os, re
+    from pathlib import Path
+    section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
+    chapter = unquote(section.first("ChapterCountry") or "")
+    assert chapter.startswith("Country_"), "ChapterCountry must name a country template"
+    assert unquote(section.first("NameFallbackCountry") or "").startswith("Country_")
+    liveries = section.values("ChapterLiveries")
+    from x2config import struct_field
+    countries = {struct_field(v, "Country") for v in liveries}
+    assert chapter in countries, "the default Chapter needs a livery entry"
+    workshop = Path(os.environ.get("XCOM2_WORKSHOP", r"C:/Program Files (x86)/Steam/steamapps/workshop/content/268500"))
+    if workshop.is_dir():
+        defined = set()
+        for ini in workshop.glob("*/Config/*.ini"):
+            try:
+                defined |= set(re.findall(r"\[(Country_\w+) X2CountryTemplate\]", ini.read_text(encoding="utf-8", errors="replace")))
+            except OSError:
+                pass
+        missing = countries - defined
+        assert not missing, f"livery countries not defined by any installed flag mod: {sorted(missing)}"

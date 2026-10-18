@@ -17,6 +17,27 @@ var config bool bAllowFemaleMarines;
 /// these packs only, when present. Empty list = vanilla random appearance.
 var config array<name> MarineArmorPartPacks;
 
+struct ChapterLivery
+{
+	var name Country;        // X2CountryTemplate name, e.g. Country_Ultramarines (from the chapter flag mods)
+	var int PrimaryTint;     // armour palette index; -1 = leave random
+	var int SecondaryTint;   // armour palette index; -1 = leave random
+	var name Pattern;        // armour pattern body part; '' = leave
+	structdefaultproperties
+	{
+		PrimaryTint = -1
+		SecondaryTint = -1
+	}
+};
+
+/// Default Chapter (a country template) every Marine recruit belongs to. The Chapter state can override it
+/// (Astartes_Chapter console command, later the campaign-start chooser). '' = vanilla random countries.
+var config name ChapterCountry;
+/// Country whose name lists are used when the Chapter's country has none.
+var config name NameFallbackCountry;
+/// Armour colours per Chapter.
+var config array<ChapterLivery> ChapterLiveries;
+
 // ---------------------------------------------------------------------------------------
 // Campaign lifecycle
 // ---------------------------------------------------------------------------------------
@@ -147,6 +168,9 @@ static event OnPostTemplatesCreated()
 /// For Marines ('Soldier' template): enforce the gender policy, then dress them from the Marine armour packs.
 static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, const name CharacterTemplateName, const EGender eForceGender, const name nmCountry, const int iRace, const name ArmorName, XComGameState_Unit UnitState, XComGameState UseGameState)
 {
+	local EGender DesiredGender;
+	local name DesiredCountry;
+
 	// Chaos Cultists dress like the civilian militia: regenerate as that template. The nested call
 	// re-enters this hook with 'CivilianMilitia', which falls through untouched.
 	if (CharacterTemplateName == 'Astartes_Cultist')
@@ -164,16 +188,74 @@ static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, cons
 		return;
 	}
 
-	if (!default.bAllowFemaleMarines && eForceGender != eGender_Male && CharGen.kSoldier.kAppearance.iGender != eGender_Male)
+	// Policy: Marines are male unless allowed otherwise, and belong to the campaign's Chapter (a country).
+	DesiredGender = default.bAllowFemaleMarines ? EGender(CharGen.kSoldier.kAppearance.iGender) : eGender_Male;
+	DesiredCountry = GetChapterCountry();
+	if (DesiredCountry == '')
 	{
-		// Regenerate as male. The nested call re-enters this hook with eForceGender == eGender_Male,
-		// so it cannot recurse, and it applies the armour look itself. CreateTSoldier returns kSoldier
-		// after this hook, so the regenerated soldier is what the caller receives.
-		CharGen.CreateTSoldier(CharacterTemplateName, eGender_Male, nmCountry, iRace, ArmorName);
+		DesiredCountry = nmCountry;
+	}
+
+	if (CharGen.kSoldier.kAppearance.iGender != DesiredGender || nmCountry != DesiredCountry)
+	{
+		// Regenerate with the desired gender and country. The nested call re-enters this hook with
+		// matching values, so it cannot recurse, and it applies livery + armour look itself.
+		// CreateTSoldier returns kSoldier after this hook, so the regenerated soldier is what the caller gets.
+		CharGen.CreateTSoldier(CharacterTemplateName, DesiredGender, DesiredCountry, iRace, ArmorName);
 		return;
 	}
 
+	// Chapter-flag countries ship no name lists; fall back so Marines are not nameless.
+	if (CharGen.kSoldier.strFirstName == "" && CharGen.kSoldier.strLastName == "" && default.NameFallbackCountry != '')
+	{
+		CharGen.GenerateName(CharGen.kSoldier.kAppearance.iGender, default.NameFallbackCountry, CharGen.kSoldier.strFirstName, CharGen.kSoldier.strLastName, CharGen.kSoldier.kAppearance.iRace);
+	}
+
+	ApplyChapterLivery(CharGen, DesiredCountry);
 	ApplyMarineArmourLook(CharGen, ArmorName);
+}
+
+/// The Chapter this campaign fights as: the Chapter state's choice if set, else the config default.
+/// Returns '' if neither names a loaded country template (flag mod not installed).
+static function name GetChapterCountry()
+{
+	local XComGameState_AstartesChapter Chapter;
+	local name Country;
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	Country = (Chapter != none && Chapter.ChapterCountry != '') ? Chapter.ChapterCountry : default.ChapterCountry;
+	if (Country != '' && class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager().FindStrategyElementTemplate(Country) == none)
+	{
+		`log("Astartes: Chapter country" @ Country @ "is not a loaded country template (flag mod missing?). Using vanilla countries.",, 'Astartes');
+		return '';
+	}
+	return Country;
+}
+
+/// Armour tints and pattern for a Chapter, from the ChapterLiveries config. No entry = leave the generator's colours.
+static function ApplyChapterLivery(XGCharacterGenerator CharGen, name Country)
+{
+	local int i;
+
+	for (i = 0; i < default.ChapterLiveries.Length; i++)
+	{
+		if (default.ChapterLiveries[i].Country == Country)
+		{
+			if (default.ChapterLiveries[i].PrimaryTint >= 0)
+			{
+				CharGen.kSoldier.kAppearance.iArmorTint = default.ChapterLiveries[i].PrimaryTint;
+			}
+			if (default.ChapterLiveries[i].SecondaryTint >= 0)
+			{
+				CharGen.kSoldier.kAppearance.iArmorTintSecondary = default.ChapterLiveries[i].SecondaryTint;
+			}
+			if (default.ChapterLiveries[i].Pattern != '')
+			{
+				CharGen.kSoldier.kAppearance.nmPatterns = default.ChapterLiveries[i].Pattern;
+			}
+			return;
+		}
+	}
 }
 
 /// Replace torso, arms, legs, deco and helmet with random parts from the configured Marine packs.
@@ -521,6 +603,70 @@ exec function Astartes_PartPacks()
 			Say("Astartes_PartPacks: FAIL configured Marine pack" @ Pack @ "is not loaded (enable its mod in AML)");
 		}
 	}
+}
+
+/// Astartes_Chapter <Country_Name>
+/// Sets the campaign's Chapter (e.g. Astartes_Chapter Country_BloodAngels) and redresses the barracks.
+exec function Astartes_Chapter(string CountryStr)
+{
+	local XComGameState NewGameState;
+	local XComGameState_AstartesChapter Chapter;
+	local name Country;
+
+	Country = name(CountryStr);
+	if (class'X2StrategyElementTemplateManager'.static.GetStrategyElementTemplateManager().FindStrategyElementTemplate(Country) == none)
+	{
+		Say("Astartes_Chapter: FAIL unknown country template" @ Country @ "(is its flag mod enabled?)");
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: set Chapter");
+	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
+	Chapter.ChapterCountry = Country;
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_Chapter: PASS Chapter is now" @ Country);
+	Astartes_Redress();
+}
+
+/// Astartes_Livery <PrimaryTint> <SecondaryTint> [Pattern]
+/// Applies armour tints to every barracks soldier right now, for tuning ChapterLiveries values by eye.
+exec function Astartes_Livery(int PrimaryTint, int SecondaryTint, optional string PatternStr)
+{
+	local XComGameStateHistory History;
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState;
+	local TAppearance Appearance;
+	local int idx, Count;
+
+	History = `XCOMHISTORY;
+	XComHQ = XComGameState_HeadquartersXCom(History.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	if (XComHQ == none)
+	{
+		Say("Astartes_Livery: FAIL no XComHQ");
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: Livery");
+	for (idx = 0; idx < XComHQ.Crew.Length; idx++)
+	{
+		UnitState = XComGameState_Unit(History.GetGameStateForObjectID(XComHQ.Crew[idx].ObjectID));
+		if (UnitState == none || !UnitState.IsSoldier() || UnitState.GetMyTemplateName() != 'Soldier')
+		{
+			continue;
+		}
+		UnitState = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+		Appearance = UnitState.kAppearance;
+		Appearance.iArmorTint = PrimaryTint;
+		Appearance.iArmorTintSecondary = SecondaryTint;
+		if (PatternStr != "")
+		{
+			Appearance.nmPatterns = name(PatternStr);
+		}
+		UnitState.SetTAppearance(Appearance);
+		UnitState.StoreAppearance();
+		Count++;
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_Livery: PASS tints" @ PrimaryTint $ "/" $ SecondaryTint @ "applied to" @ Count @ "soldiers");
 }
 
 /// Astartes_Redress

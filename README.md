@@ -112,6 +112,18 @@ Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 | `Astartes_AssignFactions` | Re-deals all six continents at random |
 | `Astartes_PartPacks` | Lists loaded body-part packs; confirms the Marine armour pack is active |
 | `Astartes_ListClasses` | Confirms the five Marine classes are registered |
+| `Astartes_Variants` | Reports each cloned unit variant as created (with HP) or skipped |
+
+### Chapter and livery (Avenger)
+| Command | Does |
+|---|---|
+| `Astartes_Chapter Country_BloodAngels` | Sets the campaign's Chapter (flag, names, colours) and redresses the barracks |
+| `Astartes_Livery 14 19` | Applies armour tints (primary, secondary palette indices) to everyone, for tuning |
+| `Astartes_Livery 14 19 Pattern_Name` | Same, plus an armour pattern |
+
+Chapter countries come from the flag mods: `Country_Ultramarines`, `Country_BloodAngels`, `Country_DarkAngels`,
+`Country_ImperialFists`, `Country_Salamanders`, `Country_SpaceWolves`, `Country_BlackTemplars`, `Country_RavenGuard`,
+`Country_WhiteScars`, `Country_IronHands`, `Country_CrimsonFists`... (any `Country_*` the flag mods define).
 
 Continent names: `Continent_NorthAmerica`, `Continent_SouthAmerica`, `Continent_Europe`, `Continent_Africa`,
 `Continent_Asia`, `Continent_Oceania`. Only missions generated *after* a change use the new faction.
