@@ -497,9 +497,11 @@ Model still needed for the Inquisitor (a coat-and-rosette cosmetic). Mechanics a
 The first craftworld unit, and the technique every soldier-bodied enemy or ally will reuse. The Warlock is a Black Legion
 captain *frame* (enemy flags, cover AI) whose template says its appearance defines its pawn: the game then asks our
 `Astartes_CharGen_Dressed` for a look, and the config `Looks` entry dresses him in the EldarArmor mod's Warlock plate,
-Farseer robe and backpack (Ulthwe thigh plates, black and bone). He carries a **Destructor** (Force Weapons' Force Shove
-rifle: knockback, 80% stun on hit and on overwatch; a charging Assault Marine stunned mid-run is his whole point) and
-fights with the Dark Eldar leader's tree.
+Farseer robe and backpack (Ulthwe thigh plates, black and bone). He carries a **Singing Spear** (Force Weapons' Force Shove
+rifle: knockback, 80% stun on hit and on overwatch; a charging Assault Marine stunned mid-run is his whole point), casts
+**Horrify** (vanilla Mindspin: panic / disorient / brief control) and **Protect** (vanilla Stasis on an ally), both chosen
+because their AI nodes already exist, rolls the Perils of the Warp (Slaanesh takes Eldar souls), and otherwise fights with
+the Dark Eldar leader's tree. A vanilla psi amp in his loadout supplies the casting animations for a soldier body.
 
 **Eldar hold no territory** (decided the same day, on the user's point that once the geoscape becomes a star map no
 system is "Eldar"; neither craftworlds nor Commorragh sit anywhere we fight). They are the Lost mechanic reworked

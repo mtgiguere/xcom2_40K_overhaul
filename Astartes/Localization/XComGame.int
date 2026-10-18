@@ -896,9 +896,9 @@ strCharacterName="Daemon Prince"
 strCharacterName="Eldar Warlock"
 
 [Astartes_Destructor X2WeaponTemplate]
-FriendlyName="Destructor"
-FriendlyNamePlural="Destructors"
-BriefSummary="A hammer of telekinetic force hurled from the Warlock's mind."
+FriendlyName="Singing Spear"
+FriendlyNamePlural="Singing Spears"
+BriefSummary="A psychically guided spear that returns to the Warlock's hand and knocks its target from its feet."
 TacticalText="<Bullet/> The Eldar Warlock's ranged attack.<br/><Bullet/> Knocks the target back and may stun, on overwatch too."
 
 [Astartes_WarpLightning X2WeaponTemplate]
@@ -909,3 +909,15 @@ TacticalText="<Bullet/> The Chaos Sorcerer's ranged attack.<br/><Bullet/> Electr
 
 [Astartes_RiftListener]
 RiftCollapsesText="The rift collapses"
+
+[Mindspin X2AbilityTemplate]
+LocFriendlyName="Horrify"
+LocLongDescription="The Warlock floods a mind with dread. Panics, disorients, or briefly seizes a living target."
+LocHelpText="Psychic assault on a single mind."
+LocFlyOverText="Horrify"
+
+[Stasis X2AbilityTemplate]
+LocFriendlyName="Protect"
+LocLongDescription="A rune of warding seals an ally out of time: untouchable and unable to act until the next turn."
+LocHelpText="Seals a unit out of time for a turn."
+LocFlyOverText="Protect"

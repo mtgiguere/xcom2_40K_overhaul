@@ -63,7 +63,7 @@ def test_every_psychic_power_in_the_tree_has_a_warp_charge(config, perils_cfg):
     assert not bad, f"WarpCharge must be 1..3: {bad}"
 
 
-ENEMY_PSYKER_POWERS = {"Astartes_OpenTheWarp"}  # X2Ability_Astartes_Chaos: Chaos Sorcerers roll Perils too
+ENEMY_PSYKER_POWERS = {"Astartes_OpenTheWarp", "Mindspin", "Stasis"}  # enemy psykers (Sorcerer, Eldar Warlock) roll Perils too
 
 
 def test_warp_charge_entries_point_at_tree_abilities(perils_cfg):

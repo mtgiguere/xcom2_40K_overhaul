@@ -24,6 +24,8 @@ def test_warlock_is_a_dressed_soldier_body(config):
     assert struct_field(v, "bAppearanceDefinesPawn") == "true"
     assert struct_field(v, "CharacterGenerator") == "Astartes.Astartes_CharGen_Dressed"
     assert struct_field(v, "BehaviorTree") == "Astartes_EldarWarlock::CharacterRoot"
+    for power in ("Mindspin", "Stasis", "Astartes_PerilsOfTheWarp"):
+        assert power in v, f"the Warlock needs {power}"
 
 
 def test_warlock_look_names_real_eldar_parts(config):
@@ -60,6 +62,7 @@ def test_destructor_and_loadout(config):
     loadouts = section(config, "XComGameData.ini", "XComGame.X2ItemTemplateManager").values("Loadouts")
     lo = next(x for x in loadouts if struct_field(x, "LoadoutName") == "Astartes_EldarWarlock_Loadout")
     assert lo.index("Astartes_Destructor") < lo.index("AssaultRifle_MG")
+    assert "PsiAmp_MG" in lo, "the psi amp carries the casting animations for a soldier body"
 
 
 def test_eldar_hold_no_territory_but_their_lists_exist(config):
@@ -77,7 +80,9 @@ def test_eldar_hold_no_territory_but_their_lists_exist(config):
 def test_warlock_ai_stats_names_project(config, loc_sections):
     tree = section(config, "XComAI.ini", "XComGame.X2AIBTBehaviorTree")
     nodes = {unquote(struct_field(b, "BehaviorName")): b for b in tree.values("Behaviors")}
-    assert "DarkEldarLeaderRedAlert" in nodes["Astartes_EldarWarlock::CharacterRoot"]
+    assert "Astartes_Warlock_RedAlert" in nodes["Astartes_EldarWarlock::CharacterRoot"]
+    sel = nodes["Astartes_Warlock_RedSelector"]
+    assert "TryMindSpinOption" in sel and "TryStasis" in sel and "DarkEldarLeaderRedAbilitySelector" in sel, "powers first, then the leader's fight"
     stats = parse_ini(REPO / "Astartes/Config/XComGameData_CharacterStats.ini")
     assert any(s.name == "Astartes_EldarWarlock X2CharacterTemplate" for s in stats)
     names = {(x.template_name, x.template_class) for x in loc_sections}
