@@ -52,6 +52,7 @@
     <Content Include="Src\Astartes\Classes\Astartes_CharGen_Dressed.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Heroes.uc" />
     <Content Include="Src\Astartes\Classes\X2Condition_Astartes_Wavering.uc" />
+    <Content Include="Src\Astartes\Classes\X2Effect_Astartes_Execute.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />

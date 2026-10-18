@@ -114,7 +114,7 @@ static function X2AbilityTemplate SummaryExecution()
 	Visibility.bRequireGameplayVisible = true;
 	Template.AbilityTargetConditions.AddItem(Visibility);
 
-	Template.AddTargetEffect(new class'X2Effect_Executed');
+	Template.AddTargetEffect(new class'X2Effect_Astartes_Execute');
 
 	Template.TargetingMethod = class'X2TargetingMethod_OverTheShoulder';
 	Template.bUsesFiringCamera = true;

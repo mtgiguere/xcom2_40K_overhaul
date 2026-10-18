@@ -93,6 +93,13 @@ untouched so far. **Decided 2026-10-18: all three faction heroes are out.** Skir
 sound confirmed; the flames fall back to the pawn centre (spine bone name unknown on this skeleton) and may hide inside a
 bulky pack; the next jump logs the torso bone candidates.
 
+**Playtest 2026-10-18, late night (heroes and monsters).** Deathclaw daemon looks good. Fixes the same night: the Inquisitor's
+hat (McCree head-with-hat helmet), Summary Execution made a true kill (the vanilla executed effect bleeds out soldiers),
+daemons and the Autarch on a fanatic melee tree (they hid every other turn), the axe on their backs replaced (daemons: the red
+Waning Moon blade; the Autarch: psi-blade only), the Chaos Champion given the Chaos Lord voice, the Autarch's mis-fitted hair
+stripped under her helmet. Marine swords from the user's picks: power sword tiers = Lucky 8's sword, force sword = psionic
+longsword. Open: the Inquisitor's spurs; a ranged option for the Autarch.
+
 **Playtest 2026-10-18, night (Eldar build).** Warlock confirmed in craftworld plate with the Singing Spear ("totally lore accurate");
 Horrify mind-controlled a Marine; a Perils roll turned him into the Daemon Prince. The spear is fired with the rifle stance (the shove
 weapon's animations), a little off but acceptable; a throw/cast stance for spear-wielders joins the two-handed-grip backlog item.

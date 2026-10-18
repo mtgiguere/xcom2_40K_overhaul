@@ -50,3 +50,18 @@ def test_autarch_carries_the_psi_blade_and_leads_incursions(config):
     mgr = section(config, "XComEncounterLists.ini", "XComGame.XComTacticalMissionManager")
     lists = {struct_field(v, "ListID"): v for v in mgr.values("SpawnDistributionLists")}
     assert "Astartes_EldarAutarch" in lists["Astartes_EldarCommanders"] and "Astartes_EldarAutarch" in lists["Astartes_EldarLeaders"]
+
+
+def test_melee_monsters_rush(config):
+    """Daemons and the Autarch hid every other turn on the Black Legion tree (playtest 2026-10-18)."""
+    variants = {struct_field(x, "NewName"): x for x in section(config, "XComAstartes.ini", "Astartes.Astartes_UnitVariants").values("Variants")}
+    for unit in ("Astartes_Daemon", "Astartes_EldarAutarch"):
+        assert struct_field(variants[unit], "BehaviorTree") == "Astartes_MeleeFanatic::CharacterRoot"
+    tree = section(config, "XComAI.ini", "XComGame.X2AIBTBehaviorTree").values("Behaviors")
+    sel = next(b for b in tree if "Astartes_MeleeFanatic_Selector" in b and "TryStandardMeleeDashFANATICUnsafe" in b)
+    assert "HuntEnemyWithCover" not in sel
+
+
+def test_no_axes_on_backs(config):
+    loadouts = {struct_field(x, "LoadoutName"): x for x in section(config, "XComGameData.ini", "XComGame.X2ItemTemplateManager").values("Loadouts")}
+    assert "ChaosAxe" not in loadouts["Astartes_Daemon_Loadout"] and "ChaosAxe" not in loadouts["Astartes_EldarAutarch_Loadout"]

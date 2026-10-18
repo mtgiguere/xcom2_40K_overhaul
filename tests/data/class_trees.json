@@ -1279,14 +1279,13 @@
     {
       "name": "Astartes_EldarAutarch_Loadout",
       "items": [
-        "PSIBlade_MG_Primary",
-        "ChaosAxeM1_WPN"
+        "PSIBlade_MG_Primary"
       ]
     },
     {
       "name": "Astartes_Daemon_Loadout",
       "items": [
-        "ChaosAxeM1_WPN"
+        "Astartes_Hellblade"
       ]
     }
   ],

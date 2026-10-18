@@ -50,7 +50,9 @@ def test_summary_execution_targets_the_wavering_on_either_side():
     body = src[src.index("static function X2AbilityTemplate SummaryExecution"):]
     body = body[: body.index("\n}\n")]
     assert "ExcludeFriendlyToSource = false" in body and "ExcludeHostileToSource = false" in body, "friend or foe (user, 2026-10-18)"
-    assert "X2Condition_Astartes_Wavering" in body and "X2Effect_Executed" in body and "default.DeadEye" in body
+    assert "X2Condition_Astartes_Wavering" in body and "X2Effect_Astartes_Execute" in body and "default.DeadEye" in body
+    ex = (SRC_DIR / "X2Effect_Astartes_Execute.uc").read_text(encoding="utf-8")
+    assert "super(X2Effect).OnEffectAdded" in ex and ", false, false, true, DamageTypes)" in ex, "a guaranteed kill: no bleed-out (user, 2026-10-18)"
     cond = (SRC_DIR / "X2Condition_Astartes_Wavering.uc").read_text(encoding="utf-8")
     assert "IsPanicked()" in cond and "IsMindControlled()" in cond
     comm = SPEC["classes"]["Astartes_Commissar"]["ranks"][0]

@@ -1029,6 +1029,12 @@ strCharacterName="Eldar Guardian"
 [Astartes_DireAvenger X2CharacterTemplate]
 strCharacterName="Dire Avenger"
 
+[Astartes_Hellblade X2WeaponTemplate]
+FriendlyName="Hellblade"
+FriendlyNamePlural="Hellblades"
+BriefSummary="A daemon's blade, forged of the Warp and hungry for souls."
+TacticalText="<Bullet/> The lesser daemon's weapon."
+
 [Astartes_ShurikenCatapult X2WeaponTemplate]
 FriendlyName="Shuriken Catapult"
 FriendlyNamePlural="Shuriken Catapults"
