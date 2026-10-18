@@ -78,6 +78,8 @@ def test_jump_effects_come_from_vanilla_alien_hunters(config):
     thrusters = sec.values("JUMP_THRUSTERS")
     assert len(thrusters) == 2 and all(struct_field(t, "FX").startswith("DLC_2_FX_Icarus_Suit.") for t in thrusters)
     assert sec.values("JUMP_SOUND_CUE")[0].strip('"') == "", "the Jedi ignition cue is no longer a dependency"
+    bones = [b.strip('"') for b in sec.values("JUMP_THRUSTER_BONES")]
+    assert bones[0] == "exoSuit_Backpack" and "Spine1" in bones, "the back mount first, then the spine (bone dump, playtest 2026-10-18)"
 
 
 def test_jump_thrusters_are_guarded_and_stop_on_landing():

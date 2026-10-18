@@ -31,7 +31,7 @@ struct JumpThruster
 var config string JUMP_TAKEOFF_SOUND, JUMP_FLIGHT_SOUND, JUMP_LAND_SOUND;
 var config string JUMP_TAKEOFF_FX, JUMP_LAND_FX;
 var config array<JumpThruster> JUMP_THRUSTERS;
-var config name JUMP_THRUSTER_BONE;  // bone the thrusters ride on; falls back to the pawn itself if absent
+var config array<name> JUMP_THRUSTER_BONES;  // bones tried in order for the thrusters; the pawn itself if none is present
 var config string JUMP_ANIMSET_PATH; // optional extra AnimSet granted to Assault Marines (e.g. a jump animation pack)
 var config array<name> JumpAbilities; // abilities whose visualization becomes the arc
 

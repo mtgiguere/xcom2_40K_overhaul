@@ -76,6 +76,15 @@ def test_rift_listener_uses_the_reinforcement_system_safely():
     assert "Spawner.SpawnedUnitIDs.Length > 0" in src, "a gate that already opened must not be cancelled"
 
 
+def test_daemon_prince_is_the_possession_form(config, loc_sections):
+    variants = section(config, "XComAstartes.ini", "Astartes.Astartes_UnitVariants").values("Variants")
+    v = next(x for x in variants if struct_field(x, "NewName") == "Astartes_DaemonPrince")
+    assert struct_field(v, "BaseTemplate") == "Nemesis_T2"
+    stats = parse_ini(REPO / "Astartes/Config/XComGameData_CharacterStats.ini")
+    assert any(s.name == "Astartes_DaemonPrince X2CharacterTemplate" for s in stats)
+    assert ("Astartes_DaemonPrince", "X2CharacterTemplate") in {(x.template_name, x.template_class) for x in loc_sections}
+
+
 def test_sorcerer_has_stats_names_and_project_entries(config, loc_sections):
     stats = parse_ini(REPO / "Astartes/Config/XComGameData_CharacterStats.ini")
     assert any(s.name == "Astartes_ChaosSorcerer X2CharacterTemplate" for s in stats)

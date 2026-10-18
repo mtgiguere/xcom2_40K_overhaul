@@ -454,6 +454,9 @@ Highlander comment: "eTeam_One and eTeam_Two should be the only ones here." The 
 |---|---|---|
 | Resident Evil 2: Remake G-Virus (Beta) | 2264204537 | Full enemy units (G1/G2/G3 forms, own AI, melee sweeps, a civilian that morphs). G3 = `Astartes_GreaterDaemon`, G2 = `Astartes_Daemon` via `Astartes_UnitVariants`. Used by Perils of the Warp possession; candidate for Chaos pods at high force level. |
 
+**Daemon Prince (2026-10-18):** RE3 Nemesis Prototype (2400021624) stage-2 Nemesis is `Astartes_DaemonPrince`, the form a possessed
+Librarian takes, so it differs from the G-Virus daemons a Sorcerer's rift lets through. Needs that mod ticked; Greater Daemon otherwise.
+
 ## 40K weapon models (reviewed 2026-10-17)
 | Mod | ID | Templates | Use |
 |---|---|---|---|

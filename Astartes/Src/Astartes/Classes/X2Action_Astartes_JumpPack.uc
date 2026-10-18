@@ -122,9 +122,12 @@ private function StartThrusters()
 	local array<name> Bones;
 	local string Candidates;
 
-	Bone = class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONE;
-	bOnBone = Bone != '' && UnitPawn.Mesh.MatchRefBone(Bone) != INDEX_NONE;
-	if (Bone != '' && !bOnBone)
+	for (i = 0; i < class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONES.Length && !bOnBone; i++)
+	{
+		Bone = class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONES[i];
+		bOnBone = Bone != '' && UnitPawn.Mesh.MatchRefBone(Bone) != INDEX_NONE;
+	}
+	if (!bOnBone && class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONES.Length > 0)
 	{
 		UnitPawn.Mesh.GetBoneNames(Bones);
 		for (i = 0; i < Bones.Length; i++)
@@ -134,7 +137,7 @@ private function StartThrusters()
 				Candidates @= string(Bones[i]);
 			}
 		}
-		`log("Astartes: jump thruster bone" @ Bone @ "not on this pawn (" $ Bones.Length @ "bones; torso candidates:" @ Candidates $ "); flames attached to the pawn instead",, 'Astartes');
+		`log("Astartes: no configured jump thruster bone on this pawn (" $ Bones.Length @ "bones; torso candidates:" @ Candidates $ "); flames attached to the pawn instead",, 'Astartes');
 	}
 	for (i = 0; i < ThrusterFX.Length; i++)
 	{

@@ -889,6 +889,9 @@ LocFlyOverText="Open the Warp"
 [Astartes_ChaosSorcerer X2CharacterTemplate]
 strCharacterName="Chaos Sorcerer"
 
+[Astartes_DaemonPrince X2CharacterTemplate]
+strCharacterName="Daemon Prince"
+
 [Astartes_WarpLightning X2WeaponTemplate]
 FriendlyName="Warpfire"
 FriendlyNamePlural="Warpfire"

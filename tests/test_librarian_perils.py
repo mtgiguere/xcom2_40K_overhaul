@@ -84,6 +84,10 @@ def test_outcome_table_is_sane(perils_cfg):
 def test_daemon_tiers(perils_cfg):
     tiers = [(int(struct_field(v, "MinForceLevel")), struct_field(v, "Template")) for v in perils_cfg.values("PerilsDaemons")]
     assert tiers, "PerilsDaemons must list at least one tier"
+    templates = [t for _, t in tiers]
+    assert "Astartes_DaemonPrince" in templates and "Astartes_GreaterDaemon" in templates, "possession form plus its fallback"
+    assert templates.index("Astartes_GreaterDaemon") < templates.index("Astartes_DaemonPrince"), "later entry wins a tie: the Prince must come after the fallback"
+    assert "PsiZombieHuman" not in templates, "the husk example must stay commented out"
     assert tiers[0][0] == 1, "the first daemon tier must start at force level 1 so possession always has a daemon"
     assert [t[0] for t in tiers] == sorted(t[0] for t in tiers), "tiers must be listed in ascending force level"
     assert all(t[1] for t in tiers), "every tier needs a character template"
