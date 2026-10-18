@@ -108,6 +108,7 @@ Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 | `Astartes_SquadSize 6` | Squad cap 4, 5 or 6 by granting the GTS squad-size unlocks; takes effect at the next squad select (6 = every class at once) |
 | `Astartes_AppointCommander` | Appoints the first rank-7 Marine (or `Astartes_AppointCommander Hudson` by name) as Chapter Master; he gains his class's relic ability (Assault: Death Incarnate) |
 | `Astartes_AppointChiefLibrarian` | Appoints the first rank-7 Librarian (or by name) as Chief Librarian, a separate unique; he gains Warp Mastery. Librarians cannot be Chapter Master |
+| `Astartes_AppointMasterOfSanctity` | Appoints the first rank-7 Chaplain (or by name) as Master of Sanctity; he gains Litany of the Devout. `Astartes_Appoint <Seat> [name]` is the generic form |
 | `Astartes_ExportLook Arthur Ward` | Prints a pool soldier's armour parts as a config line for `MarineLookParts` |
 | `LevelUpBarracks 7` | Promotes every existing soldier 7 ranks |
 | `MakeSoldierAClass "First Last" Astartes_Librarian` | Forces a soldier into a class |

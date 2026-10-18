@@ -1,9 +1,10 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    Astartes_ChapterMaster.uc
-//  PURPOSE: The Chapter Master (design.md 4.4): one at a time, appointed from a rank-7 Marine, and
-//           his relic ability depends on the class he came from (config Capstones). The capstone is
-//           granted as an unlocked class-agnostic ability so it lives in the soldier's own ability
-//           list. Replacing a dead Chapter Master is tracked (ChapterMastersLost) for a later cost.
+//  PURPOSE: The Chapter's unique seats (design.md 4.4): Chapter Master, Chief Librarian, Master of
+//           Sanctity. One holder per seat at a time, appointed from a top-rank Marine; each seat has
+//           class rules and a relic ability, granted as an unlocked class-agnostic ability so it lives
+//           in the soldier's own ability list. The Chapter Master's relic depends on his origin class
+//           (Capstones). Lost holders are counted per seat for a later replacement cost.
 //---------------------------------------------------------------------------------------
 class Astartes_ChapterMaster extends Object config(Astartes);
 
@@ -13,15 +14,20 @@ struct CapstoneDef
 	var name Ability;        // e.g. Astartes_DeathIncarnate
 };
 
+struct UniqueSeat
+{
+	var name Seat;                   // ChapterMaster, ChiefLibrarian, MasterOfSanctity
+	var string Title;                // for messages
+	var name RequiredClass;          // '' = any combat class not excluded
+	var array<name> ExcludedClasses; // classes that can never hold this seat
+	var name Ability;                // relic ability (ignored when bCapstoneByClass)
+	var bool bCapstoneByClass;       // relic ability comes from Capstones, by the holder's class
+	var string Nickname;             // title given as nickname when the Marine has none ("" = leave)
+};
+
 var config array<CapstoneDef> Capstones;
-var config int CHAPTER_MASTER_MIN_RANK;
-var config string CHAPTER_MASTER_NICKNAME;
-// Classes that can never hold the Chapter Master's seat (the Librarius has its own head).
-var config array<name> ChapterMasterExcludedClasses;
-// The Chief Librarian: which class qualifies, his relic ability and title.
-var config name CHIEF_LIBRARIAN_CLASS;
-var config name CHIEF_LIBRARIAN_ABILITY;
-var config string CHIEF_LIBRARIAN_NICKNAME;
+var config array<UniqueSeat> Seats;
+var config int CHAPTER_MASTER_MIN_RANK; // minimum rank for every seat (7 = the top rank)
 
 static function name CapstoneFor(name SoldierClass)
 {
@@ -37,18 +43,39 @@ static function name CapstoneFor(name SoldierClass)
 	return '';
 }
 
-/// The current Chapter Master, or none if there is none or he is dead/captured.
-static function XComGameState_Unit GetChapterMaster()
+static function bool GetSeat(name Seat, out UniqueSeat Def)
+{
+	local int i;
+
+	for (i = 0; i < default.Seats.Length; i++)
+	{
+		if (default.Seats[i].Seat == Seat)
+		{
+			Def = default.Seats[i];
+			return true;
+		}
+	}
+	return false;
+}
+
+/// The living holder of a seat, or none.
+static function XComGameState_Unit GetSeatHolder(name Seat)
 {
 	local XComGameState_AstartesChapter Chapter;
 	local XComGameState_Unit Unit;
+	local StateObjectReference Ref;
 
 	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
-	if (Chapter == none || Chapter.ChapterMasterRef.ObjectID == 0)
+	if (Chapter == none)
 	{
 		return none;
 	}
-	Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Chapter.ChapterMasterRef.ObjectID));
+	Ref = Chapter.GetSeatRef(Seat);
+	if (Ref.ObjectID == 0)
+	{
+		return none;
+	}
+	Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Ref.ObjectID));
 	if (Unit == none || Unit.IsDead() || Unit.bCaptured)
 	{
 		return none;
@@ -56,19 +83,32 @@ static function XComGameState_Unit GetChapterMaster()
 	return Unit;
 }
 
-/// Appoint a Marine. Returns false with a reason when the rules forbid it. Modifies the unit and the
-/// Chapter state inside NewGameState; the caller submits.
-static function bool Appoint(XComGameState_Unit UnitState, XComGameState NewGameState, out string Reason)
+/// Can this Marine take the seat? Reason explains a refusal.
+static function bool IsEligible(name Seat, XComGameState_Unit UnitState, out string Reason)
 {
-	local XComGameState_AstartesChapter Chapter;
-	local XComGameState_Unit Current, NewUnit;
-	local ClassAgnosticAbility Capstone;
-	local name CapstoneName;
-	local int i;
+	local UniqueSeat Def;
+	local XComGameState_Unit Current;
+	local name SoldierClass;
 
+	if (!GetSeat(Seat, Def))
+	{
+		Reason = "unknown seat" @ Seat;
+		return false;
+	}
 	if (UnitState == none || !UnitState.IsSoldier())
 	{
 		Reason = "not a soldier";
+		return false;
+	}
+	SoldierClass = UnitState.GetSoldierClassTemplateName();
+	if (Def.RequiredClass != '' && SoldierClass != Def.RequiredClass)
+	{
+		Reason = "only a" @ Def.RequiredClass @ "can be" @ Def.Title;
+		return false;
+	}
+	if (Def.ExcludedClasses.Find(SoldierClass) != INDEX_NONE)
+	{
+		Reason = "a" @ SoldierClass @ "cannot be" @ Def.Title;
 		return false;
 	}
 	if (UnitState.GetRank() < default.CHAPTER_MASTER_MIN_RANK)
@@ -76,140 +116,104 @@ static function bool Appoint(XComGameState_Unit UnitState, XComGameState NewGame
 		Reason = "rank" @ UnitState.GetRank() @ "is below the required" @ default.CHAPTER_MASTER_MIN_RANK;
 		return false;
 	}
-	if (default.ChapterMasterExcludedClasses.Find(UnitState.GetSoldierClassTemplateName()) != INDEX_NONE)
-	{
-		Reason = "a" @ UnitState.GetSoldierClassTemplateName() @ "cannot hold the Chapter Master's seat (the Librarius has its own head)";
-		return false;
-	}
-	Current = GetChapterMaster();
-	if (Current != none && Current.ObjectID != UnitState.ObjectID)
-	{
-		Reason = Current.GetFullName() @ "is the Chapter Master and lives";
-		return false;
-	}
+	Current = GetSeatHolder(Seat);
 	if (Current != none)
 	{
-		Reason = "already the Chapter Master";
+		Reason = Current.ObjectID == UnitState.ObjectID ? "already" @ Def.Title : Current.GetFullName() @ "is" @ Def.Title @ "and lives";
 		return false;
 	}
+	Reason = "";
+	return true;
+}
+
+/// Appoint a Marine to a seat. Modifies the unit and the Chapter state inside NewGameState; the caller submits.
+static function bool AppointToSeat(name Seat, XComGameState_Unit UnitState, XComGameState NewGameState, out string Reason)
+{
+	local UniqueSeat Def;
+	local XComGameState_AstartesChapter Chapter;
+	local XComGameState_Unit NewUnit;
+	local ClassAgnosticAbility Relic;
+	local name RelicName;
+	local int i;
+
+	if (!IsEligible(Seat, UnitState, Reason))
+	{
+		return false;
+	}
+	GetSeat(Seat, Def);
 
 	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
-	if (Chapter.ChapterMasterRef.ObjectID != 0)
-	{
-		Chapter.ChapterMastersLost++; // the previous one is dead or captured
-	}
-	Chapter.ChapterMasterRef = UnitState.GetReference();
+	Chapter.SetSeatRef(Seat, UnitState.GetReference());
 
 	NewUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-	CapstoneName = CapstoneFor(NewUnit.GetSoldierClassTemplateName());
-	if (CapstoneName != '')
+	RelicName = Def.bCapstoneByClass ? CapstoneFor(NewUnit.GetSoldierClassTemplateName()) : Def.Ability;
+	if (RelicName != '')
 	{
 		for (i = 0; i < NewUnit.AWCAbilities.Length; i++)
 		{
-			if (NewUnit.AWCAbilities[i].AbilityType.AbilityName == CapstoneName)
+			if (NewUnit.AWCAbilities[i].AbilityType.AbilityName == RelicName)
 			{
 				break;
 			}
 		}
 		if (i == NewUnit.AWCAbilities.Length)
 		{
-			Capstone.AbilityType.AbilityName = CapstoneName;
-			Capstone.AbilityType.ApplyToWeaponSlot = eInvSlot_Unknown;
-			Capstone.bUnlocked = true;
-			Capstone.iRank = 0;
-			NewUnit.AWCAbilities.AddItem(Capstone);
+			Relic.AbilityType.AbilityName = RelicName;
+			Relic.AbilityType.ApplyToWeaponSlot = eInvSlot_Unknown;
+			Relic.bUnlocked = true;
+			Relic.iRank = 0;
+			NewUnit.AWCAbilities.AddItem(Relic);
 		}
 	}
 	else
 	{
-		`log("Astartes: no Chapter Master capstone configured for" @ NewUnit.GetSoldierClassTemplateName() @ "yet",, 'Astartes');
+		`log("Astartes: no relic ability configured for" @ Def.Title @ "from" @ NewUnit.GetSoldierClassTemplateName() @ "yet",, 'Astartes');
 	}
-	if (default.CHAPTER_MASTER_NICKNAME != "" && NewUnit.GetNickName(true) == "")
+	if (Def.Nickname != "" && NewUnit.GetNickName(true) == "")
 	{
-		NewUnit.SetUnitName(NewUnit.GetFirstName(), NewUnit.GetLastName(), default.CHAPTER_MASTER_NICKNAME);
+		NewUnit.SetUnitName(NewUnit.GetFirstName(), NewUnit.GetLastName(), Def.Nickname);
 	}
-	`log("Astartes: Chapter Master appointed:" @ NewUnit.GetFullName() @ "(" $ NewUnit.GetSoldierClassTemplateName() $ ") capstone" @ CapstoneName,, 'Astartes');
+	`log("Astartes:" @ Def.Title @ "appointed:" @ NewUnit.GetFullName() @ "(" $ NewUnit.GetSoldierClassTemplateName() $ ") relic" @ RelicName,, 'Astartes');
 	Reason = "";
 	return true;
 }
 
-// --- Chief Librarian -----------------------------------------------------------------------
-
-static function XComGameState_Unit GetChiefLibrarian()
+/// Pick the first barracks soldier eligible for the seat, or the one whose name contains NameFragment.
+static function XComGameState_Unit FindCandidate(name Seat, string NameFragment)
 {
-	local XComGameState_AstartesChapter Chapter;
-	local XComGameState_Unit Unit;
-
-	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
-	if (Chapter == none || Chapter.ChiefLibrarianRef.ObjectID == 0)
-	{
-		return none;
-	}
-	Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Chapter.ChiefLibrarianRef.ObjectID));
-	if (Unit == none || Unit.IsDead() || Unit.bCaptured)
-	{
-		return none;
-	}
-	return Unit;
-}
-
-/// Appoint the head of the Librarius. Top-rank Librarians only; one at a time; grants CHIEF_LIBRARIAN_ABILITY.
-static function bool AppointChiefLibrarian(XComGameState_Unit UnitState, XComGameState NewGameState, out string Reason)
-{
-	local XComGameState_AstartesChapter Chapter;
-	local XComGameState_Unit Current, NewUnit;
-	local ClassAgnosticAbility Capstone;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState;
+	local string Reason;
 	local int i;
 
-	if (UnitState == none || !UnitState.IsSoldier())
+	XComHQ = `XCOMHQ;
+	if (XComHQ == none)
 	{
-		Reason = "not a soldier";
-		return false;
+		return none;
 	}
-	if (UnitState.GetSoldierClassTemplateName() != default.CHIEF_LIBRARIAN_CLASS)
+	for (i = 0; i < XComHQ.Crew.Length; i++)
 	{
-		Reason = "only a" @ default.CHIEF_LIBRARIAN_CLASS @ "can head the Librarius";
-		return false;
-	}
-	if (UnitState.GetRank() < default.CHAPTER_MASTER_MIN_RANK)
-	{
-		Reason = "rank" @ UnitState.GetRank() @ "is below the required" @ default.CHAPTER_MASTER_MIN_RANK;
-		return false;
-	}
-	Current = GetChiefLibrarian();
-	if (Current != none)
-	{
-		Reason = Current.ObjectID == UnitState.ObjectID ? "already the Chief Librarian" : Current.GetFullName() @ "is the Chief Librarian and lives";
-		return false;
-	}
-
-	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
-	if (Chapter.ChiefLibrarianRef.ObjectID != 0)
-	{
-		Chapter.ChiefLibrariansLost++;
-	}
-	Chapter.ChiefLibrarianRef = UnitState.GetReference();
-
-	NewUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
-	for (i = 0; i < NewUnit.AWCAbilities.Length; i++)
-	{
-		if (NewUnit.AWCAbilities[i].AbilityType.AbilityName == default.CHIEF_LIBRARIAN_ABILITY)
+		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Crew[i].ObjectID));
+		if (UnitState == none || !UnitState.IsSoldier() || UnitState.IsDead())
 		{
-			break;
+			continue;
+		}
+		if (NameFragment != "")
+		{
+			if (InStr(Caps(UnitState.GetFullName()), Caps(NameFragment)) != INDEX_NONE)
+			{
+				return UnitState;
+			}
+			continue;
+		}
+		if (IsEligible(Seat, UnitState, Reason))
+		{
+			return UnitState;
 		}
 	}
-	if (i == NewUnit.AWCAbilities.Length && default.CHIEF_LIBRARIAN_ABILITY != '')
-	{
-		Capstone.AbilityType.AbilityName = default.CHIEF_LIBRARIAN_ABILITY;
-		Capstone.AbilityType.ApplyToWeaponSlot = eInvSlot_Unknown;
-		Capstone.bUnlocked = true;
-		NewUnit.AWCAbilities.AddItem(Capstone);
-	}
-	if (default.CHIEF_LIBRARIAN_NICKNAME != "" && NewUnit.GetNickName(true) == "")
-	{
-		NewUnit.SetUnitName(NewUnit.GetFirstName(), NewUnit.GetLastName(), default.CHIEF_LIBRARIAN_NICKNAME);
-	}
-	`log("Astartes: Chief Librarian appointed:" @ NewUnit.GetFullName() @ "relic" @ default.CHIEF_LIBRARIAN_ABILITY,, 'Astartes');
-	Reason = "";
-	return true;
+	return none;
 }
+
+// Compatibility names.
+static function XComGameState_Unit GetChapterMaster() { return GetSeatHolder('ChapterMaster'); }
+static function XComGameState_Unit GetChiefLibrarian() { return GetSeatHolder('ChiefLibrarian'); }

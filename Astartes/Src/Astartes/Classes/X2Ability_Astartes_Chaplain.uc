@@ -10,6 +10,7 @@ class X2Ability_Astartes_Chaplain extends XMBAbility config(Astartes);
 var config int CROZIUS_MASTERY_DAMAGE, CROZIUS_MASTERY_CRIT;
 var config int LITANY_OF_HATE_CRIT;
 var config int ROSARIUS_ARMOUR, ROSARIUS_DEFENSE;
+var config int LITANY_OF_THE_DEVOUT_RADIUS_TILES;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -18,6 +19,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(CroziusMastery());
 	Templates.AddItem(LitanyOfHate());
 	Templates.AddItem(Rosarius());
+	Templates.AddItem(LitanyOfTheDevout());
 
 	return Templates;
 }
@@ -68,4 +70,50 @@ static function X2AbilityTemplate Rosarius()
 	Effect.AddPersistentStatChange(eStat_Defense, default.ROSARIUS_DEFENSE);
 
 	return Passive('Astartes_Rosarius', "img:///UILibrary_PerkIcons.UIPerk_fortress", false, Effect);
+}
+
+// --- Master of Sanctity relic -----------------------------------------------------------------
+
+/// Litany of the Devout: for the rest of the turn, every brother within reach cannot be stunned, disoriented,
+/// knocked out or mind-controlled, and his melee cannot miss. Free action, once per mission.
+static function X2AbilityTemplate LitanyOfTheDevout()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityMultiTarget_Radius Radius;
+	local X2Effect_DamageImmunity Faith;
+	local XMBEffect_ChangeHitResultForAttacker SureStrike;
+
+	Template = SelfTargetActivated('Astartes_LitanyOfTheDevout', "img:///UILibrary_PerkIcons.UIPerk_solace", false, none, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Free);
+	AddCharges(Template, 1);
+
+	Radius = new class'X2AbilityMultiTarget_Radius';
+	Radius.fTargetRadius = default.LITANY_OF_THE_DEVOUT_RADIUS_TILES * 1.5;
+	Radius.bIgnoreBlockingCover = true;
+	Radius.bExcludeSelfAsTargetIfWithinRadius = false;
+	Template.AbilityMultiTargetStyle = Radius;
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingFriendlyTargetProperty);
+
+	Faith = new class'X2Effect_DamageImmunity';
+	Faith.EffectName = 'Astartes_LitanyOfTheDevout_Faith';
+	Faith.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	Faith.DuplicateResponse = eDupe_Refresh;
+	Faith.ImmuneTypes.AddItem('Mental');
+	Faith.ImmuneTypes.AddItem('Panic');
+	Faith.ImmuneTypes.AddItem('stun');
+	Faith.ImmuneTypes.AddItem('Unconscious');
+	Faith.ImmuneTypes.AddItem(class'X2Item_DefaultDamageTypes'.default.DisorientDamageType);
+	Template.AddMultiTargetEffect(Faith);
+
+	SureStrike = new class'XMBEffect_ChangeHitResultForAttacker';
+	SureStrike.EffectName = 'Astartes_LitanyOfTheDevout_SureStrike';
+	SureStrike.BuildPersistentEffect(1, false, true, false, eGameRule_PlayerTurnEnd);
+	SureStrike.DuplicateResponse = eDupe_Refresh;
+	SureStrike.bRequireMiss = true;
+	SureStrike.NewResult = eHit_Success;
+	SureStrike.AbilityShooterConditions.AddItem(default.MeleeCondition);
+	Template.AddMultiTargetEffect(SureStrike);
+
+	Template.ActivationSpeech = 'Inspire';
+	Template.bShowActivation = true;
+	return Template;
 }

@@ -47,12 +47,27 @@ def test_daemon_spawns_point_at_our_variants_and_real_lists(config):
         assert int(struct_field(v, "MinForceLevel")) >= 9, "no daemons in the first months' Chaos pods"
 
 
-def test_librarians_never_hold_the_chapter_masters_seat(config):
-    """User rule (2026-10-18): Chief Librarian and Force Commander are separate uniques."""
+def seats(config):
     cm = section(config, "Astartes.Astartes_ChapterMaster")
-    excluded = {unquote(v) for v in cm.values("ChapterMasterExcludedClasses")}
-    assert "Astartes_Librarian" in excluded
-    caps = {struct_field(v, "SoldierClass") for v in cm.values("Capstones")}
-    assert "Astartes_Librarian" not in caps, "the Librarian relic belongs to the Chief Librarian, not the Chapter Master table"
-    assert unquote(cm.first("CHIEF_LIBRARIAN_CLASS")) == "Astartes_Librarian"
-    assert unquote(cm.first("CHIEF_LIBRARIAN_ABILITY")) == "Astartes_WarpMastery"
+    return {struct_field(v, "Seat"): v for v in cm.values("Seats")}
+
+
+def test_three_unique_seats_with_lore_rules(config, loc_sections):
+    """Chapter Master, Chief Librarian and Master of Sanctity are separate seats (user rule 2026-10-18)."""
+    s = seats(config)
+    assert set(s) == {"ChapterMaster", "ChiefLibrarian", "MasterOfSanctity"}
+    cm = s["ChapterMaster"]
+    assert struct_field(cm, "bCapstoneByClass") == "true"
+    assert "Astartes_Librarian" in cm and "Astartes_Chaplain" in cm, "Librarians and Chaplains never hold the Chapter Master's seat"
+    assert struct_field(s["ChiefLibrarian"], "RequiredClass") == "Astartes_Librarian"
+    assert struct_field(s["ChiefLibrarian"], "Ability") == "Astartes_WarpMastery"
+    assert struct_field(s["MasterOfSanctity"], "RequiredClass") == "Astartes_Chaplain"
+    assert struct_field(s["MasterOfSanctity"], "Ability") == "Astartes_LitanyOfTheDevout"
+    src = "".join(f.read_text(encoding="utf-8", errors="replace") for f in SRC_DIR.glob("X2Ability_Astartes*.uc"))
+    loc = {x.template_name for x in loc_sections if x.template_class == "X2AbilityTemplate"}
+    for seat, v in s.items():
+        ability = struct_field(v, "Ability")
+        if ability:
+            assert f"'{ability}'" in src and ability in loc, f"{seat} relic {ability} must exist and be localized"
+    caps = {struct_field(v, "SoldierClass") for v in section(config, "Astartes.Astartes_ChapterMaster").values("Capstones")}
+    assert "Astartes_Librarian" not in caps and "Astartes_Chaplain" not in caps

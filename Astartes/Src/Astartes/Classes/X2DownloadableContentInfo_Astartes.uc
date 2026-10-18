@@ -969,108 +969,41 @@ exec function Astartes_SquadSize(int Size)
 	Say("Astartes_SquadSize: PASS squad cap is now" @ Clamp(Size, 4, 6) @ "(takes effect at the next squad select)");
 }
 
-/// Astartes_AppointCommander [NameFragment]: appoint the Chapter Master. Picks the barracks soldier whose name
-/// contains the fragment (or the first rank-7 Marine when omitted); he gains his class's relic ability.
-exec function Astartes_AppointCommander(optional string NameFragment)
+/// Astartes_Appoint <Seat> [NameFragment]: appoint a Marine to a unique seat (ChapterMaster, ChiefLibrarian,
+/// MasterOfSanctity). Picks the soldier whose name contains the fragment, or the first eligible one.
+exec function Astartes_Appoint(string Seat, optional string NameFragment)
 {
 	local XComGameState NewGameState;
-	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameState_Unit UnitState, Pick;
+	local XComGameState_Unit Pick;
 	local string Reason;
-	local int i;
+	local name SeatName;
 
-	XComHQ = `XCOMHQ;
-	if (XComHQ == none)
+	SeatName = name(Seat);
+	if (`XCOMHQ == none)
 	{
-		Say("Astartes_AppointCommander: FAIL no XComHQ (strategy layer only)");
+		Say("Astartes_Appoint: FAIL no XComHQ (strategy layer only)");
 		return;
 	}
-	for (i = 0; i < XComHQ.Crew.Length; i++)
-	{
-		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Crew[i].ObjectID));
-		if (UnitState == none || !UnitState.IsSoldier() || UnitState.IsDead())
-		{
-			continue;
-		}
-		if (NameFragment != "" && InStr(Caps(UnitState.GetFullName()), Caps(NameFragment)) == INDEX_NONE)
-		{
-			continue;
-		}
-		if (NameFragment == "" && UnitState.GetRank() < class'Astartes_ChapterMaster'.default.CHAPTER_MASTER_MIN_RANK)
-		{
-			continue;
-		}
-		Pick = UnitState;
-		break;
-	}
+	Pick = class'Astartes_ChapterMaster'.static.FindCandidate(SeatName, NameFragment);
 	if (Pick == none)
 	{
-		Say("Astartes_AppointCommander: FAIL no matching soldier" @ (NameFragment == "" ? "of rank" @ class'Astartes_ChapterMaster'.default.CHAPTER_MASTER_MIN_RANK : "named like" @ NameFragment));
+		Say("Astartes_Appoint: FAIL no eligible soldier for" @ Seat @ (NameFragment != "" ? "named like" @ NameFragment : ""));
 		return;
 	}
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: appoint Chapter Master");
-	if (!class'Astartes_ChapterMaster'.static.Appoint(Pick, NewGameState, Reason))
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: appoint" @ Seat);
+	if (!class'Astartes_ChapterMaster'.static.AppointToSeat(SeatName, Pick, NewGameState, Reason))
 	{
 		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
-		Say("Astartes_AppointCommander: FAIL" @ Pick.GetFullName() $ ":" @ Reason);
+		Say("Astartes_Appoint: FAIL" @ Pick.GetFullName() $ ":" @ Reason);
 		return;
 	}
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	Say("Astartes_AppointCommander: PASS" @ Pick.GetFullName() @ "is the Chapter Master; capstone" @ class'Astartes_ChapterMaster'.static.CapstoneFor(Pick.GetSoldierClassTemplateName()));
+	Say("Astartes_Appoint: PASS" @ Pick.GetFullName() @ "is now" @ Seat);
 }
 
-/// Astartes_AppointChiefLibrarian [NameFragment]: appoint the head of the Librarius (top-rank Librarian; one at a time).
-exec function Astartes_AppointChiefLibrarian(optional string NameFragment)
-{
-	local XComGameState NewGameState;
-	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameState_Unit UnitState, Pick;
-	local string Reason;
-	local int i;
-
-	XComHQ = `XCOMHQ;
-	if (XComHQ == none)
-	{
-		Say("Astartes_AppointChiefLibrarian: FAIL no XComHQ (strategy layer only)");
-		return;
-	}
-	for (i = 0; i < XComHQ.Crew.Length; i++)
-	{
-		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Crew[i].ObjectID));
-		if (UnitState == none || !UnitState.IsSoldier() || UnitState.IsDead())
-		{
-			continue;
-		}
-		if (UnitState.GetSoldierClassTemplateName() != class'Astartes_ChapterMaster'.default.CHIEF_LIBRARIAN_CLASS)
-		{
-			continue;
-		}
-		if (NameFragment != "" && InStr(Caps(UnitState.GetFullName()), Caps(NameFragment)) == INDEX_NONE)
-		{
-			continue;
-		}
-		if (NameFragment == "" && UnitState.GetRank() < class'Astartes_ChapterMaster'.default.CHAPTER_MASTER_MIN_RANK)
-		{
-			continue;
-		}
-		Pick = UnitState;
-		break;
-	}
-	if (Pick == none)
-	{
-		Say("Astartes_AppointChiefLibrarian: FAIL no matching top-rank Librarian");
-		return;
-	}
-	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: appoint Chief Librarian");
-	if (!class'Astartes_ChapterMaster'.static.AppointChiefLibrarian(Pick, NewGameState, Reason))
-	{
-		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
-		Say("Astartes_AppointChiefLibrarian: FAIL" @ Pick.GetFullName() $ ":" @ Reason);
-		return;
-	}
-	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
-	Say("Astartes_AppointChiefLibrarian: PASS" @ Pick.GetFullName() @ "heads the Librarius; relic" @ class'Astartes_ChapterMaster'.default.CHIEF_LIBRARIAN_ABILITY);
-}
+exec function Astartes_AppointCommander(optional string NameFragment) { Astartes_Appoint("ChapterMaster", NameFragment); }
+exec function Astartes_AppointChiefLibrarian(optional string NameFragment) { Astartes_Appoint("ChiefLibrarian", NameFragment); }
+exec function Astartes_AppointMasterOfSanctity(optional string NameFragment) { Astartes_Appoint("MasterOfSanctity", NameFragment); }
 
 /// Astartes_ExportLook <Pool soldier name>: prints that character's armour parts as a +MarineLookParts config line,
 /// ready to paste into XComGame.ini so the look ships with the mod.

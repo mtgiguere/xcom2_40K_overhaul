@@ -276,6 +276,7 @@ Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were
 | Shared | Know No Fear, Astartes Physiology, Power Armour Mk VII stats | | |
 | Chapter Master | Death Incarnate (Assault), Rites of Battle (Tactical), The Emperor's Mercy (Apothecary) | | Orbital Bombardment (Devastator; needs strike visuals) |
 | Chief Librarian (separate unique) | Warp Mastery | | |
+| Master of Sanctity (separate unique) | Litany of the Devout | | |
 | Chaplain | Crozius Mastery, Litany of Hate, Rosarius (rest reused from Assault/Tactical) | Fortress, Bladestorm, Untouchable, Implacable, Reaper | Undying |
 
 Weapon and ability clones are created as named objects (`new(none, string(Name))`) so their 40K localization loads; unnamed clones showed vanilla names in play (fixed 2026-10-17, guarded by `tests/test_wargear.py`).

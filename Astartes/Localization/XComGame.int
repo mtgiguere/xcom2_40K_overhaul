@@ -854,3 +854,10 @@ FriendlyName="Master-Crafted Crozius"
 FriendlyNamePlural="Master-Crafted Crozii"
 BriefSummary="A master-crafted crozius arcanum, a relic of the Reclusiam."
 TacticalText="<Bullet/> The Chaplain's melee weapon, master-crafted.<br/>"
+
+[Astartes_LitanyOfTheDevout X2AbilityTemplate]
+LocFriendlyName="Litany of the Devout"
+LocLongDescription="The Master of Sanctity's voice fills every brother within 10 tiles. For the rest of the turn they cannot be stunned, disoriented, knocked unconscious, panicked or mind-controlled, and their melee attacks cannot miss. Free action, once per mission."
+LocHelpText="Brothers within 10 tiles: immune to stun, disorient, unconsciousness and mind control this turn; melee cannot miss. Once per mission."
+LocFlyOverText="Litany of the Devout"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Brothers within 10 tiles cannot be stunned, disoriented, knocked out, panicked or mind-controlled this turn.<br/><Bullet/> Their melee attacks this turn cannot miss.<br/>"

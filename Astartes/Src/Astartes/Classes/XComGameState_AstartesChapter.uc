@@ -26,12 +26,14 @@ var array<ContinentFaction> ContinentFactions;
 /// The Chapter this campaign fights as (an X2CountryTemplate name). '' = use the config default.
 var name ChapterCountry;
 
-// The Chapter Master (Astartes_ChapterMaster): one at a time; lost ones are counted for the replacement cost.
-var StateObjectReference ChapterMasterRef;
-var int ChapterMastersLost;
-// The Chief Librarian: a separate unique (never the same Marine, never a Librarian in the Chapter Master's seat).
-var StateObjectReference ChiefLibrarianRef;
-var int ChiefLibrariansLost;
+// The Chapter's unique seats (Astartes_ChapterMaster): one holder each; lost holders counted for the replacement cost.
+struct SeatHolder
+{
+	var name Seat;
+	var StateObjectReference UnitRef;
+	var int Lost;
+};
+var array<SeatHolder> Seats;
 
 static function XComGameState_AstartesChapter GetChapter(optional bool bAllowNone = false)
 {
@@ -76,6 +78,44 @@ static function EnsureChapterExists()
 	Chapter = GetOrCreateChapter(NewGameState);
 	Chapter.AssignContinentFactions(NewGameState);
 	`XCOMHISTORY.AddGameStateToHistory(NewGameState);
+}
+
+function StateObjectReference GetSeatRef(name Seat)
+{
+	local StateObjectReference Empty;
+	local int i;
+
+	for (i = 0; i < Seats.Length; i++)
+	{
+		if (Seats[i].Seat == Seat)
+		{
+			return Seats[i].UnitRef;
+		}
+	}
+	return Empty;
+}
+
+/// Record a new holder; a previous holder (dead or captured by then) counts as lost.
+function SetSeatRef(name Seat, StateObjectReference UnitRef)
+{
+	local SeatHolder Holder;
+	local int i;
+
+	for (i = 0; i < Seats.Length; i++)
+	{
+		if (Seats[i].Seat == Seat)
+		{
+			if (Seats[i].UnitRef.ObjectID != 0 && Seats[i].UnitRef.ObjectID != UnitRef.ObjectID)
+			{
+				Seats[i].Lost++;
+			}
+			Seats[i].UnitRef = UnitRef;
+			return;
+		}
+	}
+	Holder.Seat = Seat;
+	Holder.UnitRef = UnitRef;
+	Seats.AddItem(Holder);
 }
 
 function AddGeneseed(int Amount)
