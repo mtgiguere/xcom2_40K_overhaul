@@ -688,3 +688,9 @@ LocLongDescription="The Librarian reaches into an enemy's ammunition and grenade
 LocHelpText="Detonate a target's explosives. Rolls for Perils."
 LocFlyOverText="Combustion"
 LocPromotionPopupText="<Bullet/> Detonates the explosives an enemy is carrying.<br/><Bullet/> Rolls for Perils of the Warp.<br/>"
+
+[Astartes_JumpPackRig X2AbilityTemplate]
+LocFriendlyName="Jump Pack Rig"
+LocLongDescription="The jump pack's harness and thrusters."
+LocHelpText="Jump pack harness."
+LocFlyOverText="Jump Pack Rig"

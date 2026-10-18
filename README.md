@@ -70,6 +70,8 @@ Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 - **X2ModBuildCommon** by the X2 Community Core team (build system), vendored in `.scripts/`.
 - Art and enemy factions come from the Workshop mods listed in `docs/mod-inventory.md` as required dependencies.
 
+- **Jedi Class Revised** (workshop 2031929512): the jump-arc visualization pattern (precomputed ballistic path + leap/flight/landing animations) that `X2Action_Astartes_JumpPack` is modelled on. Our implementation uses vanilla soldier animations and does not depend on that mod.
+
 ## Conventions
 
 - Prefer config (`.ini`) and Highlander event hooks over class overrides.

@@ -43,6 +43,7 @@
     <Content Include="Src\Astartes\Classes\X2Effect_Astartes_ResetCooldown.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_WarpListener.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_ChapterMaster.uc" />
+    <Content Include="Src\Astartes\Classes\X2Action_Astartes_JumpPack.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />

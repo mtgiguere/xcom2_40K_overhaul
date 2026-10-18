@@ -32,5 +32,17 @@ def test_jump_pack_tuning(config):
 
 
 def test_no_source_refers_to_the_old_clone_name():
-    bad = [f.name for f in SRC_DIR.glob("*.uc") if "Astartes_JumpPack" in f.read_text(encoding="utf-8", errors="replace")]
+    bad = [f.name for f in SRC_DIR.glob("*.uc") if "'Astartes_JumpPack'" in f.read_text(encoding="utf-8", errors="replace")]
     assert not bad, f"Astartes_JumpPack no longer exists; refer to IcarusJump: {bad}"
+
+
+def test_jump_arc_is_configured(config):
+    """Both jumps visualize through the arc action, with real vanilla animation names."""
+    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Ability_Astartes_Assault"][0]
+    jumps = {v.strip().strip('"') for v in section.values("JumpAbilities")}
+    assert {"IcarusJump", "Astartes_DeepJump"} <= jumps
+    for key in ("JUMP_ANIM_START", "JUMP_ANIM_LOOP", "JUMP_ANIM_STOP"):
+        assert (section.first(key) or "").strip('"').startswith("MV_"), f"{key} must name a vanilla movement animation"
+    assert (SRC_DIR / "X2Action_Astartes_JumpPack.uc").exists()
+    assault = (SRC_DIR / "X2Ability_Astartes_Assault.uc").read_text(encoding="utf-8")
+    assert "RewireJumpVisuals" in assault and "JumpPack_BuildVisualization" in assault

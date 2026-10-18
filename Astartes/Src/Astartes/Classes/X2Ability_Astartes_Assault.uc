@@ -16,6 +16,12 @@ var config float SHOCK_LANDING_RADIUS_METERS;
 var config int HOLD_FAST_DEFENSE;
 var config int HAMMER_OF_WRATH_DAMAGE, HAMMER_OF_WRATH_SHRED;
 var config int ANGEL_OF_DEATH_ACTIONS, ANGEL_OF_DEATH_MOBILITY;
+// Jump visualization (X2Action_Astartes_JumpPack): vanilla soldier animations by default.
+var config name JUMP_ANIM_START, JUMP_ANIM_LOOP, JUMP_ANIM_STOP;
+var config float JUMP_START_PLAYRATE, JUMP_STOP_PLAYRATE, JUMP_START_FRACTION, JUMP_ARC_TIME_SCALE, JUMP_LANDING_LEAD;
+var config string JUMP_SOUND_CUE;    // optional SoundCue path for the ignition (empty = none)
+var config string JUMP_ANIMSET_PATH; // optional extra AnimSet granted to Assault Marines (e.g. a jump animation pack)
+var config array<name> JumpAbilities; // abilities whose visualization becomes the arc
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -35,6 +41,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(HoldFast());
 	Templates.AddItem(DeathIncarnate());
 	Templates.AddItem(DeathIncarnateReset());
+	Templates.AddItem(JumpPackRig());
 
 	return Templates;
 }
@@ -322,4 +329,134 @@ static function X2AbilityTemplate DeathIncarnateReset()
 	Active.AddRequireEffect('Astartes_DeathIncarnate_Effect', 'AA_MissingRequiredEffect');
 	Template.AbilityShooterConditions.AddItem(Active);
 	return Template;
+}
+
+// --- Jump visualization ----------------------------------------------------------------------
+
+/// Hidden passive carried by every Assault Marine: grants the optional extra animation set for the jump.
+static function X2AbilityTemplate JumpPackRig()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_AdditionalAnimSets AnimSets;
+
+	Template = Passive('Astartes_JumpPackRig', "img:///UILibrary_PerkIcons.UIPerk_runandgun", false);
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
+	Template.bDisplayInUITacticalText = false;
+	Template.bDontDisplayInAbilitySummary = true;
+	if (default.JUMP_ANIMSET_PATH != "")
+	{
+		AnimSets = new class'X2Effect_AdditionalAnimSets';
+		AnimSets.EffectName = 'Astartes_JumpPackRig_AnimSets';
+		AnimSets.AddAnimSetWithPath(default.JUMP_ANIMSET_PATH);
+		AnimSets.BuildPersistentEffect(1, true, false, false, eGameRule_TacticalGameStart);
+		AnimSets.DuplicateResponse = eDupe_Ignore;
+		Template.AddTargetEffect(AnimSets);
+	}
+	return Template;
+}
+
+/// After templates exist: the jump abilities visualize as an arc instead of the Icarus teleport.
+static function RewireJumpVisuals()
+{
+	local X2AbilityTemplateManager AbilityMgr;
+	local X2AbilityTemplate Template;
+	local int i, Rewired;
+
+	AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	for (i = 0; i < default.JumpAbilities.Length; i++)
+	{
+		Template = AbilityMgr.FindAbilityTemplate(default.JumpAbilities[i]);
+		if (Template == none)
+		{
+			continue;
+		}
+		Template.BuildVisualizationFn = JumpPack_BuildVisualization;
+		if (Template.AdditionalAbilities.Find('Astartes_JumpPackRig') == INDEX_NONE)
+		{
+			Template.AdditionalAbilities.AddItem('Astartes_JumpPackRig');
+		}
+		Rewired++;
+	}
+	`log("Astartes: jump visualizations rewired:" @ Rewired @ "of" @ default.JumpAbilities.Length,, 'Astartes');
+}
+
+/// Icarus Jump's visualization with the path parse replaced by the jump-pack arc action.
+simulated function JumpPack_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability Context;
+	local StateObjectReference UnitRef;
+	local X2AbilityTemplate AbilityTemplate;
+	local VisualizationActionMetadata EmptyTrack, ActionMetadata;
+	local X2Action_PlaySoundAndFlyOver SoundAndFlyOver;
+	local X2Action_MoveTurn MoveTurnAction;
+	local X2Action_Astartes_JumpPack JumpAction;
+	local XComGameState_WorldEffectTileData WorldDataUpdate;
+	local XComGameState_EnvironmentDamage DamageEventStateObject;
+	local X2VisualizerInterface TargetVisualizerInterface;
+	local int i, j;
+
+	History = `XCOMHISTORY;
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	UnitRef = Context.InputContext.SourceObject;
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+
+	ActionMetadata = EmptyTrack;
+	ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(UnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(UnitRef.ObjectID);
+	ActionMetadata.VisualizeActor = History.GetVisualizer(UnitRef.ObjectID);
+
+	SoundAndFlyOver = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ActionMetadata, Context));
+	SoundAndFlyOver.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, '', eColor_Good);
+
+	MoveTurnAction = X2Action_MoveTurn(class'X2Action_MoveTurn'.static.AddToVisualizationTree(ActionMetadata, Context));
+	MoveTurnAction.m_vFacePoint = Context.InputContext.TargetLocations[0];
+
+	class'X2Action_ExitCover'.static.AddToVisualizationTree(ActionMetadata, Context);
+
+	JumpAction = X2Action_Astartes_JumpPack(class'X2Action_Astartes_JumpPack'.static.AddToVisualizationTree(ActionMetadata, Context));
+	JumpAction.DesiredLocation = Context.InputContext.TargetLocations[0];
+
+	class'X2Action_EnterCover'.static.AddToVisualizationTree(ActionMetadata, Context);
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_WorldEffectTileData', WorldDataUpdate)
+	{
+		ActionMetadata = EmptyTrack;
+		ActionMetadata.VisualizeActor = none;
+		ActionMetadata.StateObject_NewState = WorldDataUpdate;
+		ActionMetadata.StateObject_OldState = WorldDataUpdate;
+		for (i = 0; i < AbilityTemplate.AbilityTargetEffects.Length; ++i)
+		{
+			AbilityTemplate.AbilityTargetEffects[i].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, Context.FindTargetEffectApplyResult(AbilityTemplate.AbilityTargetEffects[i]));
+		}
+	}
+
+	for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+	{
+		UnitRef = Context.InputContext.MultiTargets[i];
+		ActionMetadata = EmptyTrack;
+		ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(UnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+		ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(UnitRef.ObjectID);
+		ActionMetadata.VisualizeActor = History.GetVisualizer(UnitRef.ObjectID);
+		class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context);
+		for (j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j)
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+		TargetVisualizerInterface = X2VisualizerInterface(ActionMetadata.VisualizeActor);
+		if (TargetVisualizerInterface != none)
+		{
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, ActionMetadata);
+		}
+	}
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_EnvironmentDamage', DamageEventStateObject)
+	{
+		ActionMetadata = EmptyTrack;
+		ActionMetadata.StateObject_OldState = DamageEventStateObject;
+		ActionMetadata.StateObject_NewState = DamageEventStateObject;
+		ActionMetadata.VisualizeActor = History.GetVisualizer(DamageEventStateObject.ObjectID);
+		class'X2Action_WaitForAbilityEffect'.static.AddToVisualizationTree(ActionMetadata, Context);
+		class'X2Action_ApplyWeaponDamageToTerrain'.static.AddToVisualizationTree(ActionMetadata, Context);
+	}
 }

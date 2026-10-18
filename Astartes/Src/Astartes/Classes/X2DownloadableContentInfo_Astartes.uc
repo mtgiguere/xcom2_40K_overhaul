@@ -165,6 +165,7 @@ static event OnPostTemplatesCreated()
 	class'X2Item_AstartesWeapons'.static.CreateWeapons();
 	class'Astartes_AbilityVariants'.static.CreateClones();
 	class'Astartes_FactionConfig'.static.AddDaemonSpawns();
+	class'X2Ability_Astartes_Assault'.static.RewireJumpVisuals();
 }
 
 /// Called when a mission is generated, after the faction mods have added their raid SitReps (we run after
