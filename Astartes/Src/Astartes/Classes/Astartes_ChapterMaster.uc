@@ -16,6 +16,12 @@ struct CapstoneDef
 var config array<CapstoneDef> Capstones;
 var config int CHAPTER_MASTER_MIN_RANK;
 var config string CHAPTER_MASTER_NICKNAME;
+// Classes that can never hold the Chapter Master's seat (the Librarius has its own head).
+var config array<name> ChapterMasterExcludedClasses;
+// The Chief Librarian: which class qualifies, his relic ability and title.
+var config name CHIEF_LIBRARIAN_CLASS;
+var config name CHIEF_LIBRARIAN_ABILITY;
+var config string CHIEF_LIBRARIAN_NICKNAME;
 
 static function name CapstoneFor(name SoldierClass)
 {
@@ -70,6 +76,11 @@ static function bool Appoint(XComGameState_Unit UnitState, XComGameState NewGame
 		Reason = "rank" @ UnitState.GetRank() @ "is below the required" @ default.CHAPTER_MASTER_MIN_RANK;
 		return false;
 	}
+	if (default.ChapterMasterExcludedClasses.Find(UnitState.GetSoldierClassTemplateName()) != INDEX_NONE)
+	{
+		Reason = "a" @ UnitState.GetSoldierClassTemplateName() @ "cannot hold the Chapter Master's seat (the Librarius has its own head)";
+		return false;
+	}
 	Current = GetChapterMaster();
 	if (Current != none && Current.ObjectID != UnitState.ObjectID)
 	{
@@ -118,6 +129,87 @@ static function bool Appoint(XComGameState_Unit UnitState, XComGameState NewGame
 		NewUnit.SetUnitName(NewUnit.GetFirstName(), NewUnit.GetLastName(), default.CHAPTER_MASTER_NICKNAME);
 	}
 	`log("Astartes: Chapter Master appointed:" @ NewUnit.GetFullName() @ "(" $ NewUnit.GetSoldierClassTemplateName() $ ") capstone" @ CapstoneName,, 'Astartes');
+	Reason = "";
+	return true;
+}
+
+// --- Chief Librarian -----------------------------------------------------------------------
+
+static function XComGameState_Unit GetChiefLibrarian()
+{
+	local XComGameState_AstartesChapter Chapter;
+	local XComGameState_Unit Unit;
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	if (Chapter == none || Chapter.ChiefLibrarianRef.ObjectID == 0)
+	{
+		return none;
+	}
+	Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Chapter.ChiefLibrarianRef.ObjectID));
+	if (Unit == none || Unit.IsDead() || Unit.bCaptured)
+	{
+		return none;
+	}
+	return Unit;
+}
+
+/// Appoint the head of the Librarius. Top-rank Librarians only; one at a time; grants CHIEF_LIBRARIAN_ABILITY.
+static function bool AppointChiefLibrarian(XComGameState_Unit UnitState, XComGameState NewGameState, out string Reason)
+{
+	local XComGameState_AstartesChapter Chapter;
+	local XComGameState_Unit Current, NewUnit;
+	local ClassAgnosticAbility Capstone;
+	local int i;
+
+	if (UnitState == none || !UnitState.IsSoldier())
+	{
+		Reason = "not a soldier";
+		return false;
+	}
+	if (UnitState.GetSoldierClassTemplateName() != default.CHIEF_LIBRARIAN_CLASS)
+	{
+		Reason = "only a" @ default.CHIEF_LIBRARIAN_CLASS @ "can head the Librarius";
+		return false;
+	}
+	if (UnitState.GetRank() < default.CHAPTER_MASTER_MIN_RANK)
+	{
+		Reason = "rank" @ UnitState.GetRank() @ "is below the required" @ default.CHAPTER_MASTER_MIN_RANK;
+		return false;
+	}
+	Current = GetChiefLibrarian();
+	if (Current != none)
+	{
+		Reason = Current.ObjectID == UnitState.ObjectID ? "already the Chief Librarian" : Current.GetFullName() @ "is the Chief Librarian and lives";
+		return false;
+	}
+
+	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
+	if (Chapter.ChiefLibrarianRef.ObjectID != 0)
+	{
+		Chapter.ChiefLibrariansLost++;
+	}
+	Chapter.ChiefLibrarianRef = UnitState.GetReference();
+
+	NewUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', UnitState.ObjectID));
+	for (i = 0; i < NewUnit.AWCAbilities.Length; i++)
+	{
+		if (NewUnit.AWCAbilities[i].AbilityType.AbilityName == default.CHIEF_LIBRARIAN_ABILITY)
+		{
+			break;
+		}
+	}
+	if (i == NewUnit.AWCAbilities.Length && default.CHIEF_LIBRARIAN_ABILITY != '')
+	{
+		Capstone.AbilityType.AbilityName = default.CHIEF_LIBRARIAN_ABILITY;
+		Capstone.AbilityType.ApplyToWeaponSlot = eInvSlot_Unknown;
+		Capstone.bUnlocked = true;
+		NewUnit.AWCAbilities.AddItem(Capstone);
+	}
+	if (default.CHIEF_LIBRARIAN_NICKNAME != "" && NewUnit.GetNickName(true) == "")
+	{
+		NewUnit.SetUnitName(NewUnit.GetFirstName(), NewUnit.GetLastName(), default.CHIEF_LIBRARIAN_NICKNAME);
+	}
+	`log("Astartes: Chief Librarian appointed:" @ NewUnit.GetFullName() @ "relic" @ default.CHIEF_LIBRARIAN_ABILITY,, 'Astartes');
 	Reason = "";
 	return true;
 }

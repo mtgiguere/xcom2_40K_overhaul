@@ -748,7 +748,7 @@ LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Br
 
 [Astartes_WarpMastery X2AbilityTemplate]
 LocFriendlyName="Warp Mastery"
-LocLongDescription="For the rest of this turn the Chapter Master's powers roll no Perils of the Warp, and every psychic power is ready again now. Free action, once per mission."
+LocLongDescription="For the rest of this turn the Chief Librarian's powers roll no Perils of the Warp, and every psychic power is ready again now. Free action, once per mission."
 LocHelpText="This turn: no Perils, all psychic cooldowns cleared. Once per mission."
 LocFlyOverText="Warp Mastery"
 LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Psychic powers cast this turn roll no Perils of the Warp.<br/><Bullet/> Every psychic power's cooldown is cleared.<br/>"

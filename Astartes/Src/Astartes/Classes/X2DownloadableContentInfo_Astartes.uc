@@ -914,3 +914,56 @@ exec function Astartes_AppointCommander(optional string NameFragment)
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	Say("Astartes_AppointCommander: PASS" @ Pick.GetFullName() @ "is the Chapter Master; capstone" @ class'Astartes_ChapterMaster'.static.CapstoneFor(Pick.GetSoldierClassTemplateName()));
 }
+
+/// Astartes_AppointChiefLibrarian [NameFragment]: appoint the head of the Librarius (top-rank Librarian; one at a time).
+exec function Astartes_AppointChiefLibrarian(optional string NameFragment)
+{
+	local XComGameState NewGameState;
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit UnitState, Pick;
+	local string Reason;
+	local int i;
+
+	XComHQ = `XCOMHQ;
+	if (XComHQ == none)
+	{
+		Say("Astartes_AppointChiefLibrarian: FAIL no XComHQ (strategy layer only)");
+		return;
+	}
+	for (i = 0; i < XComHQ.Crew.Length; i++)
+	{
+		UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Crew[i].ObjectID));
+		if (UnitState == none || !UnitState.IsSoldier() || UnitState.IsDead())
+		{
+			continue;
+		}
+		if (UnitState.GetSoldierClassTemplateName() != class'Astartes_ChapterMaster'.default.CHIEF_LIBRARIAN_CLASS)
+		{
+			continue;
+		}
+		if (NameFragment != "" && InStr(Caps(UnitState.GetFullName()), Caps(NameFragment)) == INDEX_NONE)
+		{
+			continue;
+		}
+		if (NameFragment == "" && UnitState.GetRank() < class'Astartes_ChapterMaster'.default.CHAPTER_MASTER_MIN_RANK)
+		{
+			continue;
+		}
+		Pick = UnitState;
+		break;
+	}
+	if (Pick == none)
+	{
+		Say("Astartes_AppointChiefLibrarian: FAIL no matching top-rank Librarian");
+		return;
+	}
+	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: appoint Chief Librarian");
+	if (!class'Astartes_ChapterMaster'.static.AppointChiefLibrarian(Pick, NewGameState, Reason))
+	{
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+		Say("Astartes_AppointChiefLibrarian: FAIL" @ Pick.GetFullName() $ ":" @ Reason);
+		return;
+	}
+	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	Say("Astartes_AppointChiefLibrarian: PASS" @ Pick.GetFullName() @ "heads the Librarius; relic" @ class'Astartes_ChapterMaster'.default.CHIEF_LIBRARIAN_ABILITY);
+}

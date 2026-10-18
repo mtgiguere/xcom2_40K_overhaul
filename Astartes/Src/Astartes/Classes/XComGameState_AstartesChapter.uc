@@ -29,6 +29,9 @@ var name ChapterCountry;
 // The Chapter Master (Astartes_ChapterMaster): one at a time; lost ones are counted for the replacement cost.
 var StateObjectReference ChapterMasterRef;
 var int ChapterMastersLost;
+// The Chief Librarian: a separate unique (never the same Marine, never a Librarian in the Chapter Master's seat).
+var StateObjectReference ChiefLibrarianRef;
+var int ChiefLibrariansLost;
 
 static function XComGameState_AstartesChapter GetChapter(optional bool bAllowNone = false)
 {

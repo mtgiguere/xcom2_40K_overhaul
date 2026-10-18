@@ -101,6 +101,7 @@ Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 | `GiveFacility RecoveryCenter 3` | Builds the Training Center in room 3 (try 4, 5... if that room is taken); required before extra abilities can be bought with ability points |
 | `Astartes_SquadSize 5` | Squad cap 4, 5 or 6 by granting the GTS squad-size unlocks; takes effect at the next squad select |
 | `Astartes_AppointCommander` | Appoints the first rank-7 Marine (or `Astartes_AppointCommander Hudson` by name) as Chapter Master; he gains his class's relic ability (Assault: Death Incarnate) |
+| `Astartes_AppointChiefLibrarian` | Appoints the first rank-7 Librarian (or by name) as Chief Librarian, a separate unique; he gains Warp Mastery. Librarians cannot be Chapter Master |
 | `LevelUpBarracks 7` | Promotes every existing soldier 7 ranks |
 | `MakeSoldierAClass "First Last" Astartes_Librarian` | Forces a soldier into a class |
 | `MakeAllSoldiersReady` | Clears wounds, fatigue and shaken status |

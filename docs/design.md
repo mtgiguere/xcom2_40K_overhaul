@@ -98,6 +98,18 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 
 **Synergy idea:** Apothecary (body) + Chaplain (soul) in the same squad → bonus.
 
+**Chaplaincy ladder (decided 2026-10-18).** Like the Chapter Master and Chief Librarian, Chaplaincy is a *status* layered on a
+combat class, not a class of its own, and the Reclusiam has its own ladder with the unique at the top:
+
+| Step | Who | What he gets | How many |
+|---|---|---|---|
+| **Chaplain** | Any rank-4+ Marine of a combat class (not Apothecary, not Librarian) with Will at or above a threshold | Chaplain kit granted on appointment: *Litanies of Hate* (adjacent brothers +crit vs Chaos and daemons), *Rosarius* (personal shield), *Spiritual Liege* (Will aura; Guard and Sisters in range cannot panic). Black armour and skull helm (Space Marine 2 Chaplain Armor pack) applied like the Librarian hood. | Several |
+| **Reclusiarch** | A rank-7 Chaplain | Adds *Exhortation* (a brother regains an action, cooldown) and *Purge the Unclean* (cleanse Chaos corruption, 8). | A few |
+| **Master of Sanctity** | One Reclusiarch | Relic ability (candidate: *Litany of the Devout*: the whole squad cannot be stunned, disoriented or mind-controlled this turn and melee cannot miss; once per mission). Separate unique; never the same Marine as the Chapter Master or Chief Librarian. | One |
+
+Appointment, one-at-a-time enforcement and loss tracking reuse `Astartes_ChapterMaster`'s pattern (`Astartes_AppointChaplain`, `Astartes_AppointMasterOfSanctity`). Chaplains keep their class tree; the kit is extra. Implementation after Chaos corruption (8) exists, since the Reclusiarch's purge needs it.
+
+
 **Chapter Master relic ability depends on his origin class (decided 2026-10-17).** The Chapter Master (the player's "Force Commander") is appointed from a rank-7 Marine of any combat class, and the relic-tier ability he gains is the one for the class he came from. Only one Chapter Master exists at a time, so a campaign can only ever see one of these builds: a reason to play the mod again with a different Captain.
 
 | Origin class | Relic ability | Shape |
@@ -106,7 +118,7 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 | Tactical | **Rites of Battle**: every Marine in sight regains all actions and gains +20 aim this turn. The squad acts twice. | Free action, once per mission |
 | Devastator | **Orbital Bombardment**: mark an area; a Thunderhawk strike lands at the start of the next enemy turn (large AoE, destroys cover, friendly fire possible). | Once per mission |
 | Apothecary | **The Emperor's Mercy**: every Marine in sight is healed to full and bleeding-out brothers stand up; geneseed from every fallen brother on the field is recovered automatically at mission end. | Once per mission + passive |
-| Librarian | **Warp Mastery**: psychic powers cast this turn roll no Perils and incur no cooldown. (The Chief Librarian stays a separate unique; a Librarian Chapter Master is the rarer, riskier choice.) | Free action, once per mission |
+| Librarian | *Not eligible.* Librarians never hold the Chapter Master's seat. **Warp Mastery** (powers cast this turn roll no Perils; all psychic cooldowns cleared) is the **Chief Librarian's** relic, a separate unique appointed from a rank-7 Librarian (`Astartes_AppointChiefLibrarian`). Decided 2026-10-18. | Free action, once per mission |
 
 **Implemented 2026-10-17 (evening):** `Astartes_ChapterMaster` (appointment rules, capstone as an unlocked class-agnostic ability, `ChapterMasterRef` on the Chapter state), dev command `Astartes_AppointCommander`, and the Assault capstone **Death Incarnate**. Other capstones pending. Rules: appointed from the Avenger (strategy action later; dev command now), rank 7 only, granted through the rank-up/appointment listener (same pattern as `Astartes_ClassLook`). If he dies, the next appointment costs geneseed and a waiting period so the loss stings (Replacement, above). Implementation order: after the five class trees are rounded out; Death Incarnate first since Whirlwind and Hit and Run already exist.
 

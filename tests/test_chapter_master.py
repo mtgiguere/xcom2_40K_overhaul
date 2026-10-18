@@ -45,3 +45,14 @@ def test_daemon_spawns_point_at_our_variants_and_real_lists(config):
         assert struct_field(v, "Template") in variants, "daemon spawns must use our variant templates (skipped safely when absent)"
         assert struct_field(v, "ListID") in lists, f"unknown spawn list {struct_field(v, 'ListID')}"
         assert int(struct_field(v, "MinForceLevel")) >= 9, "no daemons in the first months' Chaos pods"
+
+
+def test_librarians_never_hold_the_chapter_masters_seat(config):
+    """User rule (2026-10-18): Chief Librarian and Force Commander are separate uniques."""
+    cm = section(config, "Astartes.Astartes_ChapterMaster")
+    excluded = {unquote(v) for v in cm.values("ChapterMasterExcludedClasses")}
+    assert "Astartes_Librarian" in excluded
+    caps = {struct_field(v, "SoldierClass") for v in cm.values("Capstones")}
+    assert "Astartes_Librarian" not in caps, "the Librarian relic belongs to the Chief Librarian, not the Chapter Master table"
+    assert unquote(cm.first("CHIEF_LIBRARIAN_CLASS")) == "Astartes_Librarian"
+    assert unquote(cm.first("CHIEF_LIBRARIAN_ABILITY")) == "Astartes_WarpMastery"
