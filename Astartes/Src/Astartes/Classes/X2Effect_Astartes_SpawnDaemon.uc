@@ -46,9 +46,14 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 {
 	local XComGameState_Unit Librarian, Daemon;
 	local XComGameState_AIGroup OldGroup, NewGroup;
+	local array<name> DamageTypes;
 
 	Librarian = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	Librarian.SetUnitFloatValue(default.LostToTheWarpValueName, 1, eCleanup_Never);
+	// The daemon takes him. Direct damage: no bleed-out, no shields, no armour, a normal KIA for the strategy layer.
+	// (Playtest 2026-10-17: a separate X2Effect_ApplyWeaponDamage on the same ability left him standing.)
+	DamageTypes.AddItem('Psi');
+	Librarian.TakeEffectDamage(self, Librarian.GetMaxStat(eStat_HP) + 100, 0, 0, ApplyEffectParameters, NewGameState, false, false, true, DamageTypes);
 
 	// The spawn manager files units created by an XCOM-owned source under XCOM's own group.
 	// A daemon fights for nobody but itself: give it a fresh alien group.
@@ -74,6 +79,10 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	local int i;
 
 	super.AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, EffectApplyResult);
+	if (EffectApplyResult == 'AA_Success' && XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
+	{
+		class'X2Action_ApplyWeaponDamageToUnit'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext());
+	}
 
 	History = `XCOMHISTORY;
 	FindNewlySpawnedUnit(VisualizeGameState, SpawnedUnits);

@@ -221,3 +221,19 @@ def test_vanilla_classes_are_removed_from_the_deck(config):
     removed = {unquote(v) for op, k, v in deck.entries if k == "SoldierClasses" and op == "-"}
     assert removed >= set(SPEC["remove_from_deck"]), f"vanilla classes still in the deck: {set(SPEC['remove_from_deck']) - removed}"
     assert "Rookie" not in removed, "Rookie must stay in the deck"
+
+
+def test_trigger_filters_use_target_conditions():
+    """XMB SelfTargetTrigger: ability-name/property filters must go through AddTriggerTargetCondition. Shooter-side
+    filters are ignored for those condition types, which let Chirurgeon's Fury re-trigger on itself until the game
+    crashed (playtest 2026-10-17)."""
+    offenders = []
+    for f in SRC_DIR.glob("X2Ability_Astartes*.uc"):
+        src = f.read_text(encoding="utf-8", errors="replace")
+        if "AddTriggerShooterCondition(" in src:
+            offenders.append(f.name)
+        for m in re.finditer(r"SelfTargetTrigger\('(\w+)'[^;]*'AbilityActivated'\);", src):
+            tail = src[m.end(): m.end() + 800]
+            if "AddTriggerTargetCondition(" not in tail or f"ExcludeAbilityNames.AddItem('{m.group(1)}')" not in src:
+                offenders.append(f"{f.name}: {m.group(1)} listens to AbilityActivated without a self-excluding target filter")
+    assert not offenders, offenders

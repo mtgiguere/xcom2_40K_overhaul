@@ -325,12 +325,11 @@ static function X2AbilityTemplate MentalPurge()
 }
 
 /// Dragged into the Warp: a daemon takes the Librarian. It bursts from his body onto the field,
-/// hostile; the Librarian is killed in action and his geneseed is lost with him.
+/// hostile; the spawn effect kills him outright (KIA) and his geneseed is lost with him.
 static function X2AbilityTemplate Possession()
 {
 	local X2AbilityTemplate Template;
 	local X2Effect_Astartes_SpawnDaemon Daemon;
-	local X2Effect_ApplyWeaponDamage Death;
 
 	Template = HiddenSelfAbility('Astartes_Perils_Possession', "img:///UILibrary_PerkIcons.UIPerk_voidrift");
 
@@ -338,15 +337,6 @@ static function X2AbilityTemplate Possession()
 	Daemon.BuildPersistentEffect(1, false, false, false, eGameRule_PlayerTurnBegin);
 	Template.AddTargetEffect(Daemon);
 
-	Death = new class'X2Effect_ApplyWeaponDamage';
-	Death.EffectDamageValue.Damage = 999;
-	Death.EffectDamageValue.DamageType = 'Psi';
-	Death.bIgnoreBaseDamage = true;
-	Death.bIgnoreArmor = true;
-	Death.bBypassShields = true;
-	Death.bBypassSustainEffects = true;
-	Death.DamageTypes.AddItem('Psi');
-	Template.AddTargetEffect(Death);
 
 	Template.CinescriptCameraType = "Psionic_FireAtUnit";
 	return Template;

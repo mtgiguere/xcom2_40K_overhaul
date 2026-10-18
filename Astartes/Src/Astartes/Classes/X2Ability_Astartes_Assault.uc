@@ -208,7 +208,7 @@ static function X2AbilityTemplate HitAndRun()
 	Reset.AbilityNames.AddItem('Astartes_DeepJump');
 
 	Template = SelfTargetTrigger('Astartes_HitAndRun', "img:///UILibrary_PerkIcons.UIPerk_implacable", false, Reset, 'KillMail');
-	AddTriggerShooterCondition(Template, default.MeleeCondition);
+	AddTriggerTargetCondition(Template, default.MeleeCondition); // ability-property conditions belong in the trigger's target conditions
 	Template.bShowActivation = true;
 	return Template;
 }

@@ -22,3 +22,10 @@ def test_every_icon_exists_in_the_game():
             if icon not in VANILLA_ICONS:
                 bad.append(f"{f.name}: {icon}")
     assert not bad, "icons not shipped by the game (blank on the promotion screen):\n" + "\n".join(sorted(set(bad)))
+
+
+def test_class_icons_exist_in_the_game():
+    import json
+    spec = json.loads((REPO / "tests" / "data" / "class_trees.json").read_text(encoding="utf-8"))
+    bad = {name: c["icon"] for name, c in spec["classes"].items() if c["icon"] not in VANILLA_ICONS}
+    assert not bad, f"class icons not shipped by the game (shows 'img' on the promotion screen): {bad}"

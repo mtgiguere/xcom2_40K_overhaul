@@ -551,7 +551,7 @@
         "Biomancy"
       ],
       "rank_set": "librarius",
-      "icon": "img:///UILibrary_Common.class_psioperative",
+      "icon": "img:///UILibrary_Common.class_psiop",
       "loadout": [
         "Astartes_ForceSword_CV_Primary",
         "Astartes_PsychicHood_CV"

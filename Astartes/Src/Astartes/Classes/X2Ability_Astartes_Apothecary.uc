@@ -112,9 +112,13 @@ static function X2AbilityTemplate ChirurgeonsFury()
 	Heals.IncludeAbilityNames.AddItem('RevivalProtocol');
 	Heals.IncludeAbilityNames.AddItem('RestorativeMist');
 	Heals.IncludeAbilityNames.AddItem('Astartes_StimmShot');
+	Heals.ExcludeAbilityNames.AddItem('Astartes_ChirurgeonsFury'); // never trigger on itself
 
 	Template = SelfTargetTrigger('Astartes_ChirurgeonsFury', "img:///UILibrary_PerkIcons.UIPerk_coupdegrace", false, Crit, 'AbilityActivated');
-	AddTriggerShooterCondition(Template, Heals);
+	// XMB evaluates ability-name/property conditions only in the trigger's TARGET conditions (shooter conditions
+	// are plain unit checks). A shooter-side filter here let the ability re-trigger on its own activation forever
+	// and crashed the game at mission start (playtest 2026-10-17).
+	AddTriggerTargetCondition(Template, Heals);
 	Template.bShowActivation = true;
 	return Template;
 }
