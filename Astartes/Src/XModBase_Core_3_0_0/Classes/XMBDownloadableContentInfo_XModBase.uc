@@ -254,19 +254,20 @@ static function bool UpdateAbilityCost(out X2AbilityCost AbilityCost)
 		if (IsNewer(Override))
 			return false;
 	}
-
-	if (AbilityCost.class == class'X2AbilityCost_ActionPoints')
+	else
 	{
-		NewAbilityCost = new class'XMBAbilityCost_ActionPoints'(AbilityCost);
-		NewAbilityCost.MajorVersion = default.MajorVersion;
-		NewAbilityCost.MinorVersion = default.MinorVersion;
-		NewAbilityCost.PatchVersion = default.PatchVersion;
-
-		AbilityCost = NewAbilityCost;
-		return true;
+		if (AbilityCost.class != class'X2AbilityCost_ActionPoints')
+			return false;
 	}
 
-	return false;
+	NewAbilityCost = new class'XMBAbilityCost_ActionPoints'(AbilityCost);
+	NewAbilityCost.MajorVersion = default.MajorVersion;
+	NewAbilityCost.MinorVersion = default.MinorVersion;
+	NewAbilityCost.PatchVersion = default.PatchVersion;
+
+	AbilityCost = NewAbilityCost;
+
+	return true;
 }
 
 static function UpdateAbilities()
@@ -320,8 +321,9 @@ static function UpdateAbilities()
 			for (i = 0; i < Template.AbilityCosts.Length; i++)
 			{
 				AbilityCost = Template.AbilityCosts[i];
-				if (AbilityCost.bFreeCost)
-					continue;
+				//Tedster - Replace free costs with newer versions if needed.
+				//if (AbilityCost.bFreeCost)
+				//	continue;
 				if (AbilityCost != none && UpdateAbilityCost(AbilityCost))
 				{
 					Template.AbilityCosts[i] = AbilityCost;
@@ -425,7 +427,7 @@ static function HandleEffect(X2Effect Effect)
 
 defaultproperties
 {
-	MajorVersion = 2
+	MajorVersion = 3
 	MinorVersion = 0
-	PatchVersion = 1
+	PatchVersion = 0
 }

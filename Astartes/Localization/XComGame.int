@@ -78,6 +78,39 @@ LocHelpText="Once per mission, all nearby allies regain an action."
 LocFlyOverText="For the Emperor!"
 LocPromotionPopupText="<Bullet/> Every ally within range regains one action.<br/><Bullet/> Once per mission.<br/>"
 
+; ---------------------------------------------------------------- Assault Marine
+[Astartes_ChainTeeth X2AbilityTemplate]
+LocFriendlyName="Chain Teeth"
+LocLongDescription="Adamantium chain-teeth tear through armour and flesh alike. Chainsword attacks deal <Ability:CHAIN_TEETH_DAMAGE/> extra damage."
+LocHelpText="Chainsword attacks deal extra damage."
+LocPromotionPopupText="<Bullet/> Chainsword attacks deal extra damage.<br/>"
+
+[Astartes_Whirlwind X2AbilityTemplate]
+LocFriendlyName="Whirlwind"
+LocLongDescription="Momentum is a weapon. A chainsword kill refunds the action, up to a limit each turn."
+LocHelpText="Chainsword kills refund the action, up to a limit per turn."
+LocFlyOverText="Whirlwind"
+LocPromotionPopupText="<Bullet/> When a chainsword attack kills its target, the action is refunded.<br/><Bullet/> Limited refunds per turn.<br/>"
+
+[Astartes_Duelist X2AbilityTemplate]
+LocFriendlyName="Duelist"
+LocLongDescription="Trained against the champions of the enemy. Chainsword attacks pierce <Ability:DUELIST_PIERCE/> armour and gain <Ability:DUELIST_CRIT/> critical chance."
+LocHelpText="Chainsword attacks pierce armour and crit more often."
+LocPromotionPopupText="<Bullet/> Chainsword attacks ignore some armour.<br/><Bullet/> Chainsword attacks gain critical chance.<br/>"
+
+[Astartes_Decapitate X2AbilityTemplate]
+LocFriendlyName="Decapitate"
+LocLongDescription="A measured, unstoppable strike. This chainsword attack cannot miss. Cooldown."
+LocHelpText="A chainsword attack that cannot miss."
+LocFlyOverText="Decapitate"
+LocPromotionPopupText="<Bullet/> A chainsword attack that always hits.<br/><Bullet/> Ends the turn. Cooldown.<br/>"
+
+[Astartes_PowerArmourVeteran X2AbilityTemplate]
+LocFriendlyName="Power Armour Veteran"
+LocLongDescription="Larraman cells and the suit's medicae systems close wounds in the field. Regenerate <Ability:POWER_ARMOUR_VETERAN_REGEN/> health per turn, up to a limit per mission."
+LocHelpText="Regenerate health each turn, up to a limit per mission."
+LocPromotionPopupText="<Bullet/> Regenerate health at the start of each turn.<br/><Bullet/> Capped per mission.<br/>"
+
 ; ---------------------------------------------------------------- shared Marine abilities
 [Astartes_KnowNoFear X2AbilityTemplate]
 LocFriendlyName="Know No Fear"

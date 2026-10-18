@@ -12,3 +12,8 @@ BuildCache/
 # Python
 __pycache__/
 .pytest_cache/
+
+# Screenshots dropped in the repo root for review are not part of the mod
+/*.jpg
+/*.JPG
+/*.png

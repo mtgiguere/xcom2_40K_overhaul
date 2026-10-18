@@ -56,6 +56,14 @@ static function EventListenerReturn EventHandler(Object EventData, Object EventS
 		return ELR_NoInterrupt;
 
 	UnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.TargetStateObjectRef.ObjectID));
+	// Once a unit is removed from play we don't want to apply the conditional stat changes anymore
+	// As those can have permanent effects after tactical has ended
+	// This is already handled by the game but for some reason the stats are still being permanently affect
+	// Hopefully this is a fail safe to prevent stat modifiers after the unit has been removed from play
+	if (UnitState.bRemovedFromPlay) 
+	{								
+		return ELR_NoInterrupt;
+	}
 	SourceUnitState = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.SourceStateObjectRef.ObjectID));
 	AbilityState = XComGameState_Ability(`XCOMHISTORY.GetGameStateForObjectID(EffectState.ApplyEffectParameters.AbilityStateObjectRef.ObjectID));
 

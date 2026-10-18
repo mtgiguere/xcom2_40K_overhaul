@@ -200,7 +200,6 @@
         [
           {
             "name": "Astartes_ChainTeeth",
-            "standin": "Blademaster",
             "slot": "primary"
           },
           {
@@ -208,8 +207,7 @@
             "standin": "RunAndGun"
           },
           {
-            "name": "Astartes_PowerArmourVeteran",
-            "standin": "BlastPadding"
+            "name": "Astartes_PowerArmourVeteran"
           },
           {
             "name": "Astartes_KnowNoFear"
@@ -228,14 +226,12 @@
             "standin": "Shadowstep"
           },
           {
-            "name": "Astartes_IronHalo",
-            "standin": "Fortress"
+            "name": "Fortress"
           }
         ],
         [
           {
             "name": "Astartes_Whirlwind",
-            "standin": "Reaper",
             "slot": "primary"
           },
           {
@@ -257,16 +253,14 @@
             "standin": "DeepCover"
           },
           {
-            "name": "Astartes_BoltPistolSuppression",
-            "standin": "Quickdraw",
+            "name": "Quickdraw",
             "slot": "secondary"
           }
         ],
         [
           {
             "name": "Astartes_Duelist",
-            "standin": "FanFire",
-            "slot": "secondary"
+            "slot": "primary"
           },
           {
             "name": "Implacable"
@@ -279,8 +273,7 @@
         [
           {
             "name": "Astartes_Decapitate",
-            "standin": "Faceoff",
-            "slot": "secondary"
+            "slot": "primary"
           },
           {
             "name": "Astartes_DeepJump",

@@ -16,6 +16,9 @@ var config bool bAllowFemaleMarines;
 /// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
 /// these packs only, when present. Empty list = vanilla random appearance.
 var config array<name> MarineArmorPartPacks;
+/// Only parts whose display name contains one of these are used (e.g. "Tint": the packs label tintable
+/// pieces, unlabelled ones are pre-painted for one Chapter). Empty = any part from the packs.
+var config array<string> MarinePartNameKeywords;
 
 struct ChapterLivery
 {
@@ -281,6 +284,7 @@ static function ApplyMarineArmourLook(XGCharacterGenerator CharGen, name ArmorNa
 
 	Filter = new class'Astartes_BodyPartFilter';
 	Filter.RequiredPacks = default.MarineArmorPartPacks;
+	Filter.RequiredNameKeywords = default.MarinePartNameKeywords;
 	Filter.Set(Gender, Race, '', , , default.MarineArmorPartPacks);
 	Filter.SetTorsoSelection('NoCharacterTemplateName', ArmorName == '' ? 'KevlarArmor' : ArmorName);
 
@@ -722,6 +726,10 @@ exec function Astartes_Redress()
 		CharGen = `XCOMGRI.Spawn(UnitState.GetMyTemplate().CharacterGeneratorClass);
 		Generated = CharGen.CreateTSoldierFromUnit(UnitState, NewGameState);
 		UnitState.SetTAppearance(Generated.kAppearance);
+		if (Generated.nmCountry != '')
+		{
+			UnitState.SetCountry(Generated.nmCountry); // the Chapter: flag follows the livery
+		}
 		UnitState.StoreAppearance();
 		CharGen.Destroy();
 		Count++;

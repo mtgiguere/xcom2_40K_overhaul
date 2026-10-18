@@ -53,3 +53,9 @@ def test_power_armour_is_configured_and_named(config, loc_sections):
     armour_loc = {s.template_name: s for s in loc_sections if s.template_class == "X2ArmorTemplate"}
     assert "KevlarArmor" in armour_loc, "KevlarArmor must be renamed to power armour"
     assert "Power Armour" in unquote(armour_loc["KevlarArmor"].first("FriendlyName"))
+
+
+def test_marine_look_uses_only_tintable_parts(config):
+    section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
+    keywords = [unquote(v) for v in section.values("MarinePartNameKeywords")]
+    assert "Tint" in keywords, "pre-painted chapter parts must be filtered out of the random Marine look"
