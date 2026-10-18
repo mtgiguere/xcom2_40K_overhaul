@@ -98,6 +98,11 @@ def render_gamedata_ini(spec: dict) -> str:
     for lo in spec.get("extra_loadouts", []):
         items = ", ".join(f'Items[{i}]=(Item="{item}")' for i, item in enumerate(lo["items"]))
         parts.append(f'+Loadouts=(LoadoutName="{lo["name"]}", {items})')
+    for lo in spec.get("loadout_overrides", []):
+        removed = ", ".join(f'Items[{i}]=(Item="{item}")' for i, item in enumerate(lo["remove"]))
+        items = ", ".join(f'Items[{i}]=(Item="{item}")' for i, item in enumerate(lo["items"]))
+        parts.append(f'-Loadouts=(LoadoutName="{lo["name"]}", {removed})')
+        parts.append(f'+Loadouts=(LoadoutName="{lo["name"]}", {items})')
     return "\n".join(parts) + "\n"
 
 

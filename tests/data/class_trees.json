@@ -706,5 +706,53 @@
       ]
     }
   ],
-  "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent."
+  "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent.",
+  "_loadout_overrides_note": "Vanilla loadouts removed (exact match required) and replaced, so new recruits carry Imperial wargear from day one. Lines copied from the SDK's DefaultGameData.ini.",
+  "loadout_overrides": [
+    {
+      "name": "RookieSoldier",
+      "remove": [
+        "KevlarArmor",
+        "AssaultRifle_CV",
+        "FragGrenade",
+        "FragGrenade"
+      ],
+      "items": [
+        "KevlarArmor",
+        "Astartes_Bolter_CV",
+        "FragGrenade",
+        "FragGrenade"
+      ]
+    },
+    {
+      "name": "RookieSoldierM2",
+      "remove": [
+        "KevlarArmor",
+        "AssaultRifle_MG",
+        "FragGrenade",
+        "FragGrenade"
+      ],
+      "items": [
+        "KevlarArmor",
+        "Astartes_Bolter_MG",
+        "FragGrenade",
+        "FragGrenade"
+      ]
+    },
+    {
+      "name": "RookieSoldierM3",
+      "remove": [
+        "KevlarArmor",
+        "AssaultRifle_BM",
+        "FragGrenade",
+        "FragGrenade"
+      ],
+      "items": [
+        "KevlarArmor",
+        "Astartes_Bolter_BM",
+        "FragGrenade",
+        "FragGrenade"
+      ]
+    }
+  ]
 }

@@ -1,22 +1,23 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    X2Action_Astartes_JumpPack.uc
-//  PURPOSE: Visualize a jump-pack move as an arc: leap animation, flight along a precomputed
-//           ballistic path to the destination, landing animation. The game state is the vanilla
-//           Icarus Jump relocation; this only replaces its teleport-style visualization.
+//  PURPOSE: Visualize a jump-pack move as an arc: leap animation, flight along a parabola to the
+//           destination, landing animation. The game state is the vanilla Icarus Jump relocation;
+//           this only replaces its teleport-style visualization.
 //           Approach modelled on the Jedi Class Revised mod's Force Jump (credit in README), written
-//           here against vanilla soldier animations so no other mod's content is required.
-//           Animation names, play rates, arc timing and an optional ignition sound are config
-//           (X2Ability_Astartes_Assault).
+//           here against vanilla soldier animations and a self-computed arc, so no other mod's
+//           content and no shared engine path object is involved (the shared grenade path sent the
+//           first version to the world origin). Animation names, play rates, arc shape and an
+//           optional ignition sound are config (X2Ability_Astartes_Assault).
 //---------------------------------------------------------------------------------------
 class X2Action_Astartes_JumpPack extends X2Action_Move;
 
 var vector DesiredLocation;
 
-var private XComPrecomputedPath Path;
+var private vector StartLocation, EndLocation;
+var private float FlightDuration, ApexHeight, FlightTime;
 var private CustomAnimParams Params;
 var private AnimNodeSequence PlayingSequence;
 var private bool bFlying, bLanded, bSkipJump;
-var private float FlightTime;
 var private AudioComponent IgnitionSound;
 
 function Init()
@@ -47,84 +48,44 @@ function Init()
 	}
 }
 
-/// Build the ballistic arc from the pawn to the destination and shorten it to the configured flight time.
-private function bool BuildArc()
+/// Start and end at pawn height on their tiles; flight time and apex scale with the distance.
+private function BuildArc()
 {
-	local PrecomputedPathData PathData;
-	local XGWeapon Weapon;
-	local XComWeapon Entity;
-	local float Scale, StartZ, Diff;
-	local int i;
+	local float Tiles;
 
-	Path = XComTacticalGRI(class'Engine'.static.GetCurrentWorldInfo().GRI).GetPrecomputedPath();
-	if (Path == none)
-	{
-		return false;
-	}
-	Weapon = Unit.GetInventory().GetPrimaryWeapon();
-	if (Weapon != none)
-	{
-		Entity = Weapon.GetEntity();
-	}
-	PathData.InitialPathTime = 0.8;
-	PathData.MaxPathTime = 2.5;
-	PathData.MaxNumberOfBounces = 0;
-	Path.ActivatePath(Entity, Unit.GetTeam(), PathData);
-	Path.SetHidden(true);
-	Path.bUseOverrideSourceLocation = true;
-	Path.OverrideSourceLocation = UnitPawn.Location;
-	Path.bUseOverrideTargetLocation = true;
-	Path.OverrideTargetLocation = DesiredLocation;
-	Path.OverrideTargetLocation.Z = Unit.GetDesiredZForLocation(DesiredLocation);
-	Path.bNoSpinUntilBounce = true;
-	Path.UpdateTrajectory();
-	Path.bUseOverrideSourceLocation = false;
-	Path.bUseOverrideTargetLocation = false;
-	Path.ClearPathGraphics();
-	if (Path.iNumKeyframes <= 1)
-	{
-		return false;
-	}
+	StartLocation = UnitPawn.Location;
+	EndLocation = DesiredLocation;
+	EndLocation.Z = `XWORLD.GetFloorZForPosition(DesiredLocation, true) + UnitPawn.CollisionHeight + class'XComWorldData'.const.Cover_BufferDistance;
 
-	// The grenade arc starts at the weapon's hand height; lift it so the first frame is where the pawn stands,
-	// easing the correction out over the first half of the flight, then speed the whole thing up.
-	StartZ = UnitPawn.Location.Z;
-	Diff = Path.akKeyframes[0].vLoc.Z - StartZ;
-	Scale = class'X2Ability_Astartes_Assault'.default.JUMP_ARC_TIME_SCALE;
-	for (i = 0; i < Path.iNumKeyframes; i++)
-	{
-		if (i >= Path.iNumKeyframes / 2 && Diff > 0)
-		{
-			Diff = FMax(Diff - (Path.akKeyframes[0].vLoc.Z - StartZ) * 2.0 / Path.iNumKeyframes, 0.0);
-		}
-		Path.akKeyframes[i].vLoc.Z -= Diff;
-		Path.akKeyframes[i].fTime *= Scale;
-	}
-	return true;
+	Tiles = VSize2D(EndLocation - StartLocation) / class'XComWorldData'.const.WORLD_StepSize;
+	FlightDuration = FClamp(Tiles * class'X2Ability_Astartes_Assault'.default.JUMP_SECONDS_PER_TILE,
+		class'X2Ability_Astartes_Assault'.default.JUMP_MIN_FLIGHT_SECONDS, class'X2Ability_Astartes_Assault'.default.JUMP_MAX_FLIGHT_SECONDS);
+	ApexHeight = FMax(class'X2Ability_Astartes_Assault'.default.JUMP_ARC_HEIGHT_TILES * class'XComWorldData'.const.WORLD_FloorHeight,
+		Abs(EndLocation.Z - StartLocation.Z) * 0.5);
 }
 
-/// Move the pawn along the arc. True once the landing animation should start.
+/// Place the pawn on the parabola at Time. True once the landing animation should start.
 private function bool Fly(float Time)
 {
-	local XKeyframe KF;
-	local vector Loc;
+	local float T, Lead;
+	local vector Loc, Dir;
 	local Rotator Rot;
-	local float EndTime, FloorZ;
 
-	KF = Path.ExtractInterpolatedKeyframe(Time);
-	Loc = KF.vLoc;
-	EndTime = Path.akKeyframes[Path.iNumKeyframes - 1].fTime;
-	if (Time > EndTime * 0.5)
-	{
-		// never clip below the landing tile on the way down
-		FloorZ = `XWORLD.GetFloorZForPosition(Path.OverrideTargetLocation, true) + UnitPawn.CollisionHeight + class'XComWorldData'.const.Cover_BufferDistance;
-		Loc.Z = FMax(Loc.Z, FloorZ);
-	}
+	T = FClamp(Time / FlightDuration, 0.0, 1.0);
+	Loc = StartLocation + (EndLocation - StartLocation) * T;
+	Loc.Z += ApexHeight * 4.0 * T * (1.0 - T);
 	UnitPawn.SetLocation(Loc);
-	Rot = UnitPawn.Rotation;
-	Rot.Yaw = KF.rRot.Yaw;
-	UnitPawn.SetRotation(Rot);
-	return Time >= EndTime - FMin(class'X2Ability_Astartes_Assault'.default.JUMP_LANDING_LEAD, EndTime * 0.5);
+
+	Dir = EndLocation - StartLocation;
+	Dir.Z = 0;
+	if (VSizeSq(Dir) > 1.0)
+	{
+		Rot = UnitPawn.Rotation;
+		Rot.Yaw = Rotator(Dir).Yaw;
+		UnitPawn.SetRotation(Rot);
+	}
+	Lead = FMin(class'X2Ability_Astartes_Assault'.default.JUMP_LANDING_LEAD, FlightDuration * 0.5);
+	return Time >= FlightDuration - Lead;
 }
 
 simulated state Executing
@@ -142,12 +103,13 @@ simulated state Executing
 	}
 
 Begin:
-	if (bSkipJump || !BuildArc())
+	if (bSkipJump)
 	{
 		UnitPawn.SetLocation(DesiredLocation);
 		Unit.ProcessNewPosition();
 		CompleteAction();
 	}
+	BuildArc();
 
 	UnitPawn.EnableRMA(true, true);
 	UnitPawn.EnableRMAInteractPhysics(true);
@@ -186,7 +148,7 @@ Begin:
 
 	// landing
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
-	UnitPawn.SetLocation(Path.OverrideTargetLocation);
+	UnitPawn.SetLocation(EndLocation);
 	UnitPawn.SnapToGround();
 	Params = default.Params;
 	Params.AnimName = class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_STOP;
@@ -202,6 +164,7 @@ Begin:
 	}
 	UnitPawn.bSkipIK = false;
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
+	UnitPawn.SetLocation(EndLocation);
 	Unit.ProcessNewPosition();
 	CompleteAction();
 }

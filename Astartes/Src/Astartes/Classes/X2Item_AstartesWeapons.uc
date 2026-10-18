@@ -29,6 +29,15 @@ var config array<WeaponDef> Weapons;
 // the player sees one Bolter, ours, not theirs as well. Skipped silently when the mod is not loaded.
 var config array<name> HideDonorItems;
 
+// Abilities added to our weapons beyond what the vanilla base grants (e.g. vanilla pistols have no standard shot;
+// a bolt pistol can always be fired).
+struct WeaponExtraAbility
+{
+	var name Weapon;
+	var name Ability;
+};
+var config array<WeaponExtraAbility> ExtraAbilities;
+
 static function CreateWeapons()
 {
 	local X2ItemTemplateManager ItemMgr;
@@ -61,6 +70,7 @@ static function CreateWeapons()
 		// Keep CreatorTemplateName: the vanilla schematic that creates the base tier also creates ours,
 		// and upgrades soldiers' items whose template equals our BaseItem.
 		StripUnknownAbilities(Clone);
+		AddExtraAbilities(Clone);
 		if (default.Weapons[i].MeshFrom != '')
 		{
 			BorrowLook(Clone, default.Weapons[i].MeshFrom, ItemMgr);
@@ -161,4 +171,25 @@ static function StripUnknownAbilities(X2WeaponTemplate Clone)
 		}
 	}
 	Clone.Abilities = Kept;
+}
+
+static function AddExtraAbilities(X2WeaponTemplate Clone)
+{
+	local X2AbilityTemplateManager AbilityMgr;
+	local int i;
+
+	AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	for (i = 0; i < default.ExtraAbilities.Length; i++)
+	{
+		if (default.ExtraAbilities[i].Weapon != Clone.DataName || Clone.Abilities.Find(default.ExtraAbilities[i].Ability) != INDEX_NONE)
+		{
+			continue;
+		}
+		if (AbilityMgr.FindAbilityTemplate(default.ExtraAbilities[i].Ability) == none)
+		{
+			`log("Astartes: weapon" @ Clone.DataName @ "extra ability" @ default.ExtraAbilities[i].Ability @ "not found",, 'Astartes');
+			continue;
+		}
+		Clone.Abilities.AddItem(default.ExtraAbilities[i].Ability);
+	}
 }

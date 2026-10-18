@@ -18,7 +18,8 @@ var config int HAMMER_OF_WRATH_DAMAGE, HAMMER_OF_WRATH_SHRED;
 var config int ANGEL_OF_DEATH_ACTIONS, ANGEL_OF_DEATH_MOBILITY;
 // Jump visualization (X2Action_Astartes_JumpPack): vanilla soldier animations by default.
 var config name JUMP_ANIM_START, JUMP_ANIM_LOOP, JUMP_ANIM_STOP;
-var config float JUMP_START_PLAYRATE, JUMP_STOP_PLAYRATE, JUMP_START_FRACTION, JUMP_ARC_TIME_SCALE, JUMP_LANDING_LEAD;
+var config float JUMP_START_PLAYRATE, JUMP_STOP_PLAYRATE, JUMP_START_FRACTION, JUMP_LANDING_LEAD;
+var config float JUMP_ARC_HEIGHT_TILES, JUMP_SECONDS_PER_TILE, JUMP_MIN_FLIGHT_SECONDS, JUMP_MAX_FLIGHT_SECONDS;
 var config string JUMP_SOUND_CUE;    // optional SoundCue path for the ignition (empty = none)
 var config string JUMP_ANIMSET_PATH; // optional extra AnimSet granted to Assault Marines (e.g. a jump animation pack)
 var config array<name> JumpAbilities; // abilities whose visualization becomes the arc

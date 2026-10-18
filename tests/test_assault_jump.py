@@ -41,6 +41,9 @@ def test_jump_arc_is_configured(config):
     section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Ability_Astartes_Assault"][0]
     jumps = {v.strip().strip('"') for v in section.values("JumpAbilities")}
     assert {"IcarusJump", "Astartes_DeepJump"} <= jumps
+    for key in ("JUMP_ARC_HEIGHT_TILES", "JUMP_SECONDS_PER_TILE", "JUMP_MIN_FLIGHT_SECONDS", "JUMP_MAX_FLIGHT_SECONDS"):
+        assert float(section.first(key)) > 0, f"{key} must be set"
+    assert "XComPrecomputedPath" not in (SRC_DIR / "X2Action_Astartes_JumpPack.uc").read_text(encoding="utf-8"), "the shared grenade path sent the jump to the world origin; compute the arc ourselves"
     for key in ("JUMP_ANIM_START", "JUMP_ANIM_LOOP", "JUMP_ANIM_STOP"):
         assert (section.first(key) or "").strip('"').startswith("MV_"), f"{key} must name a vanilla movement animation"
     assert (SRC_DIR / "X2Action_Astartes_JumpPack.uc").exists()
