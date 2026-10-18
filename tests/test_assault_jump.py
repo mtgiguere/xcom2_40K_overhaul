@@ -56,3 +56,13 @@ def test_jump_never_enables_root_motion():
     src = (SRC_DIR / "X2Action_Astartes_JumpPack.uc").read_text(encoding="utf-8")
     assert "EnableRMA(true" not in src, "root motion on during the jump let animations drag the pawn to the world origin"
     assert "CanPlayAnimation" in src, "animations must be optional: the pack that ships them may be absent"
+
+
+def test_jump_visualization_has_no_cover_bracket():
+    """X2Action_EnterCover restores Unit.RestoreLocation, zero when the jumper stood in the open: world-origin teleport."""
+    src = (SRC_DIR / "X2Ability_Astartes_Assault.uc").read_text(encoding="utf-8")
+    start = src.index("function JumpPack_BuildVisualization")
+    end = src.index("\n}\n", start)
+    vis = src[start:end]
+    assert "X2Action_EnterCover'.static" not in vis, "EnterCover after the jump teleports the pawn to the origin"
+    assert "X2Action_ExitCover'.static" not in vis

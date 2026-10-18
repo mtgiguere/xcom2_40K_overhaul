@@ -417,12 +417,11 @@ simulated function JumpPack_BuildVisualization(XComGameState VisualizeGameState)
 	MoveTurnAction = X2Action_MoveTurn(class'X2Action_MoveTurn'.static.AddToVisualizationTree(ActionMetadata, Context));
 	MoveTurnAction.m_vFacePoint = Context.InputContext.TargetLocations[0];
 
-	class'X2Action_ExitCover'.static.AddToVisualizationTree(ActionMetadata, Context);
-
+	// No ExitCover/EnterCover here: EnterCover ends by moving the pawn to Unit.RestoreLocation, which ExitCover only
+	// fills when the unit stood in cover. From the open it is zero, and the pawn was teleported to the world origin
+	// after every jump (playtest 2026-10-18). The vanilla Icarus visualization does not use them either.
 	JumpAction = X2Action_Astartes_JumpPack(class'X2Action_Astartes_JumpPack'.static.AddToVisualizationTree(ActionMetadata, Context));
 	JumpAction.DesiredLocation = Context.InputContext.TargetLocations[0];
-
-	class'X2Action_EnterCover'.static.AddToVisualizationTree(ActionMetadata, Context);
 
 	foreach VisualizeGameState.IterateByClassType(class'XComGameState_WorldEffectTileData', WorldDataUpdate)
 	{
