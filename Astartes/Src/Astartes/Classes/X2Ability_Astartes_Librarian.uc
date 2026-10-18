@@ -193,7 +193,11 @@ static function int PerilsChance(XComGameState_Unit Unit, int WarpCharge)
 
 	Chance = default.PERILS_BASE_CHANCE + (WarpCharge - 1) * default.PERILS_CHANCE_PER_WARP_CHARGE;
 
-	Hood = Unit.GetSecondaryWeapon();
+	Hood = Unit.GetItemInSlot(eInvSlot_PsiAmp);
+	if (Hood == none)
+	{
+		Hood = Unit.GetSecondaryWeapon();
+	}
 	if (Hood != none)
 	{
 		HoodTemplate = X2WeaponTemplate(Hood.GetMyTemplate());

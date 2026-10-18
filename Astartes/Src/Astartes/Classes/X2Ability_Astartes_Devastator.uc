@@ -14,6 +14,9 @@ var config int HEAVY_STANCE_REFUNDS_PER_TURN;
 var config int KRAK_MISSILE_COOLDOWN, KRAK_MISSILE_DAMAGE, KRAK_MISSILE_PIERCE;
 var config int WEAPON_MOUNT_ARMOUR, WEAPON_MOUNT_DEFENSE;
 var config int MELTA_CHARGES, MELTA_RANGE_TILES, MELTA_DAMAGE, MELTA_PIERCE;
+var config int ORBITAL_RANGE_TILES, ORBITAL_RADIUS_TILES, ORBITAL_DAMAGE, ORBITAL_SPREAD, ORBITAL_PIERCE, ORBITAL_ENVIRONMENT_DAMAGE, ORBITAL_SHELLS;
+var config float ORBITAL_SHELL_INTERVAL;
+var config string ORBITAL_EXPLOSION_EFFECT;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -28,6 +31,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(KrakMissile());
 	Templates.AddItem(WeaponMount());
 	Templates.AddItem(MeltaRound());
+	Templates.AddItem(OrbitalBombardment());
 
 	return Templates;
 }
@@ -196,4 +200,155 @@ static function X2AbilityTemplate WeaponMount()
 	Effect.Conditions.AddItem(NotMovedCondition());
 
 	return Passive('Astartes_WeaponMount', "img:///UILibrary_PerkIcons.UIPerk_fortress", false, Effect);
+}
+
+// --- Chapter Master capstone ------------------------------------------------------------------
+
+/// Orbital Bombardment: the Chapter Master calls the strike cruiser's guns onto a point. Heavy area damage that
+/// ignores cover and flattens it. The Devastator-born Chapter Master's relic ability. Once per mission.
+static function X2AbilityTemplate OrbitalBombardment()
+{
+	local X2AbilityTemplate Template;
+	local X2AbilityTarget_Cursor Cursor;
+	local X2AbilityMultiTarget_Radius Radius;
+	local X2Effect_ApplyWeaponDamage Damage;
+	local X2AbilityCost_ActionPoints Cost;
+
+	`CREATE_X2ABILITY_TEMPLATE(Template, 'Astartes_OrbitalBombardment');
+	Template.IconImage = "img:///UILibrary_PerkIcons.UIPerk_firerocket";
+	Template.AbilitySourceName = 'eAbilitySource_Perk';
+	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_AlwaysShow;
+	Template.ShotHUDPriority = class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY;
+	Template.Hostility = eHostility_Offensive;
+	Template.bShowActivation = true;
+	Template.bFriendlyFireWarning = true;
+	Template.TargetingMethod = class'X2TargetingMethod_VoidRift';
+	Template.AbilityToHitCalc = default.DeadEye;
+
+	Cost = new class'X2AbilityCost_ActionPoints';
+	Cost.iNumPoints = 1;
+	Cost.bConsumeAllPoints = true;
+	Template.AbilityCosts.AddItem(Cost);
+	AddCharges(Template, 1);
+
+	Cursor = new class'X2AbilityTarget_Cursor';
+	Cursor.bRestrictToSquadsightRange = true;
+	Cursor.FixedAbilityRange = default.ORBITAL_RANGE_TILES * class'XComWorldData'.const.WORLD_StepSize / class'XComWorldData'.const.WORLD_METERS_TO_UNITS_MULTIPLIER;
+	Template.AbilityTargetStyle = Cursor;
+
+	Radius = new class'X2AbilityMultiTarget_Radius';
+	Radius.fTargetRadius = default.ORBITAL_RADIUS_TILES * 1.5;
+	Radius.bIgnoreBlockingCover = true;
+	Template.AbilityMultiTargetStyle = Radius;
+	Template.AbilityMultiTargetConditions.AddItem(default.LivingTargetUnitOnlyProperty);
+
+	Damage = new class'X2Effect_ApplyWeaponDamage';
+	Damage.bIgnoreBaseDamage = true;
+	Damage.bExplosiveDamage = true;
+	Damage.EffectDamageValue.Damage = default.ORBITAL_DAMAGE;
+	Damage.EffectDamageValue.Spread = default.ORBITAL_SPREAD;
+	Damage.EffectDamageValue.Pierce = default.ORBITAL_PIERCE;
+	Damage.EffectDamageValue.DamageType = 'Explosion';
+	Damage.EnvironmentalDamageAmount = default.ORBITAL_ENVIRONMENT_DAMAGE;
+	Damage.bApplyWorldEffectsForEachTargetLocation = true;
+	Template.AddMultiTargetEffect(Damage);
+
+	Template.AbilityShooterConditions.AddItem(default.LivingShooterProperty);
+	Template.AddShooterEffectExclusions();
+	Template.AbilityTriggers.AddItem(default.PlayerInputTrigger);
+
+	Template.BuildNewGameStateFn = TypicalAbility_BuildGameState;
+	Template.BuildVisualizationFn = OrbitalBombardment_BuildVisualization;
+	Template.CinescriptCameraType = "Grenadier_GrenadeLauncher";
+	Template.ActivationSpeech = 'ThrowGrenade';
+	return Template;
+}
+
+/// No fire animation: the strike comes from orbit. Flyover, camera to the target, a barrage of explosions, then the
+/// damage and terrain results.
+simulated function OrbitalBombardment_BuildVisualization(XComGameState VisualizeGameState)
+{
+	local XComGameStateHistory History;
+	local XComGameStateContext_Ability Context;
+	local VisualizationActionMetadata EmptyTrack, ActionMetadata, ShooterTrack;
+	local X2Action_PlaySoundAndFlyOver Flyover;
+	local X2Action_CameraLookAt Camera;
+	local X2Action_PlayEffect Explosion;
+	local X2Action_Delay Delay;
+	local X2Action LastAction;
+	local X2AbilityTemplate AbilityTemplate;
+	local XComGameState_EnvironmentDamage DamageEventStateObject;
+	local X2VisualizerInterface TargetVisualizerInterface;
+	local StateObjectReference UnitRef;
+	local vector Center, Offset, ShellLocation;
+	local int i, j;
+
+	History = `XCOMHISTORY;
+	Context = XComGameStateContext_Ability(VisualizeGameState.GetContext());
+	AbilityTemplate = class'XComGameState_Ability'.static.GetMyTemplateManager().FindAbilityTemplate(Context.InputContext.AbilityTemplateName);
+	Center = Context.InputContext.TargetLocations[0];
+
+	ShooterTrack = EmptyTrack;
+	ShooterTrack.StateObject_OldState = History.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+	ShooterTrack.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(Context.InputContext.SourceObject.ObjectID);
+	ShooterTrack.VisualizeActor = History.GetVisualizer(Context.InputContext.SourceObject.ObjectID);
+
+	Flyover = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(ShooterTrack, Context));
+	Flyover.SetSoundAndFlyOverParameters(none, AbilityTemplate.LocFlyOverText, AbilityTemplate.ActivationSpeech, eColor_Good);
+
+	Camera = X2Action_CameraLookAt(class'X2Action_CameraLookAt'.static.AddToVisualizationTree(ShooterTrack, Context));
+	Camera.LookAtLocation = Center;
+	Camera.LookAtDuration = default.ORBITAL_SHELLS * default.ORBITAL_SHELL_INTERVAL + 2.0;
+	Camera.BlockUntilActorOnScreen = true;
+	Camera.UseTether = false;
+	LastAction = Camera;
+
+	for (i = 0; i < default.ORBITAL_SHELLS; i++)
+	{
+		Delay = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ShooterTrack, Context, false, LastAction));
+		Delay.Duration = default.ORBITAL_SHELL_INTERVAL;
+		Explosion = X2Action_PlayEffect(class'X2Action_PlayEffect'.static.AddToVisualizationTree(ShooterTrack, Context, false, Delay));
+		Explosion.EffectName = default.ORBITAL_EXPLOSION_EFFECT;
+		Offset = vect(0, 0, 0);
+		if (i > 0)
+		{
+			Offset.X = (i % 2 == 0 ? 1 : -1) * class'XComWorldData'.const.WORLD_StepSize * (i + 1) * 0.5;
+			Offset.Y = (i % 3 == 0 ? -1 : 1) * class'XComWorldData'.const.WORLD_StepSize * i * 0.5;
+		}
+		ShellLocation = Center + Offset;
+		ShellLocation.Z = `XWORLD.GetFloorZForPosition(ShellLocation, true);
+		Explosion.EffectLocation = ShellLocation;
+		Explosion.bWaitForCompletion = false;
+		LastAction = Explosion;
+	}
+
+	for (i = 0; i < Context.InputContext.MultiTargets.Length; ++i)
+	{
+		UnitRef = Context.InputContext.MultiTargets[i];
+		ActionMetadata = EmptyTrack;
+		ActionMetadata.StateObject_OldState = History.GetGameStateForObjectID(UnitRef.ObjectID, eReturnType_Reference, VisualizeGameState.HistoryIndex - 1);
+		ActionMetadata.StateObject_NewState = VisualizeGameState.GetGameStateForObjectID(UnitRef.ObjectID);
+		ActionMetadata.VisualizeActor = History.GetVisualizer(UnitRef.ObjectID);
+		// Anchor the target's track behind the last shell so the damage lands after the barrage.
+		Delay = X2Action_Delay(class'X2Action_Delay'.static.AddToVisualizationTree(ActionMetadata, Context, false, LastAction));
+		Delay.Duration = 0.1;
+		for (j = 0; j < Context.ResultContext.MultiTargetEffectResults[i].Effects.Length; ++j)
+		{
+			Context.ResultContext.MultiTargetEffectResults[i].Effects[j].AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, Context.ResultContext.MultiTargetEffectResults[i].ApplyResults[j]);
+		}
+		TargetVisualizerInterface = X2VisualizerInterface(ActionMetadata.VisualizeActor);
+		if (TargetVisualizerInterface != none)
+		{
+			TargetVisualizerInterface.BuildAbilityEffectsVisualization(VisualizeGameState, ActionMetadata);
+		}
+	}
+
+	foreach VisualizeGameState.IterateByClassType(class'XComGameState_EnvironmentDamage', DamageEventStateObject)
+	{
+		ActionMetadata = EmptyTrack;
+		ActionMetadata.StateObject_OldState = DamageEventStateObject;
+		ActionMetadata.StateObject_NewState = DamageEventStateObject;
+		ActionMetadata.VisualizeActor = History.GetVisualizer(DamageEventStateObject.ObjectID);
+		class'X2Action_ApplyWeaponDamageToTerrain'.static.AddToVisualizationTree(ActionMetadata, Context, false, LastAction);
+	}
 }

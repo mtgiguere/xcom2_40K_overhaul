@@ -20,6 +20,16 @@
       "Epistolary",
       "Librarian",
       "Senior Librarian"
+    ],
+    "reclusiam": [
+      "Scout",
+      "Neophyte",
+      "Novitiate",
+      "Deacon",
+      "Chaplain",
+      "Chaplain Confessor",
+      "Senior Chaplain",
+      "Reclusiarch"
     ]
   },
   "short_names": {
@@ -42,6 +52,16 @@
       "Epi.",
       "Lib.",
       "SLb."
+    ],
+    "reclusiam": [
+      "Sct.",
+      "Neo.",
+      "Nov.",
+      "Dcn.",
+      "Chp.",
+      "Cnf.",
+      "SCh.",
+      "Rcl."
     ]
   },
   "classes": {
@@ -554,6 +574,7 @@
       "icon": "img:///UILibrary_Common.class_psiop",
       "loadout": [
         "Astartes_ForceSword_CV_Primary",
+        "Astartes_BoltPistol_CV",
         "Astartes_PsychicHood_CV"
       ],
       "weapons": [
@@ -563,6 +584,10 @@
         ],
         [
           "eInvSlot_SecondaryWeapon",
+          "pistol"
+        ],
+        [
+          "eInvSlot_PsiAmp",
           "psiamp"
         ]
       ],
@@ -570,15 +595,15 @@
         [
           {
             "name": "Soulfire",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Insanity",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Inspire",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Astartes_KnowNoFear"
@@ -593,25 +618,25 @@
         [
           {
             "name": "NullLance",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Schism",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Solace",
-            "slot": "secondary"
+            "slot": "psiamp"
           }
         ],
         [
           {
             "name": "SoulSteal",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Domination",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "EnergyShield"
@@ -624,7 +649,7 @@
           },
           {
             "name": "Fuse",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "ForceChoke",
@@ -634,7 +659,7 @@
         [
           {
             "name": "VoidRift",
-            "slot": "secondary"
+            "slot": "psiamp"
           },
           {
             "name": "Astartes_PuppetMaster",
@@ -684,7 +709,7 @@
         "Litanies",
         "Zeal"
       ],
-      "rank_set": "combat",
+      "rank_set": "reclusiam",
       "icon": "img:///UILibrary_Common.class_ranger",
       "loadout": [
         "Astartes_Crozius_CV_Primary",

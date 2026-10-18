@@ -14,6 +14,15 @@ struct ClassHelmet
 
 var config array<ClassHelmet> ClassHelmets;
 
+// Abilities granted (as unlocked class-agnostic abilities) when a class reaches a rank: the Reclusiarch's Purge the Unclean.
+struct RankGrant
+{
+	var name SoldierClass;
+	var int Rank;
+	var name Ability;
+};
+var config array<RankGrant> RankGrants;
+
 static function array<X2DataTemplate> CreateTemplates()
 {
 	local array<X2DataTemplate> Templates;
@@ -61,6 +70,7 @@ static function EventListenerReturn OnUnitRankUp(Object EventData, Object EventS
 	if (class'X2DownloadableContentInfo_Astartes'.default.MarineClasses.Find(NewUnitState.GetSoldierClassTemplateName()) != INDEX_NONE)
 	{
 		class'Astartes_AbilityVariants'.static.ApplyFallbacksToUnit(NewUnitState);
+		ApplyRankGrants(NewUnitState);
 	}
 
 	Helmet = HelmetForClass(NewUnitState.GetSoldierClassTemplateName());
@@ -96,4 +106,34 @@ static function name HelmetForClass(name SoldierClass)
 		}
 	}
 	return '';
+}
+
+static function ApplyRankGrants(XComGameState_Unit Unit)
+{
+	local ClassAgnosticAbility Grant;
+	local int i, j;
+
+	for (i = 0; i < default.RankGrants.Length; i++)
+	{
+		if (default.RankGrants[i].SoldierClass != Unit.GetSoldierClassTemplateName() || Unit.GetRank() < default.RankGrants[i].Rank)
+		{
+			continue;
+		}
+		for (j = 0; j < Unit.AWCAbilities.Length; j++)
+		{
+			if (Unit.AWCAbilities[j].AbilityType.AbilityName == default.RankGrants[i].Ability)
+			{
+				break;
+			}
+		}
+		if (j < Unit.AWCAbilities.Length)
+		{
+			continue;
+		}
+		Grant.AbilityType.AbilityName = default.RankGrants[i].Ability;
+		Grant.AbilityType.ApplyToWeaponSlot = eInvSlot_Unknown;
+		Grant.bUnlocked = true;
+		Unit.AWCAbilities.AddItem(Grant);
+		`log("Astartes:" @ Unit.GetFullName() @ "reached rank" @ Unit.GetRank() @ "and gains" @ default.RankGrants[i].Ability,, 'Astartes');
+	}
 }

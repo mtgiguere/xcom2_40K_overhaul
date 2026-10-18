@@ -11,6 +11,7 @@ var config int CROZIUS_MASTERY_DAMAGE, CROZIUS_MASTERY_CRIT;
 var config int LITANY_OF_HATE_CRIT;
 var config int ROSARIUS_ARMOUR, ROSARIUS_DEFENSE;
 var config int LITANY_OF_THE_DEVOUT_RADIUS_TILES;
+var config int PURGE_THE_UNCLEAN_COOLDOWN;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -20,6 +21,7 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(LitanyOfHate());
 	Templates.AddItem(Rosarius());
 	Templates.AddItem(LitanyOfTheDevout());
+	Templates.AddItem(PurgeTheUnclean());
 
 	return Templates;
 }
@@ -113,6 +115,30 @@ static function X2AbilityTemplate LitanyOfTheDevout()
 	SureStrike.AbilityShooterConditions.AddItem(default.MeleeCondition);
 	Template.AddMultiTargetEffect(SureStrike);
 
+	Template.ActivationSpeech = 'Inspire';
+	Template.bShowActivation = true;
+	return Template;
+}
+
+// --- Reclusiarch ------------------------------------------------------------------------------
+
+/// Purge the Unclean: the Reclusiarch drives the Warp's touch from a brother. Removes mind control, panic, stun,
+/// disorientation and unconsciousness; Chaos corruption will join that list when it exists. Cooldown.
+static function X2AbilityTemplate PurgeTheUnclean()
+{
+	local X2AbilityTemplate Template;
+	local X2Effect_RemoveEffects Cleanse;
+
+	Cleanse = new class'X2Effect_RemoveEffects';
+	Cleanse.EffectNamesToRemove.AddItem(class'X2Effect_MindControl'.default.EffectName);
+	Cleanse.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.PanickedName);
+	Cleanse.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.StunnedName);
+	Cleanse.EffectNamesToRemove.AddItem(class'X2AbilityTemplateManager'.default.DisorientedName);
+	Cleanse.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.UnconsciousName);
+	Cleanse.EffectNamesToRemove.AddItem(class'X2StatusEffects'.default.BurningName);
+
+	Template = TargetedBuff('Astartes_PurgeTheUnclean', "img:///UILibrary_PerkIcons.UIPerk_revivalprotocol", false, Cleanse, class'UIUtilities_Tactical'.const.CLASS_COLONEL_PRIORITY, eCost_Single);
+	AddCooldown(Template, default.PURGE_THE_UNCLEAN_COOLDOWN);
 	Template.ActivationSpeech = 'Inspire';
 	Template.bShowActivation = true;
 	return Template;

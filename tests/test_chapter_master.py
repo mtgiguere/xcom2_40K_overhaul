@@ -71,3 +71,27 @@ def test_three_unique_seats_with_lore_rules(config, loc_sections):
             assert f"'{ability}'" in src and ability in loc, f"{seat} relic {ability} must exist and be localized"
     caps = {struct_field(v, "SoldierClass") for v in section(config, "Astartes.Astartes_ChapterMaster").values("Capstones")}
     assert "Astartes_Librarian" not in caps and "Astartes_Chaplain" not in caps
+
+
+def test_reclusiarch_rank_grant(config, loc_sections):
+    """Rank-7 Chaplains are Reclusiarchs: the rank name says so and Purge the Unclean is granted."""
+    cl = section(config, "Astartes.Astartes_ClassLook")
+    grants = {(struct_field(v, "SoldierClass"), int(struct_field(v, "Rank"))): struct_field(v, "Ability") for v in cl.values("RankGrants")}
+    assert grants.get(("Astartes_Chaplain", 7)) == "Astartes_PurgeTheUnclean"
+    assert SPEC["rank_names"]["reclusiam"][7] == "Reclusiarch"
+    assert SPEC["classes"]["Astartes_Chaplain"]["rank_set"] == "reclusiam"
+    loc = {x.template_name for x in loc_sections if x.template_class == "X2AbilityTemplate"}
+    assert "Astartes_PurgeTheUnclean" in loc and "Astartes_OrbitalBombardment" in loc
+
+
+def test_librarian_carries_sword_pistol_and_hood(config):
+    """The hood has its own Highlander slot (eInvSlot_PsiAmp); the Librarian's powers hang off it."""
+    lib = SPEC["classes"]["Astartes_Librarian"]
+    assert lib["loadout"] == ["Astartes_ForceSword_CV_Primary", "Astartes_BoltPistol_CV", "Astartes_PsychicHood_CV"]
+    assert ["eInvSlot_PsiAmp", "psiamp"] in lib["weapons"]
+    slots = section(config, "Astartes.Astartes_ItemSlots")
+    assert "Astartes_Librarian" in {unquote(v) for v in slots.values("HoodSlotClasses")}
+    weapons = section(config, "Astartes.X2Item_AstartesWeapons")
+    hoods = [v for v in weapons.values("Weapons") if struct_field(v, "NewName").startswith("Astartes_PsychicHood_")]
+    assert hoods and all("eInvSlot_PsiAmp" in v for v in hoods)
+    assert not any(s.get("slot") == "secondary" for rank in lib["ranks"] for s in rank), "Librarian powers must bind to the hood slot"

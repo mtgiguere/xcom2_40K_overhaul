@@ -276,9 +276,10 @@ Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were
 | Apothecary | Recover Geneseed, Reductor Mastery, Stimm Shot, Warrior Medic, Field Surgery, Chirurgeon's Fury | Medical Protocol (Narthecium), Aid Protocol (Combat Stims), Restorative Mist (Mass Triage), Revival Protocol | Dreadnought/bleed-out linked: Interment Rites, Augmentic Repair, Preservation, Miracle, Last Rites; Purity Check (Chaos corruption), Honour the Fallen, Harvest, Guardian, Combat Doctrine |
 | Librarian | Smite, Flame Breath, Molten Beam, Fury of the Ancients, Terrify, Psychic Scream, Dominate, Quickening, Might of Heroes, Telekine Shield (vanilla psionics renamed by localization; prerequisites cleared), Perils of the Warp | Fuse | Fire Shield, Warp Bind, Puppet Master, Smite the Earth, Warp Vigour, Hallucination, Vortex of Doom, Firestorm, Psychic Hood power, Warp Quake (need new psionic implementations; no suitable vanilla bases). Perils of the Warp is live (passive + 5 outcomes incl. daemonic possession); no Warp Charge pool by decision. |
 | Shared | Know No Fear, Astartes Physiology, Power Armour Mk VII stats | | |
-| Chapter Master | Death Incarnate (Assault), Rites of Battle (Tactical), The Emperor's Mercy (Apothecary) | | Orbital Bombardment (Devastator; needs strike visuals) |
+| Chapter Master | Death Incarnate (Assault), Rites of Battle (Tactical), The Emperor's Mercy (Apothecary), Orbital Bombardment (Devastator) | | |
 | Chief Librarian (separate unique) | Warp Mastery | | |
 | Master of Sanctity (separate unique) | Litany of the Devout | | |
+| Reclusiarch (rank-7 Chaplain) | Purge the Unclean (rank grant) | | |
 | Chaplain | Crozius Mastery, Litany of Hate, Rosarius (rest reused from Assault/Tactical) | Fortress, Bladestorm, Untouchable, Implacable, Reaper | Undying |
 
 Weapon and ability clones are created as named objects (`new(none, string(Name))`) so their 40K localization loads; unnamed clones showed vanilla names in play (fixed 2026-10-17, guarded by `tests/test_wargear.py`).

@@ -45,6 +45,7 @@
     <Content Include="Src\Astartes\Classes\Astartes_ChapterMaster.uc" />
     <Content Include="Src\Astartes\Classes\X2Action_Astartes_JumpPack.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Chaplain.uc" />
+    <Content Include="Src\Astartes\Classes\Astartes_ItemSlots.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />

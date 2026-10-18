@@ -24,7 +24,7 @@ LOC = MOD / "Localization" / "XComGame.int"
 BEGIN = "; === BEGIN GENERATED: CLASSES (tools/gen_class_config.py) ==="
 END = "; === END GENERATED: CLASSES ==="
 
-SLOT_ENUM = {"primary": "eInvSlot_PrimaryWeapon", "secondary": "eInvSlot_SecondaryWeapon"}
+SLOT_ENUM = {"primary": "eInvSlot_PrimaryWeapon", "secondary": "eInvSlot_SecondaryWeapon", "psiamp": "eInvSlot_PsiAmp"}
 
 # Stat growth per rank (ranks 1..7). Marines grow a little harder than XCOM soldiers; base stats
 # will come from the Marine character template later.

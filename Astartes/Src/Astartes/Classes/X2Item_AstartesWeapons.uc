@@ -18,6 +18,7 @@ struct WeaponDef
 	var int ClipSizeOverride;  // -1 = keep base
 	var int AimBonus;          // added to the base's Aim
 	var name MeshFrom;         // optional: another mod's weapon template whose model/icon/attachments we borrow
+	var EInventorySlot SlotOverride; // optional: inventory slot (e.g. eInvSlot_PsiAmp for the Psychic Hood slot)
 	structdefaultproperties
 	{
 		ClipSizeOverride = -1
@@ -69,6 +70,10 @@ static function CreateWeapons()
 		}
 		// Keep CreatorTemplateName: the vanilla schematic that creates the base tier also creates ours,
 		// and upgrades soldiers' items whose template equals our BaseItem.
+		if (default.Weapons[i].SlotOverride != eInvSlot_Unknown)
+		{
+			Clone.InventorySlot = default.Weapons[i].SlotOverride;
+		}
 		StripUnknownAbilities(Clone);
 		AddExtraAbilities(Clone);
 		if (default.Weapons[i].MeshFrom != '')

@@ -104,7 +104,7 @@ ladder sits on top of that class, and the Reclusiam has its own ladder with the 
 | Step | Who | What he gets | How many |
 |---|---|---|---|
 | **Chaplain** | Any rank-4+ Marine of a combat class (not Apothecary, not Librarian) with Will at or above a threshold | Chaplain kit granted on appointment: *Litanies of Hate* (adjacent brothers +crit vs Chaos and daemons), *Rosarius* (personal shield), *Spiritual Liege* (Will aura; Guard and Sisters in range cannot panic). Black armour and skull helm (Space Marine 2 Chaplain Armor pack) applied like the Librarian hood. | Several |
-| **Reclusiarch** | A rank-7 Chaplain | Adds *Exhortation* (a brother regains an action, cooldown) and *Purge the Unclean* (cleanse Chaos corruption, 8). | A few |
+| **Reclusiarch** (built 2026-10-18: rank-7 Chaplains carry the title through the `reclusiam` rank names and gain *Purge the Unclean*) | A rank-7 Chaplain | Adds *Exhortation* (a brother regains an action, cooldown) and *Purge the Unclean* (cleanse Chaos corruption, 8). | A few |
 | **Master of Sanctity** (implemented 2026-10-18: `Astartes_AppointMasterOfSanctity`, relic *Litany of the Devout*; Reclusiarch step pending) | One Reclusiarch | Relic ability (candidate: *Litany of the Devout*: the whole squad cannot be stunned, disoriented or mind-controlled this turn and melee cannot miss; once per mission). Separate unique; never the same Marine as the Chapter Master or Chief Librarian. | One |
 
 Appointment, one-at-a-time enforcement and loss tracking are one mechanism (`Astartes_ChapterMaster.Seats`, config-driven; Master of Sanctity: implemented) (`Astartes_AppointChaplain`, `Astartes_AppointMasterOfSanctity`). Chaplains keep their class tree; the kit is extra. Implementation after Chaos corruption (8) exists, since the Reclusiarch's purge needs it.
@@ -116,7 +116,7 @@ Appointment, one-at-a-time enforcement and loss tracking are one mechanism (`Ast
 |---|---|---|
 | Assault | **Death Incarnate**: for the rest of the turn every melee kill refunds the action and resets the jump pack, with no per-turn cap (Whirlwind + Hit and Run, uncapped). Serial slaughter while the kills keep coming. | Free action, once per mission |
 | Tactical | **Rites of Battle**: every Marine in sight regains all actions and gains +20 aim this turn. The squad acts twice. | Free action, once per mission |
-| Devastator | **Orbital Bombardment**: mark an area; a Thunderhawk strike lands at the start of the next enemy turn (large AoE, destroys cover, friendly fire possible). | Once per mission |
+| Devastator | **Orbital Bombardment** (built 2026-10-18 as an immediate strike: 30-tile range, 3-tile radius, heavy armour-piercing damage, cover flattened, barrage visuals). The delayed-strike variant can follow. | Once per mission |
 | Apothecary | **The Emperor's Mercy**: every Marine in sight is healed to full and bleeding-out brothers stand up; geneseed from every fallen brother on the field is recovered automatically at mission end. | Once per mission + passive |
 | Librarian | *Not eligible.* Librarians never hold the Chapter Master's seat. **Warp Mastery** (powers cast this turn roll no Perils; all psychic cooldowns cleared) is the **Chief Librarian's** relic, a separate unique appointed from a rank-7 Librarian (`Astartes_AppointChiefLibrarian`). Decided 2026-10-18. | Free action, once per mission |
 
@@ -212,7 +212,7 @@ A Marine's **Chapter is his "country"** (`X2CountryTemplate`): flag, name list a
 
 **Look from a pool template (2026-10-18).** Random part picking dressed Marines in power fists and jump packs. Generated Marines now copy the armour parts of a character-pool soldier (`MarineLookTemplates`, random among several); tints and pattern still follow the Chapter. Per-class additions (Assault jump pack deco, Devastator backpack) belong in `Astartes_ClassLook` next to the Librarian hood. `MarineLookParts` ships the look for players without the pool template (`Astartes_ExportLook`).
 
-**Librarian kit (2026-10-18).** Lore kit is force weapon + bolt pistol with the hood worn, not carried. The hood occupies the secondary slot only because the powers need a psi-amp item. Plan: a Highlander custom inventory slot (CHItemSlot) for the hood, freeing the secondary for a bolt pistol, the way LWOTC fields a psi amp beside two weapons. Librarians need no overwatch.
+**Librarian kit (2026-10-18).** Lore kit is force weapon + bolt pistol with the hood worn, not carried. The hood occupies the secondary slot only because the powers need a psi-amp item. Built 2026-10-18: `Astartes_ItemSlots` defines the Psychic Hood slot on the Highlander's reserved `eInvSlot_PsiAmp`; the Librarian carries force sword, bolt pistol and hood. Librarians need no overwatch.
 
 ### 4.9 Unit scale (decided 2026-10-17)
 Marines stay on the **unmodified rig (scale 1.0)** so the player's most-watched units never have socket or cover glitches. Everyone else is scaled relative to them. Lore ratio: Marine ~2.1 m vs Guardsman ~1.75 m = 0.83.
@@ -421,6 +421,8 @@ They run covert actions and give resources/favors. (WotC's hero classes — Reap
 - **Verify:** how many extra hostile team slots WotC exposes for modders (believed to exist beyond XCOM/Alien/Lost — confirm in the SDK).
 
 ### 9.2 Eldar interventions (Lost-mechanic, reworked)
+
+**Decided 2026-10-18: the Lost are Eldar, full stop.** No Tyranid gaunt swap: gaunts on a Tyranid continent would read as the same faction twice. The Lost SitRep and Lost missions become Eldar incursions (webway raiders) once Eldar unit models are wired in.
 Keep "third faction hostile to everyone," change the rest:
 - **Small elite strike teams**, not a horde (Rangers, Farseer, Wraithguard).
 - **Prophecy-based arrival** instead of noise: appear at a certain point in the fight, or telegraphed a turn or two ahead ("a Farseer foresaw this").
