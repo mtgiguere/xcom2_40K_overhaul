@@ -71,6 +71,8 @@ Steam's `appworkshop_268500.acf` lists 403 subscriptions vs 338 folders on disk.
 | Black Legion | 1582632067 | 0.9 GB | Chaos Marine armor set. |
 | [WOTC] Space Marine Weaponry (Warhammer) | 3656755854 | 117 MB | Bolters etc. |
 | BolterWeaponMod | 1493097153 | 21 MB | |
+| 40kMechanicus | 1943761564 | 40kAdMec_MechanicusPowerAxe/OmnissianPowerAxe/MechanicusPowerSword/TransonicBlade CV/MG/BM, arc and phosphor guns | **In use**: the Crozius wears the Mechanicus power axe. Power sword and Omnissian axe are alternatives; the ranged kit is Mechanicus faction material later |
+| TheAxeMod / LegacyKatanaMod / NightsisterGear | 718190620 / 698579656 / 2858248083 | Axes, katanas, vibrostaff (sword cat) | Alternative crozius/power-sword looks; not wired |
 | Space Marine Class Pack | 3789746906 | 0.5 MB | Someone already built Marine classes; inspect before writing ours. |
 | Storm Eagle Replacer | 1563067479 | 530 MB | Skyranger -> Storm Eagle gunship. |
 | WotC: Skyranger Skins | 1346067153 | 65 MB | |
