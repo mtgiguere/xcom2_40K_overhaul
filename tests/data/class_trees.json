@@ -597,17 +597,14 @@
         [
           {
             "name": "Astartes_Smite",
-            "standin": "Soulfire",
             "slot": "secondary"
           },
           {
             "name": "Astartes_Terrify",
-            "standin": "Insanity",
             "slot": "secondary"
           },
           {
             "name": "Astartes_Quickening",
-            "standin": "Inspire",
             "slot": "secondary"
           },
           {
@@ -620,29 +617,24 @@
         [
           {
             "name": "Astartes_FlameBreath",
-            "standin": "NullLance",
             "slot": "secondary"
           },
           {
             "name": "Astartes_PsychicScream",
-            "standin": "Schism",
             "slot": "secondary"
           },
           {
             "name": "Astartes_MightOfHeroes",
-            "standin": "Solace",
             "slot": "secondary"
           }
         ],
         [
           {
             "name": "Astartes_MoltenBeam",
-            "standin": "SoulSteal",
             "slot": "secondary"
           },
           {
             "name": "Astartes_Dominate",
-            "standin": "Domination",
             "slot": "secondary"
           },
           {
@@ -668,7 +660,6 @@
         [
           {
             "name": "Astartes_FuryOfTheAncients",
-            "standin": "VoidRift",
             "slot": "secondary"
           },
           {

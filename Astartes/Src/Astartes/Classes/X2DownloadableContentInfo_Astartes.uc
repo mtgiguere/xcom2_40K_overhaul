@@ -163,6 +163,7 @@ static event OnPostTemplatesCreated()
 	class'Astartes_UnitVariants'.static.CreateVariants();
 	class'X2Ability_Astartes'.static.MakeKevlarPowerArmour();
 	class'X2Item_AstartesWeapons'.static.CreateWeapons();
+	class'Astartes_AbilityVariants'.static.CreateClones();
 }
 
 /// Called when a mission is generated, after the faction mods have added their raid SitReps (we run after

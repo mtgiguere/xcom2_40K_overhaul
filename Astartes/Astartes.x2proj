@@ -37,6 +37,7 @@
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Devastator.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Apothecary.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_ClassLook.uc" />
+    <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_UnitVariants.uc" />

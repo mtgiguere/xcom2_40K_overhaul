@@ -32,8 +32,11 @@ _MOD_ABILITY_RE = re.compile(
 
 
 def mod_abilities() -> set[str]:
-    """Ability template names defined by this mod's own sources (XModBase helper files are library code, skipped)."""
+    """Ability template names defined by this mod: own sources (XModBase helper files are library code, skipped)
+    plus config-declared clones of vanilla abilities (Astartes_AbilityVariants)."""
     names: set[str] = set()
+    cfg = (REPO / "Astartes" / "Config" / "XComAstartes.ini").read_text(encoding="utf-8", errors="replace")
+    names |= set(re.findall(r'\+Clones=\(NewName="(\w+)"', cfg))
     for f in SRC_DIR.glob("*.uc"):
         if f.name.startswith("XMB"):
             continue

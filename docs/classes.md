@@ -216,3 +216,16 @@ This makes "cast everything every turn" impossible without copying Templar Focus
 **Known crashers to avoid copying** (from the user's Jedi playtests): Reflect (crash on the next action) and
 Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were stable.
 
+## Implementation status (2026-10-17, end of day one)
+
+| Class | Real abilities | Vanilla used as final | Still stand-ins |
+|---|---|---|---|
+| Tactical | Bolter Drill, Kraken Rounds, Hellfire Rounds, Executioner, Rally, Inspire, For the Emperor | Lightning Hands, Return Fire, Untouchable, Covering Fire, Suppression, Ever Vigilant, Rapid Fire, Sentinel, Kill Zone | Tactical Doctrine, Hold the Line, Chapter Banner, Combat Squads, Codex Volley |
+| Assault | Chain Teeth, Whirlwind, Duelist, Decapitate, Power Armour Veteran | Fortress (Iron Halo), Quickdraw, Bladestorm, Implacable, Untouchable | Jump Pack line (needs jump movement), Charge, Hit and Run, Hold Fast, Hammer of Wrath, Undying, Deep Jump, Last Stand, Death from Above, Angel of Death |
+| Devastator | Brace, Bipod, Tank Hunter | Suppression, Shredder, Holo Targeting, Chain Shot, Sentinel | ammo/zone mechanics: Plasma Overcharge, Lascannon Round, Sandbag, Grinding Advance, Heavy Stance, Fire Lane, Krak Missile, Weapon Mount, Hunker Them Down, Melta Round, Whirlwind Barrage, Castellan, Sweeping Fire |
+| Apothecary | Recover Geneseed, Stimm Shot, Warrior Medic | Medical Protocol (Narthecium), Aid Protocol (Combat Stims), Restorative Mist (Mass Triage), Revival Protocol | geneseed-linked: Interment Rites, Reductor Mastery, Preservation, Purity Check, Honour the Fallen, Harvest, Miracle, Last Rites; Field Surgery, Augmentic Repair, Guardian, Combat Doctrine, Chirurgeon's Fury |
+| Librarian | Smite, Flame Breath, Molten Beam, Fury of the Ancients, Terrify, Psychic Scream, Dominate, Quickening, Might of Heroes (clones of vanilla psionics under 40K names, via `Astartes_AbilityVariants`) | Fuse, Fortress | Fire Shield, Warp Bind, Puppet Master, Smite the Earth, Warp Vigour, Hallucination, Vortex of Doom, Firestorm, Psychic Hood power, Warp Quake. **Perils of the Warp / Warp Charge not yet implemented** (pending decision). |
+| Shared | Know No Fear, Astartes Physiology, Power Armour Mk VII stats | | |
+
+Librarians wear the Tacticus Hood on promotion (Astartes_ClassLook). Wargear: Bolter, Bolt Pistol, Chainsword/Power Sword/Relic Blade, Heavy Bolter, Force Sword, Psychic Hood, Narthecium as vanilla clones (X2Item_AstartesWeapons).
+

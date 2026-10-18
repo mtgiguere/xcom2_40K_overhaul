@@ -238,6 +238,68 @@ LocLongDescription="An Apothecary fights as he heals. Using the narthecium's hea
 LocHelpText="Healing protocols do not end your turn."
 LocPromotionPopupText="<Bullet/> Narthecium heals, revives and restorative mist do not end your turn.<br/>"
 
+; ---------------------------------------------------------------- Librarian (disciplines; vanilla psionic implementations under 40K names)
+[Astartes_Smite X2AbilityTemplate]
+LocFriendlyName="Smite"
+LocLongDescription="A bolt of warp-fire hurled from the mind. Guaranteed to hit; damage scales with the Librarian's psionic strength. Living targets only."
+LocHelpText="Guaranteed-hit psychic bolt against a living target."
+LocFlyOverText="Smite"
+LocPromotionPopupText="<Bullet/> Cannot miss.<br/><Bullet/> Damage scales with Psi Offense.<br/><Bullet/> Only affects organic targets.<br/>"
+
+[Astartes_FlameBreath X2AbilityTemplate]
+LocFriendlyName="Flame Breath"
+LocLongDescription="A lance of warp-flame that burns through everything in a line, cover included."
+LocHelpText="A piercing line of psychic fire."
+LocFlyOverText="Flame Breath"
+LocPromotionPopupText="<Bullet/> Damages every enemy in a line.<br/><Bullet/> Ignores cover.<br/>"
+
+[Astartes_MoltenBeam X2AbilityTemplate]
+LocFriendlyName="Molten Beam"
+LocLongDescription="Draw the heat from an enemy's body into your own. Damages a living target and restores the Librarian's health."
+LocHelpText="Damage a living target and heal yourself."
+LocFlyOverText="Molten Beam"
+LocPromotionPopupText="<Bullet/> Damages an organic target.<br/><Bullet/> Heals the Librarian for the damage dealt.<br/>"
+
+[Astartes_FuryOfTheAncients X2AbilityTemplate]
+LocFriendlyName="Fury of the Ancients"
+LocLongDescription="Tear open the veil. A rift of warp-energy damages every unit in a wide area and may drive them mad. Perilous."
+LocHelpText="Area psychic blast that can inflict madness."
+LocFlyOverText="Fury of the Ancients"
+LocPromotionPopupText="<Bullet/> Damages all units in a large radius.<br/><Bullet/> May disorient, panic or control affected enemies.<br/>"
+
+[Astartes_Terrify X2AbilityTemplate]
+LocFriendlyName="Terrify"
+LocLongDescription="Fill the target's mind with visions of its own death. Panics, disorients, or briefly controls a living target."
+LocHelpText="Psychic assault on a single mind."
+LocFlyOverText="Terrify"
+LocPromotionPopupText="<Bullet/> Target suffers panic, disorientation, or brief mind control.<br/>"
+
+[Astartes_PsychicScream X2AbilityTemplate]
+LocFriendlyName="Psychic Scream"
+LocLongDescription="A shriek of raw Warp. Terrify now also deals damage and reduces the target's will to resist."
+LocHelpText="Terrify also damages and weakens its target."
+LocPromotionPopupText="<Bullet/> Terrify deals damage.<br/><Bullet/> The target's Will is reduced.<br/>"
+
+[Astartes_Dominate X2AbilityTemplate]
+LocFriendlyName="Dominate"
+LocLongDescription="Seize a lesser mind and bend it to the Emperor's service for the rest of the battle. Once per mission."
+LocHelpText="Permanently control a living enemy. Once per mission."
+LocFlyOverText="Dominate"
+LocPromotionPopupText="<Bullet/> Permanent mind control of one organic enemy.<br/><Bullet/> Once per mission.<br/>"
+
+[Astartes_Quickening X2AbilityTemplate]
+LocFriendlyName="Quickening"
+LocLongDescription="Accelerate a battle-brother's reflexes with a surge of Warp-borne vigour. Grants him an action."
+LocHelpText="Grant an ally an action."
+LocFlyOverText="Quickening"
+LocPromotionPopupText="<Bullet/> Target ally gains an action point.<br/><Bullet/> Cooldown.<br/>"
+
+[Astartes_MightOfHeroes X2AbilityTemplate]
+LocFriendlyName="Might of Heroes"
+LocLongDescription="A steadying presence in the Warp. Allies near the Librarian are shielded from mental attack and shake off disorientation."
+LocHelpText="Aura: nearby allies are protected against psychic attack."
+LocPromotionPopupText="<Bullet/> Allies within range are immune to mental status effects and shed existing ones.<br/>"
+
 ; ---------------------------------------------------------------- shared Marine abilities
 [Astartes_KnowNoFear X2AbilityTemplate]
 LocFriendlyName="Know No Fear"
