@@ -43,3 +43,12 @@ def test_every_ability_clone_has_a_localized_name(config, loc_sections):
     loc = {s.template_name: s for s in sections_of_class(loc_sections, "X2AbilityTemplate")}
     missing = [c for c in clones if c not in loc or not unquote(loc[c].first("LocFriendlyName") or "")]
     assert not missing, f"ability clones without a [Name X2AbilityTemplate] LocFriendlyName: {missing}"
+
+
+def test_borrowed_looks_hide_their_donors(config):
+    """A weapon that wears another mod's model must hide that mod's own item, or the armoury shows two Bolters."""
+    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Item_AstartesWeapons"][0]
+    donors = {struct_field(v, "MeshFrom") for v in section.values("Weapons") if struct_field(v, "MeshFrom")}
+    hidden = {unquote(v) for v in section.values("HideDonorItems")}
+    assert donors, "expected at least the Bolter and Bolt Pistol to borrow a 40K model"
+    assert donors <= hidden, f"donor items not hidden: {sorted(donors - hidden)}"

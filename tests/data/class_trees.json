@@ -686,7 +686,17 @@
     "Sharpshooter",
     "Grenadier",
     "Specialist",
-    "PsiOperative"
+    "PsiOperative",
+    "AA_FieldCommander",
+    "AA_AssaultMarine",
+    "AA_TacticalMarine",
+    "AA_ScoutMarine",
+    "AA_DevastatorMarine",
+    "AA_TechMarine",
+    "AA_Apothecary",
+    "AA_Chaplain",
+    "AA_Librarian",
+    "AA_Dreadnought"
   ],
   "extra_loadouts": [
     {
@@ -695,5 +705,6 @@
         "MilitiaRifle_CV"
       ]
     }
-  ]
+  ],
+  "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent."
 }
