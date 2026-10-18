@@ -85,6 +85,10 @@ static event InstallNewCampaign(XComGameState StartState)
 /// Called per pod when a mission's encounter data is cached. SourceObject is the mission site.
 static function PostEncounterCreation(out name EncounterName, out PodSpawnInfo Encounter, int ForceLevel, int AlertLevel, optional XComGameState_BaseObject SourceObject)
 {
+	if (RewriteIncursion(Encounter, EncounterName, ForceLevel, "pod" @ EncounterName))
+	{
+		return;
+	}
 	RewritePodForContinent(Encounter, EncounterName, ForceLevel, XComGameState_MissionSite(SourceObject), "pod" @ EncounterName);
 }
 
@@ -99,7 +103,49 @@ static function PostReinforcementCreation(out name EncounterName, out PodSpawnIn
 	{
 		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(BattleData.m_iMissionID));
 	}
+	if (RewriteIncursion(Encounter, EncounterName, ForceLevel, "reinforcements" @ EncounterName))
+	{
+		return;
+	}
 	RewritePodForContinent(Encounter, EncounterName, ForceLevel, MissionSite, "reinforcements" @ EncounterName);
+}
+
+/// The Lost are Eldar (decision 2026-10-18): a Lost pod or swarm becomes a webway incursion pod on the alien team, on any
+/// continent, capped at IncursionMaxPodSize. Returns true when the pod was replaced. Without the Eldar mods the Lost stay Lost.
+static function bool RewriteIncursion(out PodSpawnInfo Encounter, name EncounterName, int ForceLevel, string Context)
+{
+	local FactionDef Def;
+	local array<name> NewTemplates;
+	local int Size;
+
+	if (!class'Astartes_FactionConfig'.default.bEnableIncursions || !class'Astartes_FactionConfig'.static.IsIncursionEncounter(EncounterName))
+	{
+		return false;
+	}
+	if (Encounter.SelectedCharacterTemplateNames.Length == 0 || Encounter.StrategyUnitTag != '')
+	{
+		return false;
+	}
+	Def = class'Astartes_FactionConfig'.default.Incursion;
+	if (!class'Astartes_FactionConfig'.static.IsFactionAvailable(Def))
+	{
+		`log("Astartes: incursion lists not loaded (is" @ Def.RequiredDLC @ "enabled?); the Lost stay the Lost for" @ Context,, 'Astartes');
+		return false;
+	}
+	Size = Encounter.SelectedCharacterTemplateNames.Length;
+	if (class'Astartes_FactionConfig'.default.IncursionMaxPodSize > 0)
+	{
+		Size = Min(Size, class'Astartes_FactionConfig'.default.IncursionMaxPodSize);
+	}
+	if (!class'Astartes_FactionConfig'.static.BuildPod(Def, ForceLevel, Size, NewTemplates, false))
+	{
+		`log("Astartes: incursion has no eligible units at force level" @ ForceLevel @ "for" @ Context,, 'Astartes');
+		return false;
+	}
+	`log("Astartes: Incursion" @ Context @ "FL" $ ForceLevel @ "->" @ Def.FactionName @ "x" $ NewTemplates.Length @ "(was" @ Encounter.SelectedCharacterTemplateNames.Length @ "Lost)",, 'Astartes');
+	Encounter.SelectedCharacterTemplateNames = NewTemplates;
+	Encounter.Team = eTeam_Alien;
+	return true;
 }
 
 /// Replace an alien-team pod with a same-sized pod from the faction that owns the mission's continent.

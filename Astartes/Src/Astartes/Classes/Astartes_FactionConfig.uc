@@ -26,6 +26,12 @@ var config bool bEnableContinentFactions;
 var config bool bLogPodRewrites;
 var config array<FactionDef> Factions;
 var config array<ContinentFactionOverride> ContinentFactionOverrides;
+/// Webway incursions: the Lost mechanic reworked (design.md 9.2). Every Lost pod and Lost swarm becomes a pod from this
+/// faction on the alien team, on any continent. Lost encounter IDs are matched by prefix.
+var config bool bEnableIncursions;
+var config FactionDef Incursion;
+var config array<string> IncursionEncounterPrefixes;
+var config int IncursionMaxPodSize;
 
 /// Encounter IDs that are never rewritten (hidden Faceless, swarm VIPs...). Chosen/VIP pods are skipped by tag anyway.
 var config array<name> NeverRewriteEncounters;
@@ -52,6 +58,20 @@ var config array<DaemonSpawn> DaemonSpawns;
 static function bool IsNeverRewritten(name EncounterID)
 {
 	return Left(string(EncounterID), 9) ~= "Astartes_" || default.NeverRewriteEncounters.Find(EncounterID) != INDEX_NONE;
+}
+
+static function bool IsIncursionEncounter(name EncounterID)
+{
+	local int i;
+
+	for (i = 0; i < default.IncursionEncounterPrefixes.Length; i++)
+	{
+		if (Left(string(EncounterID), Len(default.IncursionEncounterPrefixes[i])) ~= default.IncursionEncounterPrefixes[i])
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 static function bool IsCommanderEncounter(name EncounterID)

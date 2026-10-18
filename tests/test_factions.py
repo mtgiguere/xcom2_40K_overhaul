@@ -106,6 +106,19 @@ def test_variant_and_cultist_have_stats_and_localization(config, loc_sections):
         assert n in loc, f"{n} has no strCharacterName localization"
 
 
+def test_lost_pods_become_eldar_incursions(faction_section):
+    """The Lost are Eldar (design.md 9.2): Lost encounters are rebuilt from the incursion faction on the alien team."""
+    assert unquote(faction_section.first("bEnableIncursions") or "").lower() == "true"
+    inc = faction_section.first("Incursion")
+    assert struct_field(inc, "FactionName") == "Eldar" and struct_field(inc, "FollowerList") == "Astartes_EldarFollowers"
+    assert "TheLost" in {unquote(v) for v in faction_section.values("IncursionEncounterPrefixes")}
+    assert 3 <= int(faction_section.first("IncursionMaxPodSize")) <= 8, "a Lost swarm is huge; an Eldar pod must be a pod"
+    src = (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
+    assert src.count("if (RewriteIncursion(Encounter, EncounterName, ForceLevel,") == 2, "both the pod and the reinforcement hooks"
+    body = src[src.index("static function bool RewriteIncursion"):]
+    assert "Encounter.Team = eTeam_Alien;" in body and "IncursionMaxPodSize" in body
+
+
 def test_special_encounters_are_protected_and_commanders_defined(config, faction_section, factions):
     never = {unquote(v) for v in faction_section.values("NeverRewriteEncounters")}
     assert "SPCx1_Faceless" in never, "the hidden Faceless encounter must never be rewritten"
