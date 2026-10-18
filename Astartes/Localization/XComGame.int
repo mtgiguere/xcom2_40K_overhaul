@@ -496,3 +496,11 @@ LocFriendlyName="Dragged into the Warp"
 LocLongDescription="A daemon claims the Librarian's soul and bursts from his body onto the battlefield. The brother is lost, and his geneseed with him."
 LocHelpText="Perils outcome: the Librarian is lost and a daemon takes the field."
 LocFlyOverText="Dragged into the Warp"
+
+; --- Assault Marine jump pack (Astartes_AbilityVariants clone of IcarusJump) ---
+[Astartes_JumpPack X2AbilityTemplate]
+LocFriendlyName="Jump Pack"
+LocLongDescription="Fire the jump pack and land anywhere within 14 tiles, over walls, rooftops and enemies alike. Costs one action and does not end the turn: jump, then strike. 2-turn cooldown."
+LocHelpText="Jump to any tile within 14 tiles, ignoring terrain. One action, does not end the turn. 2-turn cooldown."
+LocFlyOverText="Jump Pack"
+LocPromotionPopupText="<Bullet/> Jump to any visible tile within 14 tiles, ignoring terrain and height.<br/><Bullet/> Costs one action and does not end the turn, so you can jump and then attack.<br/><Bullet/> 2-turn cooldown.<br/>"

@@ -203,8 +203,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_JumpPack",
-            "standin": "RunAndGun"
+            "name": "Astartes_JumpPack"
           },
           {
             "name": "Astartes_PowerArmourVeteran"
