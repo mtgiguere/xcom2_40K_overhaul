@@ -48,6 +48,8 @@ def test_dressing_generator_overrides_creation_and_keeps_arm_slots_exclusive():
     assert "extends XGCharacterGenerator" in src
     assert "function TSoldier CreateTSoldier(" in src and "super.CreateTSoldier(" in src
     assert "A.nmLeftArm = ''; A.nmRightArm = '';" in src, "a whole-arms part must clear the per-arm slots"
+    assert "'XCom_Soldier_F' : 'XCom_Soldier_M'" in src, "the body must be pinned to the soldier pawn, never a random mod pawn (playtest 2026-10-18)"
+    assert "kSoldier.strFirstName = \"\";" in src, "no random human name on an Eldar"
     uv = (SRC_DIR / "Astartes_UnitVariants.uc").read_text(encoding="utf-8")
     assert "class<XGCharacterGenerator>(DynamicLoadObject(Def.CharacterGenerator, class'Class'))" in uv
     assert "T.bAppearanceDefinesPawn = Def.bAppearanceDefinesPawn || Base.bAppearanceDefinesPawn;" in uv

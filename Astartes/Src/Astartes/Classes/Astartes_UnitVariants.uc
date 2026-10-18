@@ -47,7 +47,7 @@ static function CreateVariants()
 		Clone = CloneTemplate(Base, Def);
 		CharMgr.AddCharacterTemplate(Clone, true);
 		Created++;
-		`log("Astartes: variant" @ Clone.DataName @ "created from" @ Base.DataName @ "HP=" $ Clone.CharacterBaseStats[eStat_HP],, 'Astartes');
+		`log("Astartes: variant" @ Clone.DataName @ "created from" @ Base.DataName @ "HP=" $ Clone.CharacterBaseStats[eStat_HP] @ "appearanceDefinesPawn=" $ Clone.bAppearanceDefinesPawn @ "generator=" $ (Clone.CharacterGeneratorClass != none ? string(Clone.CharacterGeneratorClass.Name) : "none"),, 'Astartes');
 	}
 	`log("Astartes: unit variants created:" @ Created @ "of" @ default.Variants.Length,, 'Astartes');
 }

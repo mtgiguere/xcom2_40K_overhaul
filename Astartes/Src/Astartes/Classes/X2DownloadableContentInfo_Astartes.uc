@@ -727,7 +727,7 @@ exec function Astartes_Variants()
 		}
 		else
 		{
-			Say("Astartes_Variants: PASS" @ T.DataName @ "from" @ class'Astartes_UnitVariants'.default.Variants[i].BaseTemplate @ "HP=" $ T.CharacterBaseStats[eStat_HP] @ "armor=" $ T.CharacterBaseStats[eStat_ArmorMitigation]);
+			Say("Astartes_Variants: PASS" @ T.DataName @ "from" @ class'Astartes_UnitVariants'.default.Variants[i].BaseTemplate @ "HP=" $ T.CharacterBaseStats[eStat_HP] @ "armor=" $ T.CharacterBaseStats[eStat_ArmorMitigation] @ "appearanceDefinesPawn=" $ T.bAppearanceDefinesPawn @ "generator=" $ (T.CharacterGeneratorClass != none ? string(T.CharacterGeneratorClass.Name) : "none") @ "pawns=" $ T.strPawnArchetypes.Length);
 		}
 	}
 }
