@@ -98,6 +98,18 @@ Regular Chaplains and Librarians are normal roles with solid abilities; only the
 
 **Synergy idea:** Apothecary (body) + Chaplain (soul) in the same squad → bonus.
 
+**Chapter Master relic ability depends on his origin class (decided 2026-10-17).** The Chapter Master (the player's "Force Commander") is appointed from a rank-7 Marine of any combat class, and the relic-tier ability he gains is the one for the class he came from. Only one Chapter Master exists at a time, so a campaign can only ever see one of these builds: a reason to play the mod again with a different Captain.
+
+| Origin class | Relic ability | Shape |
+|---|---|---|
+| Assault | **Death Incarnate**: for the rest of the turn every melee kill refunds the action and resets the jump pack, with no per-turn cap (Whirlwind + Hit and Run, uncapped). Serial slaughter while the kills keep coming. | Free action, once per mission |
+| Tactical | **Rites of Battle**: every Marine in sight regains all actions and gains +20 aim this turn. The squad acts twice. | Free action, once per mission |
+| Devastator | **Orbital Bombardment**: mark an area; a Thunderhawk strike lands at the start of the next enemy turn (large AoE, destroys cover, friendly fire possible). | Once per mission |
+| Apothecary | **The Emperor's Mercy**: every Marine in sight is healed to full and bleeding-out brothers stand up; geneseed from every fallen brother on the field is recovered automatically at mission end. | Once per mission + passive |
+| Librarian | **Warp Mastery**: psychic powers cast this turn roll no Perils and incur no cooldown. (The Chief Librarian stays a separate unique; a Librarian Chapter Master is the rarer, riskier choice.) | Free action, once per mission |
+
+Rules: appointed from the Avenger (strategy action; dev command `Astartes_AppointCommander <unit>`), rank 7 only, granted through the rank-up/appointment listener (same pattern as `Astartes_ClassLook`). If he dies, the next appointment costs geneseed and a waiting period so the loss stings (Replacement, above). Implementation order: after the five class trees are rounded out; Death Incarnate first since Whirlwind and Hit and Run already exist.
+
 ### 4.5 Terminators (expanded 2026-10-17)
 - **A status, not a class.** A top-rank Marine of any combat class is *inducted into the First Company*; the class and tree are kept.
 - **Hard cap**: `MaxFirstCompany` config, default **10**, enforced on the induction screen.
@@ -459,7 +471,7 @@ Keep "third faction hostile to everyone," change the rest:
 ---
 
 ## 12. Open questions
-1. Which classes can become **Chapter Master**? Any top-tier Veteran, or specific lines?
+1. ~~Which classes can become **Chapter Master**?~~ Answered 2026-10-17: any rank-7 combat class; his relic ability depends on the origin class (4.4).
 2. Exact **Will threshold / experiences** for Chaplain eligibility.
 3. How slow/expensive is **replacing a dead unique**?
 4. **Civilian purge penalty:** none, or minor?

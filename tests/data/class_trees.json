@@ -217,12 +217,10 @@
         ],
         [
           {
-            "name": "Astartes_Charge",
-            "standin": "Shadowstrike"
+            "name": "Astartes_Charge"
           },
           {
-            "name": "Astartes_ShockLanding",
-            "standin": "Shadowstep"
+            "name": "Astartes_ShockLanding"
           },
           {
             "name": "Fortress"
@@ -234,12 +232,10 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_HitAndRun",
-            "standin": "Phantom"
+            "name": "Astartes_HitAndRun"
           },
           {
-            "name": "Astartes_HoldFast",
-            "standin": "CoolUnderPressure"
+            "name": "Astartes_HoldFast"
           }
         ],
         [
@@ -248,8 +244,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_HammerOfWrath",
-            "standin": "DeepCover"
+            "name": "Astartes_HammerOfWrath"
           },
           {
             "name": "Quickdraw",
@@ -275,8 +270,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_DeepJump",
-            "standin": "Stealth"
+            "name": "Astartes_DeepJump"
           },
           {
             "name": "Untouchable"
@@ -284,13 +278,10 @@
         ],
         [
           {
-            "name": "Astartes_DeathFromAboveBlade",
-            "standin": "ReturnFire",
-            "slot": "secondary"
+            "name": "Astartes_DeathFromAboveBlade"
           },
           {
-            "name": "Astartes_AngelOfDeath",
-            "standin": "EverVigilant"
+            "name": "Astartes_AngelOfDeath"
           },
           {
             "name": "Astartes_LastStand",

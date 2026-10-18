@@ -40,6 +40,7 @@
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Librarian.uc" />
     <Content Include="Src\Astartes\Classes\X2Effect_Astartes_SpawnDaemon.uc" />
     <Content Include="Src\Astartes\Classes\X2Effect_Astartes_MentalPurge.uc" />
+    <Content Include="Src\Astartes\Classes\X2Effect_Astartes_ResetCooldown.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />

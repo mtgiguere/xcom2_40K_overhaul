@@ -504,3 +504,61 @@ LocLongDescription="Fire the jump pack and land anywhere within 14 tiles, over w
 LocHelpText="Jump to any tile within 14 tiles, ignoring terrain. One action, does not end the turn. 2-turn cooldown."
 LocFlyOverText="Jump Pack"
 LocPromotionPopupText="<Bullet/> Jump to any visible tile within 14 tiles, ignoring terrain and height.<br/><Bullet/> Costs one action and does not end the turn, so you can jump and then attack.<br/><Bullet/> 2-turn cooldown.<br/>"
+
+; --- Assault Marine, round-out (X2Ability_Astartes_Assault) ---
+[Astartes_Charge X2AbilityTemplate]
+LocFriendlyName="Charge"
+LocLongDescription="A chainsword swung at the end of a charge bites deeper. After moving this turn, melee attacks gain +25 critical chance and +1 damage."
+LocHelpText="After moving this turn, melee gains +25 crit and +1 damage."
+LocFlyOverText="Charge"
+LocPromotionPopupText="<Bullet/> Melee attacks made after moving this turn gain +25 critical chance and +1 damage.<br/>"
+
+[Astartes_ShockLanding X2AbilityTemplate]
+LocFriendlyName="Shock Landing"
+LocLongDescription="The jump pack's landing concusses everything around the impact point. Enemies adjacent to where the Marine lands from a jump are disoriented."
+LocHelpText="Enemies adjacent to a jump landing are disoriented."
+LocFlyOverText="Shock Landing"
+LocPromotionPopupText="<Bullet/> Landing from the Jump Pack or Deep Jump disorients adjacent enemies.<br/>"
+
+[Astartes_HitAndRun X2AbilityTemplate]
+LocFriendlyName="Hit and Run"
+LocLongDescription="Strike, then leave. A melee kill clears the jump pack's cooldown, so a Marine who kept an action can jump straight back out."
+LocHelpText="Melee kills reset the jump pack cooldown."
+LocFlyOverText="Hit and Run"
+LocPromotionPopupText="<Bullet/> A melee kill resets the cooldown of Jump Pack and Deep Jump.<br/>"
+
+[Astartes_HammerOfWrath X2AbilityTemplate]
+LocFriendlyName="Hammer of Wrath"
+LocLongDescription="Come down on them. On the turn the Marine lands from a jump, his melee attacks deal +3 damage and shred 2 armour."
+LocHelpText="After a jump landing, melee this turn deals +3 damage and shreds 2 armour."
+LocFlyOverText="Hammer of Wrath"
+LocPromotionPopupText="<Bullet/> On the turn you land from a jump, melee attacks deal +3 damage and shred 2 armour.<br/>"
+
+[Astartes_DeepJump X2AbilityTemplate]
+LocFriendlyName="Deep Jump"
+LocLongDescription="The long jump. Land anywhere within 28 tiles. One action, does not end the turn. 3-turn cooldown."
+LocHelpText="Jump to any tile within 28 tiles. One action, does not end the turn. 3-turn cooldown."
+LocFlyOverText="Deep Jump"
+LocPromotionPopupText="<Bullet/> A second jump with twice the range: any visible tile within 28 tiles.<br/><Bullet/> One action, does not end the turn. 3-turn cooldown.<br/>"
+
+[Astartes_AngelOfDeath X2AbilityTemplate]
+LocFriendlyName="Angel of Death"
+LocLongDescription="Once per mission the Marine becomes the storm: regain 2 actions, the jump pack is ready again, and +4 mobility for the rest of the turn."
+LocHelpText="Once per mission: regain 2 actions, jump pack cooldown cleared, +4 mobility this turn."
+LocFlyOverText="Angel of Death"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Regain 2 actions and clear the jump pack cooldown.<br/><Bullet/> +4 mobility for the rest of the turn.<br/>"
+
+[Astartes_DeathFromAboveBlade X2AbilityTemplate]
+LocFriendlyName="Death from Above"
+LocLongDescription="Once per mission, for the rest of this turn the jump pack costs no action and the chainsword cannot miss."
+LocHelpText="Once per mission: this turn the jump pack is free and melee cannot miss."
+LocFlyOverText="Death from Above"
+LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> For the rest of the turn, Jump Pack and Deep Jump cost no action.<br/><Bullet/> Melee attacks this turn cannot miss.<br/>"
+
+[Astartes_HoldFast X2AbilityTemplate]
+LocFriendlyName="Hold Fast"
+LocLongDescription="Braced in power armour, the Marine is far harder to bring down up close. Melee attacks against him lose 25 to-hit."
+LocHelpText="Melee attacks against the Marine lose 25 to-hit."
+LocFlyOverText="Hold Fast"
+LocPromotionPopupText="<Bullet/> Enemy melee attacks against this Marine suffer -25 to hit.<br/>"
+
