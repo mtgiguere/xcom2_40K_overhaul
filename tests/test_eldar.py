@@ -59,6 +59,7 @@ def test_destructor_and_loadout(config):
     weapons = section(config, "XComAstartes.ini", "Astartes.X2Item_AstartesWeapons")
     w = next(x for x in weapons.values("Weapons") if struct_field(x, "NewName") == "Astartes_Destructor")
     assert struct_field(w, "BaseTemplate") == "ForcePush_MG" and struct_field(w, "bEnemyOnly") == "true"
+    assert struct_field(w, "MeshFrom") == "SingingSpear_MG", "the shove weapon is invisible by itself; the Warlock must hold something (playtest 2026-10-18)"
     extras = [x for x in weapons.values("ExtraAbilities") if struct_field(x, "Weapon") == "Astartes_Destructor"]
     assert any(struct_field(x, "Ability") == "StandardShot" for x in extras), "the AI fires StandardShot, not the mod's own shot"
     loadouts = section(config, "XComGameData.ini", "XComGame.X2ItemTemplateManager").values("Loadouts")
