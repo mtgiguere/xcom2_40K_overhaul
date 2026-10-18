@@ -46,13 +46,30 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 {
 	local XComGameState_Unit Librarian, Daemon;
 	local XComGameState_AIGroup OldGroup, NewGroup;
+	local XComTacticalCheatManager Cheats;
+	local bool bWasInvincible, bWasBleedOut;
+	local array<name> DamageTypes;
 
 	Librarian = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	Librarian.SetUnitFloatValue(default.LostToTheWarpValueName, 1, eCleanup_Never);
-	// The daemon takes him: no body, no bleed-out, no geneseed. HP 0 makes the strategy layer record a KIA;
-	// removing him from play is what the Faceless reveal does to the civilian it replaces.
-	Librarian.SetCurrentStat(eStat_HP, 0);
-	Librarian.ActionPoints.Length = 0;
+	// The daemon takes him. A real death (UnitDied fires, the mission end counts him as killed), with the
+	// god-mode and always-bleed-out cheats suspended for the call: a tester's PowerUp blocked the first versions.
+	Cheats = `CHEATMGR;
+	if (Cheats != none)
+	{
+		bWasInvincible = Cheats.bInvincible;
+		bWasBleedOut = Cheats.bAlwaysBleedOut;
+		Cheats.bInvincible = false;
+		Cheats.bAlwaysBleedOut = false;
+	}
+	DamageTypes.AddItem('Psi');
+	Librarian.TakeEffectDamage(self, Librarian.GetMaxStat(eStat_HP) + 100, 0, 0, ApplyEffectParameters, NewGameState, false, false, true, DamageTypes);
+	if (Cheats != none)
+	{
+		Cheats.bInvincible = bWasInvincible;
+		Cheats.bAlwaysBleedOut = bWasBleedOut;
+	}
+	// And he is gone: no body for the Apothecary (LostToTheWarp blocks the harvest), nothing left on the tile.
 	Librarian.RemoveStateFromPlay();
 	`XEVENTMGR.TriggerEvent('UnitRemovedFromPlay', Librarian, Librarian, NewGameState);
 

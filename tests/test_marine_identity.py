@@ -1,5 +1,5 @@
 """Step 'soldiers are Marines': base stats, gender policy, armour look, promotion deck."""
-from x2config import unquote
+from x2config import struct_field, unquote
 
 
 def _soldier_stats(config):
@@ -66,3 +66,14 @@ def test_marine_look_template_configured(config):
     section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
     names = [unquote(v) for v in section.values("MarineLookTemplates")]
     assert names and all(" " in n for n in names), "list at least one pool soldier by full name"
+
+
+def test_shipped_marine_look(config):
+    """The standard look ships as explicit parts so players without the pool template get it; every piece tintable."""
+    section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
+    looks = list(section.values("MarineLookParts"))
+    assert looks, "ship at least one MarineLookParts line (Astartes_ExportLook)"
+    for look in looks:
+        torso = struct_field(look, "nmTorso")
+        assert torso and "Tint" in torso, f"the shipped torso must be a tintable Tacticus piece, got {torso!r}"
+        assert struct_field(look, "nmHelmet"), "Marines fight helmeted"
