@@ -48,7 +48,7 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 	local XComGameState_AIGroup OldGroup, NewGroup;
 	local XComTacticalCheatManager Cheats;
 	local bool bWasInvincible, bWasBleedOut;
-	local array<name> DamageTypes;
+	local array<name> PsiDamage;
 
 	Librarian = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	Librarian.SetUnitFloatValue(default.LostToTheWarpValueName, 1, eCleanup_Never);
@@ -62,8 +62,8 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 		Cheats.bInvincible = false;
 		Cheats.bAlwaysBleedOut = false;
 	}
-	DamageTypes.AddItem('Psi');
-	Librarian.TakeEffectDamage(self, Librarian.GetMaxStat(eStat_HP) + 100, 0, 0, ApplyEffectParameters, NewGameState, false, false, true, DamageTypes);
+	PsiDamage.AddItem('Psi');
+	Librarian.TakeEffectDamage(self, Librarian.GetMaxStat(eStat_HP) + 100, 0, 0, ApplyEffectParameters, NewGameState, false, false, true, PsiDamage);
 	if (Cheats != none)
 	{
 		Cheats.bInvincible = bWasInvincible;
