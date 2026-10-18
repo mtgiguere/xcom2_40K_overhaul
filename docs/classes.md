@@ -130,6 +130,8 @@ is explicitly "today vs. tomorrow vs. right now."
 
 ## Librarian (force weapon + psychic hood)
 
+**Decision 2026-10-18: vanilla names, 40K text.** Perk visual effects and per-ability animations are bound to the *ability name* (`XComPerkContent.AssociatedAbility`, `X2WeaponTemplate.AbilitySpecificAnimations`), so a renamed clone casts with no vortex, beam or shield dome. The Librarian's disciplines, the Jump Pack (IcarusJump), Codex Volley (Faceoff) and Telekine Shield (EnergyShield) therefore keep their vanilla template names, are retuned in place (`Retunes` in `Astartes_AbilityVariants`) and get their 40K names and descriptions from localization overrides. Clones remain only for abilities without bound visuals (Deep Jump).
+
 Role: the psyker. Columns are the three classic disciplines so the fantasy itself is the choice:
 **Pyromancy** (damage and area denial), **Telepathy** (control and Will warfare),
 **Biomancy/Telekinesis** (bodies and objects). Every psychic power carries a **Perils of the Warp**
@@ -246,7 +248,7 @@ Lightsaber Telekinesis (crash on mission exit). Deflect and Lightsaber Toss were
 | Assault | Chain Teeth, Charge, Whirlwind, Duelist, Decapitate, Death from Above, Jump Pack, Shock Landing, Hit and Run, Hammer of Wrath, Deep Jump, Angel of Death, Power Armour Veteran, Hold Fast | Fortress (Iron Halo), Quickdraw, Bladestorm, Implacable, Untouchable | Undying, Last Stand (both need a bleed-out override; planned with the Dreadnought pipeline) |
 | Devastator | Brace, Bipod, Heavy Stance, Weapon Mount, Tank Hunter, Plasma Overcharge, Lascannon Round, Krak Missile, Melta Round | Suppression, Shredder, Holo Targeting, Chain Shot, Sentinel | zone mechanics: Sweeping Fire, Grinding Advance, Fire Lane, Hunker Them Down, Whirlwind Barrage; Sandbag Position, Castellan |
 | Apothecary | Recover Geneseed, Reductor Mastery, Stimm Shot, Warrior Medic, Field Surgery, Chirurgeon's Fury | Medical Protocol (Narthecium), Aid Protocol (Combat Stims), Restorative Mist (Mass Triage), Revival Protocol | Dreadnought/bleed-out linked: Interment Rites, Augmentic Repair, Preservation, Miracle, Last Rites; Purity Check (Chaos corruption), Honour the Fallen, Harvest, Guardian, Combat Doctrine |
-| Librarian | Smite, Flame Breath, Molten Beam, Fury of the Ancients, Terrify, Psychic Scream, Dominate, Quickening, Might of Heroes, Telekine Shield (clones of vanilla psionics under 40K names, via `Astartes_AbilityVariants`), Perils of the Warp | Fuse | Fire Shield, Warp Bind, Puppet Master, Smite the Earth, Warp Vigour, Hallucination, Vortex of Doom, Firestorm, Psychic Hood power, Warp Quake (need new psionic implementations; no suitable vanilla bases). Perils of the Warp is live (passive + 5 outcomes incl. daemonic possession); no Warp Charge pool by decision. |
+| Librarian | Smite, Flame Breath, Molten Beam, Fury of the Ancients, Terrify, Psychic Scream, Dominate, Quickening, Might of Heroes, Telekine Shield (vanilla psionics renamed by localization; prerequisites cleared), Perils of the Warp | Fuse | Fire Shield, Warp Bind, Puppet Master, Smite the Earth, Warp Vigour, Hallucination, Vortex of Doom, Firestorm, Psychic Hood power, Warp Quake (need new psionic implementations; no suitable vanilla bases). Perils of the Warp is live (passive + 5 outcomes incl. daemonic possession); no Warp Charge pool by decision. |
 | Shared | Know No Fear, Astartes Physiology, Power Armour Mk VII stats | | |
 | Chapter Master | Death Incarnate (Assault capstone) | | Rites of Battle, Orbital Bombardment, The Emperor's Mercy, Warp Mastery |
 

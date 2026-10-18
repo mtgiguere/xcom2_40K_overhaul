@@ -21,6 +21,7 @@ struct AbilityClone
 	var int RangeTiles;        // -1 keep; for cursor-targeted abilities: fixed range in tiles
 	var bool bNoRulerReaction; // drop the 'RulerArmorAbilityActivated' post-activation event (Alien Rulers would get a free move)
 	var int Charges;           // 0 keep; n = per-mission charges (a charge cost is added if the base has none)
+	var bool bClearPrerequisites; // drop PrerequisiteAbilities (our trees define their own progression)
 	structdefaultproperties
 	{
 		Cooldown = -1
@@ -30,6 +31,10 @@ struct AbilityClone
 };
 
 var config array<AbilityClone> Clones;
+// Retunes change a VANILLA template in place (NewName ignored). Used where the ability must keep its vanilla
+// name: perk visual effects and per-ability animations are bound to the ability name, so a clone loses them.
+// The 40K name and text come from localization overrides in XComGame.int.
+var config array<AbilityClone> Retunes;
 
 static function CreateClones()
 {
@@ -61,6 +66,28 @@ static function CreateClones()
 		Created++;
 	}
 	`log("Astartes: ability clones created:" @ Created @ "of" @ default.Clones.Length,, 'Astartes');
+	ApplyRetunes(AbilityMgr);
+}
+
+static function ApplyRetunes(X2AbilityTemplateManager AbilityMgr)
+{
+	local X2AbilityTemplate Template;
+	local AbilityClone Def;
+	local int i, Applied;
+
+	for (i = 0; i < default.Retunes.Length; i++)
+	{
+		Template = AbilityMgr.FindAbilityTemplate(default.Retunes[i].BaseAbility);
+		if (Template == none)
+		{
+			`log("Astartes: retune of" @ default.Retunes[i].BaseAbility @ "skipped: not found",, 'Astartes');
+			continue;
+		}
+		Def = default.Retunes[i];
+		Tune(Template, Def);
+		Applied++;
+	}
+	`log("Astartes: ability retunes applied:" @ Applied @ "of" @ default.Retunes.Length,, 'Astartes');
 }
 
 /// Apply the optional tuning. Cost arrays and target styles are rebuilt with new objects so the
@@ -143,6 +170,11 @@ static function Tune(X2AbilityTemplate Clone, const out AbilityClone Def)
 	if (Def.bNoRulerReaction)
 	{
 		Clone.PostActivationEvents.RemoveItem('RulerArmorAbilityActivated');
+	}
+
+	if (Def.bClearPrerequisites)
+	{
+		Clone.PrerequisiteAbilities.Length = 0;
 	}
 }
 

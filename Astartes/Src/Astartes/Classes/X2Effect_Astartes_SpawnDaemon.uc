@@ -46,14 +46,15 @@ function OnSpawnComplete(const out EffectAppliedData ApplyEffectParameters, Stat
 {
 	local XComGameState_Unit Librarian, Daemon;
 	local XComGameState_AIGroup OldGroup, NewGroup;
-	local array<name> DamageTypes;
 
 	Librarian = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', ApplyEffectParameters.TargetStateObjectRef.ObjectID));
 	Librarian.SetUnitFloatValue(default.LostToTheWarpValueName, 1, eCleanup_Never);
-	// The daemon takes him. Direct damage: no bleed-out, no shields, no armour, a normal KIA for the strategy layer.
-	// (Playtest 2026-10-17: a separate X2Effect_ApplyWeaponDamage on the same ability left him standing.)
-	DamageTypes.AddItem('Psi');
-	Librarian.TakeEffectDamage(self, Librarian.GetMaxStat(eStat_HP) + 100, 0, 0, ApplyEffectParameters, NewGameState, false, false, true, DamageTypes);
+	// The daemon takes him: no body, no bleed-out, no geneseed. HP 0 makes the strategy layer record a KIA;
+	// removing him from play is what the Faceless reveal does to the civilian it replaces.
+	Librarian.SetCurrentStat(eStat_HP, 0);
+	Librarian.ActionPoints.Length = 0;
+	Librarian.RemoveStateFromPlay();
+	`XEVENTMGR.TriggerEvent('UnitRemovedFromPlay', Librarian, Librarian, NewGameState);
 
 	// The spawn manager files units created by an XCOM-owned source under XCOM's own group.
 	// A daemon fights for nobody but itself: give it a fresh alien group.
@@ -81,7 +82,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 	super.AddX2ActionsForVisualization(VisualizeGameState, ActionMetadata, EffectApplyResult);
 	if (EffectApplyResult == 'AA_Success' && XComGameState_Unit(ActionMetadata.StateObject_NewState) != none)
 	{
-		class'X2Action_ApplyWeaponDamageToUnit'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext());
+		class'X2Action_RemoveUnit'.static.AddToVisualizationTree(ActionMetadata, VisualizeGameState.GetContext());
 	}
 
 	History = `XCOMHISTORY;
@@ -92,7 +93,7 @@ simulated function AddX2ActionsForVisualization(XComGameState VisualizeGameState
 		DaemonTrack.StateObject_OldState = SpawnedUnits[i];
 		DaemonTrack.StateObject_NewState = SpawnedUnits[i];
 		DaemonTrack.VisualizeActor = History.GetVisualizer(SpawnedUnits[i].ObjectID);
-		class'X2Action_ShowSpawnedUnit'.static.AddToVisualizationTree(DaemonTrack, VisualizeGameState.GetContext());
+		class'X2Action_ShowSpawnedUnit'.static.AddToVisualizationTree(DaemonTrack, VisualizeGameState.GetContext(), false, ActionMetadata.LastActionAdded);
 	}
 }
 

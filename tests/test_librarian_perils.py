@@ -35,9 +35,8 @@ def librarian_abilities() -> set[str]:
     return {s.get("standin") or s["name"] for rank in SPEC["classes"]["Astartes_Librarian"]["ranks"] for s in rank}
 
 
-def clone_names(config) -> set[str]:
-    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_AbilityVariants"][0]
-    return {struct_field(v, "NewName") for v in section.values("Clones")}
+# The Librarian's powers are the vanilla psionics, renamed by localization (perk visuals bind to the vanilla name).
+PSYCHIC_POWERS = {"Soulfire", "Insanity", "Inspire", "NullLance", "Schism", "Solace", "SoulSteal", "Domination", "VoidRift", "Fuse", "EnergyShield"}
 
 
 def warp_charges(perils_cfg) -> dict[str, int]:
@@ -54,7 +53,8 @@ def test_only_the_librarian_knows_the_perils():
 
 
 def test_every_psychic_power_in_the_tree_has_a_warp_charge(config, perils_cfg):
-    powers = clone_names(config) & librarian_abilities()
+    powers = PSYCHIC_POWERS & librarian_abilities()
+    assert powers == PSYCHIC_POWERS, f"psychic powers missing from the Librarian tree: {PSYCHIC_POWERS - powers}"
     charges = warp_charges(perils_cfg)
     missing = sorted(powers - set(charges))
     assert not missing, f"Librarian psychic powers without a WarpCharge entry: {missing}"
@@ -108,3 +108,10 @@ def test_perils_is_hooked_through_the_event_listener_template():
     librarian = (SRC_DIR / "X2Ability_Astartes_Librarian.uc").read_text(encoding="utf-8")
     assert "static function RollPerils" in librarian
     assert "X2AbilityTrigger_EventListener" not in librarian, "do not hook Perils through an ability trigger"
+
+
+def test_psychic_powers_have_40k_names(loc_sections):
+    """Each vanilla psionic used by the Librarian must carry our localization override."""
+    loc = {s.template_name: s for s in loc_sections if s.template_class == "X2AbilityTemplate"}
+    missing = sorted(p for p in PSYCHIC_POWERS if p not in loc or not unquote(loc[p].first("LocFriendlyName") or ""))
+    assert not missing, f"no 40K name override for: {missing}"

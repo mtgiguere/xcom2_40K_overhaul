@@ -153,7 +153,7 @@
         ],
         [
           {
-            "name": "Astartes_CodexVolley",
+            "name": "Faceoff",
             "slot": "primary"
           },
           {
@@ -198,7 +198,7 @@
             "slot": "primary"
           },
           {
-            "name": "Astartes_JumpPack"
+            "name": "IcarusJump"
           },
           {
             "name": "Astartes_PowerArmourVeteran"
@@ -569,15 +569,15 @@
       "ranks": [
         [
           {
-            "name": "Astartes_Smite",
+            "name": "Soulfire",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_Terrify",
+            "name": "Insanity",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_Quickening",
+            "name": "Inspire",
             "slot": "secondary"
           },
           {
@@ -592,29 +592,29 @@
         ],
         [
           {
-            "name": "Astartes_FlameBreath",
+            "name": "NullLance",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_PsychicScream",
+            "name": "Schism",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_MightOfHeroes",
+            "name": "Solace",
             "slot": "secondary"
           }
         ],
         [
           {
-            "name": "Astartes_MoltenBeam",
+            "name": "SoulSteal",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_Dominate",
+            "name": "Domination",
             "slot": "secondary"
           },
           {
-            "name": "Astartes_TelekineShield"
+            "name": "EnergyShield"
           }
         ],
         [
@@ -634,7 +634,7 @@
         ],
         [
           {
-            "name": "Astartes_FuryOfTheAncients",
+            "name": "VoidRift",
             "slot": "secondary"
           },
           {

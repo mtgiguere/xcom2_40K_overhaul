@@ -153,7 +153,7 @@ static function X2AbilityTemplate DeathFromAbove()
 	local XMBCondition_AbilityName JumpNames;
 
 	JumpNames = new class'XMBCondition_AbilityName';
-	JumpNames.IncludeAbilityNames.AddItem('Astartes_JumpPack');
+	JumpNames.IncludeAbilityNames.AddItem('IcarusJump');
 	JumpNames.IncludeAbilityNames.AddItem('Astartes_DeepJump');
 
 	FreeJump = new class'XMBEffect_AbilityCostRefund';
@@ -206,7 +206,7 @@ static function X2AbilityTemplate HitAndRun()
 	local X2Effect_Astartes_ResetCooldown Reset;
 
 	Reset = new class'X2Effect_Astartes_ResetCooldown';
-	Reset.AbilityNames.AddItem('Astartes_JumpPack');
+	Reset.AbilityNames.AddItem('IcarusJump');
 	Reset.AbilityNames.AddItem('Astartes_DeepJump');
 
 	Template = SelfTargetTrigger('Astartes_HitAndRun', "img:///UILibrary_PerkIcons.UIPerk_implacable", false, Reset, 'KillMail');
@@ -247,7 +247,7 @@ static function X2AbilityTemplate AngelOfDeath()
 	Actions.PointType = class'X2CharacterTemplateManager'.default.StandardActionPoint;
 
 	Reset = new class'X2Effect_Astartes_ResetCooldown';
-	Reset.AbilityNames.AddItem('Astartes_JumpPack');
+	Reset.AbilityNames.AddItem('IcarusJump');
 	Reset.AbilityNames.AddItem('Astartes_DeepJump');
 
 	Mobility = new class'X2Effect_PersistentStatChange';
@@ -313,7 +313,7 @@ static function X2AbilityTemplate DeathIncarnateReset()
 	local X2Condition_UnitEffects Active;
 
 	Reset = new class'X2Effect_Astartes_ResetCooldown';
-	Reset.AbilityNames.AddItem('Astartes_JumpPack');
+	Reset.AbilityNames.AddItem('IcarusJump');
 	Reset.AbilityNames.AddItem('Astartes_DeepJump');
 
 	Template = SelfTargetTrigger('Astartes_DeathIncarnate_Reset', "img:///UILibrary_PerkIcons.UIPerk_implacable", false, Reset, 'KillMail');

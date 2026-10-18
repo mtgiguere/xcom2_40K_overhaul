@@ -245,62 +245,62 @@ LocHelpText="Healing protocols do not end your turn."
 LocPromotionPopupText="<Bullet/> Narthecium heals, revives and restorative mist do not end your turn.<br/>"
 
 ; ---------------------------------------------------------------- Librarian (disciplines; vanilla psionic implementations under 40K names)
-[Astartes_Smite X2AbilityTemplate]
+[Soulfire X2AbilityTemplate]
 LocFriendlyName="Smite"
 LocLongDescription="A bolt of warp-fire hurled from the mind. Guaranteed to hit; damage scales with the Librarian's psionic strength. Living targets only."
 LocHelpText="Guaranteed-hit psychic bolt against a living target."
 LocFlyOverText="Smite"
 LocPromotionPopupText="<Bullet/> Cannot miss.<br/><Bullet/> Damage scales with Psi Offense.<br/><Bullet/> Only affects organic targets.<br/>"
 
-[Astartes_FlameBreath X2AbilityTemplate]
+[NullLance X2AbilityTemplate]
 LocFriendlyName="Flame Breath"
 LocLongDescription="A lance of warp-flame that burns through everything in a line, cover included."
 LocHelpText="A piercing line of psychic fire."
 LocFlyOverText="Flame Breath"
 LocPromotionPopupText="<Bullet/> Damages every enemy in a line.<br/><Bullet/> Ignores cover.<br/>"
 
-[Astartes_MoltenBeam X2AbilityTemplate]
+[SoulSteal X2AbilityTemplate]
 LocFriendlyName="Molten Beam"
 LocLongDescription="Draw the heat from an enemy's body into your own. Damages a living target and restores the Librarian's health."
 LocHelpText="Damage a living target and heal yourself."
 LocFlyOverText="Molten Beam"
 LocPromotionPopupText="<Bullet/> Damages an organic target.<br/><Bullet/> Heals the Librarian for the damage dealt.<br/>"
 
-[Astartes_FuryOfTheAncients X2AbilityTemplate]
+[VoidRift X2AbilityTemplate]
 LocFriendlyName="Fury of the Ancients"
 LocLongDescription="Tear open the veil. A rift of warp-energy damages every unit in a wide area and may drive them mad. Perilous."
 LocHelpText="Area psychic blast that can inflict madness."
 LocFlyOverText="Fury of the Ancients"
 LocPromotionPopupText="<Bullet/> Damages all units in a large radius.<br/><Bullet/> May disorient, panic or control affected enemies.<br/>"
 
-[Astartes_Terrify X2AbilityTemplate]
+[Insanity X2AbilityTemplate]
 LocFriendlyName="Terrify"
 LocLongDescription="Fill the target's mind with visions of its own death. Panics, disorients, or briefly controls a living target."
 LocHelpText="Psychic assault on a single mind."
 LocFlyOverText="Terrify"
 LocPromotionPopupText="<Bullet/> Target suffers panic, disorientation, or brief mind control.<br/>"
 
-[Astartes_PsychicScream X2AbilityTemplate]
+[Schism X2AbilityTemplate]
 LocFriendlyName="Psychic Scream"
 LocLongDescription="A shriek of raw Warp. Terrify now also deals damage and reduces the target's will to resist."
 LocHelpText="Terrify also damages and weakens its target."
 LocPromotionPopupText="<Bullet/> Terrify deals damage.<br/><Bullet/> The target's Will is reduced.<br/>"
 
-[Astartes_Dominate X2AbilityTemplate]
+[Domination X2AbilityTemplate]
 LocFriendlyName="Dominate"
 LocLongDescription="Seize a lesser mind and bend it to the Emperor's service for the rest of the battle. Once per mission."
 LocHelpText="Permanently control a living enemy. Once per mission."
 LocFlyOverText="Dominate"
 LocPromotionPopupText="<Bullet/> Permanent mind control of one organic enemy.<br/><Bullet/> Once per mission.<br/>"
 
-[Astartes_Quickening X2AbilityTemplate]
+[Inspire X2AbilityTemplate]
 LocFriendlyName="Quickening"
 LocLongDescription="Accelerate a battle-brother's reflexes with a surge of Warp-borne vigour. Grants him an action."
 LocHelpText="Grant an ally an action."
 LocFlyOverText="Quickening"
 LocPromotionPopupText="<Bullet/> Target ally gains an action point.<br/><Bullet/> Cooldown.<br/>"
 
-[Astartes_MightOfHeroes X2AbilityTemplate]
+[Solace X2AbilityTemplate]
 LocFriendlyName="Might of Heroes"
 LocLongDescription="A steadying presence in the Warp. Allies near the Librarian are shielded from mental attack and shake off disorientation."
 LocHelpText="Aura: nearby allies are protected against psychic attack."
@@ -497,8 +497,8 @@ LocLongDescription="A daemon claims the Librarian's soul and bursts from his bod
 LocHelpText="Perils outcome: the Librarian is lost and a daemon takes the field."
 LocFlyOverText="Dragged into the Warp"
 
-; --- Assault Marine jump pack (Astartes_AbilityVariants clone of IcarusJump) ---
-[Astartes_JumpPack X2AbilityTemplate]
+; --- Assault Marine jump pack: the vanilla IcarusJump, retuned in place and renamed here ---
+[IcarusJump X2AbilityTemplate]
 LocFriendlyName="Jump Pack"
 LocLongDescription="Fire the jump pack and land anywhere within 14 tiles, over walls, rooftops and enemies alike. Costs one action and does not end the turn: jump, then strike. 2-turn cooldown."
 LocHelpText="Jump to any tile within 14 tiles, ignoring terrain. One action, does not end the turn. 2-turn cooldown."
@@ -591,7 +591,7 @@ LocHelpText="You and one brother gain a free move. Once per mission."
 LocFlyOverText="Combat Squads"
 LocPromotionPopupText="<Bullet/> Free action, once per mission.<br/><Bullet/> Target a brother: he and the sergeant each gain a move action.<br/>"
 
-[Astartes_CodexVolley X2AbilityTemplate]
+[Faceoff X2AbilityTemplate]
 LocFriendlyName="Codex Volley"
 LocLongDescription="By the book: one bolter shot at every visible enemy. Once per mission."
 LocHelpText="Fire the bolter once at every visible enemy. Once per mission."
@@ -661,7 +661,7 @@ LocHelpText="After healing this turn, bolter hits crit."
 LocFlyOverText="Chirurgeon's Fury"
 LocPromotionPopupText="<Bullet/> After a heal, stabilize, revive or stimm, the Apothecary's bolter hits for the rest of the turn are critical.<br/>"
 
-[Astartes_TelekineShield X2AbilityTemplate]
+[EnergyShield X2AbilityTemplate]
 LocFriendlyName="Telekine Shield"
 LocLongDescription="A dome of force over the Librarian and the brothers beside him. Grants shield points that absorb damage. 4-turn cooldown. Psychic power: rolls for Perils."
 LocHelpText="Shield points for the Librarian and nearby brothers. Cooldown."
@@ -681,3 +681,10 @@ LocFriendlyName="Death Incarnate"
 LocLongDescription="While Death Incarnate is active, melee kills ready the jump pack."
 LocHelpText="Melee kills ready the jump pack."
 LocFlyOverText="Death Incarnate"
+
+[Fuse X2AbilityTemplate]
+LocFriendlyName="Combustion"
+LocLongDescription="The Librarian reaches into an enemy's ammunition and grenades and sets them off where they hang. Psychic power: rolls for Perils."
+LocHelpText="Detonate a target's explosives. Rolls for Perils."
+LocFlyOverText="Combustion"
+LocPromotionPopupText="<Bullet/> Detonates the explosives an enemy is carrying.<br/><Bullet/> Rolls for Perils of the Warp.<br/>"
