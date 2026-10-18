@@ -446,6 +446,20 @@ continent pod-rewrite had converted the rift encounter. Fixed the same day: `Ast
 Breath), each a behaviour-tree node away; a Sorcerer who can re-open a collapsed rift at a cost; Eldar Warlock on the same
 pattern with Force Shove.
 
+### 9.1c Imperial allies in place of the resistance factions (proposed 2026-10-18)
+
+The faction-hero machinery stays, re-aimed: each resistance faction becomes an Imperial organisation and its hero reward a
+single high-rank unique character with a class of their own, instead of the Marine recruit the no-heroes build hands out.
+
+| WotC faction | Imperial organisation | Hero reward | Models in hand |
+|---|---|---|---|
+| Reapers (stealth) | The Inquisition | **Inquisitor**: stealth, interrogation, authority; the natural owner of Chaos-corruption mechanics | none yet (needs a coat/rosette cosmetic mod) |
+| Skirmishers (aggression, ex-ADVENT) | Astra Militarum / Officio Prefectus | **Commissar**: the officer line (orders, execution, "stand your ground") | Space Marine 2 Cadian armour (3470263959), Guardsmen class mods (1139714141, 1521073823), Commissar Lord Bernn voice (862155483) |
+| Templars (psi) | Adepta Sororitas | **Sister of Battle / Canoness**: faith powers, the anti-psyker counterweight to the Librarius | WH40k Sister of Battle armour (1417074510), Sister voice pack (1443930560), Canoness Selena Agna voice (1731166463) |
+
+Build order when picked up: Commissar and Canoness first (models and voices present), Inquisitor when a model turns up.
+The hero rewards in `Astartes_NoHeroes` then generate these characters by faction instead of a rookie.
+
 ### 9.2 Eldar interventions (Lost-mechanic, reworked)
 
 **Decided 2026-10-18: the Lost are Eldar, full stop.** No Tyranid gaunt swap: gaunts on a Tyranid continent would read as the same faction twice. The Lost SitRep and Lost missions become Eldar incursions (webway raiders) once Eldar unit models are wired in.
