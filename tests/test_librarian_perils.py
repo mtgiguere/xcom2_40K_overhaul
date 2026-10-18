@@ -83,6 +83,7 @@ def test_daemon_tiers(perils_cfg):
     assert tiers[0][0] == 1, "the first daemon tier must start at force level 1 so possession always has a daemon"
     assert [t[0] for t in tiers] == sorted(t[0] for t in tiers), "tiers must be listed in ascending force level"
     assert all(t[1] for t in tiers), "every tier needs a character template"
+    assert any(not t[1].startswith("Astartes_") for t in tiers), "keep a vanilla fallback tier for when the daemon mod is not loaded"
 
 
 def test_outcome_abilities_are_defined_and_carried_by_the_passive():

@@ -159,18 +159,24 @@ static function EventListenerReturn PerilsListener(Object EventData, Object Even
 static function PerilsDaemonDef DaemonForForceLevel(int ForceLevel)
 {
 	local PerilsDaemonDef Best;
+	local X2CharacterTemplateManager CharMgr;
 	local int i;
 
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
 	for (i = 0; i < default.PerilsDaemons.Length; i++)
 	{
+		if (CharMgr.FindCharacterTemplate(default.PerilsDaemons[i].Template) == none)
+		{
+			continue; // that mod is not loaded; fall through to the next candidate
+		}
 		if (default.PerilsDaemons[i].MinForceLevel <= ForceLevel && (Best.Template == '' || default.PerilsDaemons[i].MinForceLevel >= Best.MinForceLevel))
 		{
 			Best = default.PerilsDaemons[i];
 		}
 	}
-	if (Best.Template == '' && default.PerilsDaemons.Length > 0)
+	if (Best.Template == '')
 	{
-		Best = default.PerilsDaemons[0];
+		Best.Template = 'Gatekeeper'; // last resort: a vanilla unit always exists
 	}
 	return Best;
 }

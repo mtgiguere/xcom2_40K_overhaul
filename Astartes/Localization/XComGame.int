@@ -8,6 +8,12 @@ strCharacterName="Chaos Cultist"
 [Astartes_CultHybrid X2CharacterTemplate]
 strCharacterName="Genestealer Cult Hybrid"
 
+[Astartes_GreaterDaemon X2CharacterTemplate]
+strCharacterName="Greater Daemon"
+
+[Astartes_Daemon X2CharacterTemplate]
+strCharacterName="Daemon"
+
 ; ---------------------------------------------------------------- armour (vanilla tiers renamed as power armour marks)
 [KevlarArmor X2ArmorTemplate]
 FriendlyName="Power Armour Mk VII"

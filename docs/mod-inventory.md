@@ -446,3 +446,8 @@ Highlander comment: "eTeam_One and eTeam_Two should be the only ones here." The 
 - Xlegendsneph `3372335738`
 - YetAnotherF1 `934236622`
 - ZelfExtraDamagePatcher `2971495164`
+
+## Daemons
+| Mod | ID | Notes |
+|---|---|---|
+| Resident Evil 2: Remake G-Virus (Beta) | 2264204537 | Full enemy units (G1/G2/G3 forms, own AI, melee sweeps, a civilian that morphs). G3 = `Astartes_GreaterDaemon`, G2 = `Astartes_Daemon` via `Astartes_UnitVariants`. Used by Perils of the Warp possession; candidate for Chaos pods at high force level. |

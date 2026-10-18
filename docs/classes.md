@@ -143,7 +143,7 @@ table modelled on the tabletop one (weights in `XComAstartes.ini`):
 | Psychic Backlash | 3 | 2-4 damage that ignores armour |
 | Warp Shock | 3 | Stunned |
 | Mental Purge | 2 | Every psychic power goes on a 3-turn cooldown |
-| Dragged into the Warp | 1 | A daemon bursts out on his tile, hostile. The Librarian is KIA and his geneseed is lost (the Apothecary cannot harvest him). It is a *greater* daemon from mission one (vanilla Gatekeeper stand-in), by decision: that is the point of Chaos. Force-level tiers (`PerilsDaemons`) are supported in config for anyone who wants mercy |
+| Dragged into the Warp | 1 | A daemon bursts out on his tile, hostile. The Librarian is KIA and his geneseed is lost (the Apothecary cannot harvest him). It is a *greater* daemon from mission one, by decision: that is the point of Chaos. The daemon is `Astartes_GreaterDaemon`, our variant of the RE2 G-Virus mod's G3 form (30 HP, 3 armour, melee monster with its own AI); vanilla Gatekeeper if that mod is not loaded. Force-level tiers (`PerilsDaemons`) are supported in config for anyone who wants mercy |
 
 Overall a minor power loses the Librarian 0.8% of the time, a cataclysmic one 2%; over a campaign of
 hundreds of casts that is a real chance, which is the point. Future hooks: Chaos-heavy regions raise the
