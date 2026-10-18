@@ -96,6 +96,7 @@ Soldier names go in quotes when they contain a space: `"Marcus Tyr"`.
 | `Astartes_DevSquad 3` | Same, but promoted only 3 ranks |
 | `Astartes_Redress` | Re-rolls every soldier's look through the Marine generator (Tacticus armour, gender policy) |
 | `Astartes_AP 100` | Every soldier gets 100 unspent ability points (and the XCOM pool), so every promotion choice can be bought for testing |
+| `GiveFacility RecoveryCenter 3` | Builds the Training Center in room 3 (try 4, 5... if that room is taken); required before extra abilities can be bought with ability points |
 | `Astartes_SquadSize 5` | Squad cap 4, 5 or 6 by granting the GTS squad-size unlocks; takes effect at the next squad select |
 | `LevelUpBarracks 7` | Promotes every existing soldier 7 ranks |
 | `MakeSoldierAClass "First Last" Astartes_Librarian` | Forces a soldier into a class |
