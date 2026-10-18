@@ -30,6 +30,54 @@ LocFriendlyName="Power Armour"
 LocHelpText="Power armour plating."
 LocLongDescription="Ceramite plate and an adamantium skeleton give the wearer additional health and armour."
 
+; ---------------------------------------------------------------- Tactical Marine
+[Astartes_BolterDrill X2AbilityTemplate]
+LocFriendlyName="Bolter Drill"
+LocLongDescription="Codex fire discipline. The first standard shot with your bolter each turn does not end your turn."
+LocHelpText="The first bolter shot each turn does not end your turn."
+LocFlyOverText="Bolter Drill"
+LocPromotionPopupText="<Bullet/> Once per turn, a standard bolter shot costs one action and does not end the turn.<br/><Bullet/> Other shots behave normally.<br/>"
+
+[Astartes_KrakenRounds X2AbilityTemplate]
+LocFriendlyName="Kraken Rounds"
+LocLongDescription="Adamantine-cored bolts. Bolter shots deal <Ability:KRAKEN_DAMAGE/> extra damage and pierce <Ability:KRAKEN_PIERCE/> armour, at a cost to aim."
+LocHelpText="Bolter shots: +damage, +armour piercing, -aim."
+LocPromotionPopupText="<Bullet/> Bolter shots deal extra damage and pierce armour.<br/><Bullet/> Bolter aim is reduced.<br/>"
+
+[Astartes_HellfireRounds X2AbilityTemplate]
+LocFriendlyName="Hellfire Rounds"
+LocLongDescription="Bolts filled with mutagenic acid. Bolter shots against living targets deal extra damage and shred armour."
+LocHelpText="Bolter shots vs organic targets: +damage, +shred."
+LocPromotionPopupText="<Bullet/> Against organic targets, bolter shots deal extra damage and shred armour.<br/><Bullet/> No effect on robotic or daemonic machines.<br/>"
+
+[Astartes_Executioner X2AbilityTemplate]
+LocFriendlyName="Executioner"
+LocLongDescription="Finish the wounded. Once per turn, a bolter hit against a target at or below half health is a critical hit."
+LocHelpText="Once per turn, a bolter hit on a target at or below half health crits."
+LocFlyOverText="Executioner"
+LocPromotionPopupText="<Bullet/> Once per turn, a bolter hit against a target at or below half health is upgraded to a critical hit.<br/>"
+
+[Astartes_Rally X2AbilityTemplate]
+LocFriendlyName="Rally"
+LocLongDescription="A sergeant's word. Grant a nearby battle-brother an additional action. Limited uses per mission."
+LocHelpText="Grant a nearby ally an extra action."
+LocFlyOverText="Rally"
+LocPromotionPopupText="<Bullet/> Target a battle-brother within a few tiles to grant him one action.<br/><Bullet/> Limited charges per mission.<br/>"
+
+[Astartes_Inspire X2AbilityTemplate]
+LocFriendlyName="Inspire"
+LocLongDescription="Steady the line. Every ally nearby shakes off disorientation, panic, stun and daze."
+LocHelpText="Remove disorient, panic, stun and daze from nearby allies."
+LocFlyOverText="Inspired"
+LocPromotionPopupText="<Bullet/> Allies within range lose Disoriented, Panicked, Stunned and Dazed.<br/><Bullet/> Cooldown.<br/>"
+
+[Astartes_ForTheEmperor X2AbilityTemplate]
+LocFriendlyName="For the Emperor!"
+LocLongDescription="The battle-cry of the Adeptus Astartes. Once per mission, every ally within range regains an action."
+LocHelpText="Once per mission, all nearby allies regain an action."
+LocFlyOverText="For the Emperor!"
+LocPromotionPopupText="<Bullet/> Every ally within range regains one action.<br/><Bullet/> Once per mission.<br/>"
+
 ; ---------------------------------------------------------------- shared Marine abilities
 [Astartes_KnowNoFear X2AbilityTemplate]
 LocFriendlyName="Know No Fear"

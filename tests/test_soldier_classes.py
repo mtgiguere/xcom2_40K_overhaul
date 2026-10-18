@@ -22,14 +22,21 @@ LIBRARIUS_RANKS = ["Lexicanium", "Codicier", "Epistolary", "Librarian"]
 
 VANILLA_ABILITIES = set((REPO / "tests" / "data" / "vanilla_abilities.txt").read_text(encoding="utf-8").split())
 
+# Vanilla creation patterns plus the XModBase helpers (Passive('Name', ...), TargetedBuff('Name', ...) ...).
 _MOD_ABILITY_RE = re.compile(
-    r"""(?:CreateTemplate\s*\(\s*class'X2AbilityTemplate'\s*,\s*'(\w+)'|CREATE_X2ABILITY_TEMPLATE\s*\(\s*\w+\s*,\s*'(\w+)'|PurePassive\s*\(\s*'(\w+)')"""
+    r"""(?:CreateTemplate\s*\(\s*class'X2AbilityTemplate'\s*,\s*'(\w+)'"""
+    r"""|CREATE_X2ABILITY_TEMPLATE\s*\(\s*\w+\s*,\s*'(\w+)'"""
+    r"""|PurePassive\s*\(\s*'(\w+)'"""
+    r"""|(?:Passive|SelfTargetTrigger|SelfTargetActivated|Attack|MeleeAttack|TargetedDebuff|TargetedBuff|SquadPassive)\s*\(\s*'(\w+)')"""
 )
 
 
 def mod_abilities() -> set[str]:
+    """Ability template names defined by this mod's own sources (XModBase helper files are library code, skipped)."""
     names: set[str] = set()
     for f in SRC_DIR.glob("*.uc"):
+        if f.name.startswith("XMB"):
+            continue
         for m in _MOD_ABILITY_RE.finditer(f.read_text(encoding="utf-8", errors="replace")):
             names.add(next(g for g in m.groups() if g))
     return names

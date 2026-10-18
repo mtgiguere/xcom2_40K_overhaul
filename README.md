@@ -62,6 +62,14 @@ In-game dev commands (console):
 
 Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 
+## Credits and bundled libraries
+
+- **XModBase** by xylthixlm (ability toolkit), bundled as designed: `Astartes/Src/XModBase_Core_2_0_1`,
+  `XModBase_Interfaces`, `LW_Tuple`, and the `XMB*` helper classes in `Astartes/Src/Astartes/Classes`.
+  Copies taken from the Workshop mods The Hive and Guardsmen_WotC; to be replaced by the XModBase Redux core.
+- **X2ModBuildCommon** by the X2 Community Core team (build system), vendored in `.scripts/`.
+- Art and enemy factions come from the Workshop mods listed in `docs/mod-inventory.md` as required dependencies.
+
 ## Conventions
 
 - Prefer config (`.ini`) and Highlander event hooks over class overrides.

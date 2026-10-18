@@ -31,6 +31,7 @@
     <Content Include="Localization\XComGame.int" />
     <Content Include="Src\Astartes\Classes\X2DownloadableContentInfo_Astartes.uc" />
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes.uc" />
+    <Content Include="Src\Astartes\Classes\X2Ability_Astartes_Tactical.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_UnitVariants.uc" />

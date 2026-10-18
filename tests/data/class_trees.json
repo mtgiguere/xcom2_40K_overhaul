@@ -73,12 +73,10 @@
         [
           {
             "name": "Astartes_BolterDrill",
-            "standin": "HailOfBullets",
             "slot": "primary"
           },
           {
-            "name": "Astartes_Rally",
-            "standin": "DeepCover"
+            "name": "Astartes_Rally"
           },
           {
             "name": "CoveringFire"
@@ -93,7 +91,6 @@
         [
           {
             "name": "Astartes_KrakenRounds",
-            "standin": "Deadeye",
             "slot": "primary"
           },
           {
@@ -101,15 +98,13 @@
             "standin": "Phantom"
           },
           {
-            "name": "Astartes_BolterDiscipline",
-            "standin": "ReturnFire",
+            "name": "ReturnFire",
             "slot": "secondary"
           }
         ],
         [
           {
-            "name": "Astartes_PistolSnap",
-            "standin": "LightningHands",
+            "name": "LightningHands",
             "slot": "secondary"
           },
           {
@@ -124,7 +119,6 @@
         [
           {
             "name": "Astartes_HellfireRounds",
-            "standin": "Shredder",
             "slot": "primary"
           },
           {
@@ -151,17 +145,14 @@
         [
           {
             "name": "Astartes_Executioner",
-            "standin": "Executioner",
             "slot": "primary"
           },
           {
             "name": "Astartes_Inspire",
-            "standin": "SteadyHands",
             "slot": "primary"
           },
           {
-            "name": "Astartes_TranshumanPhysiology",
-            "standin": "Untouchable"
+            "name": "Untouchable"
           }
         ],
         [
@@ -172,7 +163,6 @@
           },
           {
             "name": "Astartes_ForTheEmperor",
-            "standin": "ChainShot",
             "slot": "primary"
           },
           {

@@ -176,7 +176,7 @@ force multiplier and the safest. Perils keeps Pyromancy from being "the damage c
 - *In the Zone*: activated, primary kills refund actions, 4-turn cooldown. Candidate for Assault **Whirlwind** instead of a flat Reaper clone.
 - *Full Kit / Minefield*: bonus charges per equipped item. Devastator **Weapon Mount** and Officer **Call Fire Team** could use the same effect.
 - *Improved Survival Gear*: fire + gas immunity passive, same shape as **Astartes Physiology**.
-- It is built on **XModBase**, an ability-authoring library (conditional bonuses, cost refunds, reserve action points, stat changes, event-listener triggers). Adopting XModBase for our own abilities would cut the UnrealScript for most "(new)" abilities to a few lines each. Decision pending; many Workshop classes bundle it.
+- It is built on **XModBase**, an ability-authoring library (conditional bonuses, cost refunds, reserve action points, stat changes, event-listener triggers). Adopting XModBase for our own abilities would cut the UnrealScript for most "(new)" abilities to a few lines each. **Adopted 2026-10-17**: first seven Tactical abilities built on it (`X2Ability_Astartes_Tactical`).
 
 **The Servoskull** (Workshop 1193993048): a gremlin-type item (`X2Item_Servoskull`) with its own cosmetic unit. The Apothecary's **Narthecium** can be a clone of this item rather than a gremlin re-skin.
 
