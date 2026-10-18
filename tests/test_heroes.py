@@ -15,9 +15,9 @@ def section(config, file, name):
     return next(s for s in config[file] if s.name == name)
 
 
-def test_two_heroes_bound_to_factions():
-    assert {v["hero"]["character"] for v in HEROES.values()} == {"Astartes_Canoness", "Astartes_Commissar"}
-    assert {v["hero"]["faction"] for v in HEROES.values()} == {"Faction_Templars", "Faction_Skirmishers"}
+def test_heroes_and_their_factions():
+    assert {v["hero"]["character"] for v in HEROES.values()} == {"Astartes_Canoness", "Astartes_Commissar", "Astartes_Inquisitor"}
+    assert {v["hero"].get("faction") for v in HEROES.values()} == {"Faction_Templars", "Faction_Skirmishers", None}, "the Inquisitor is never a faction reward"
 
 
 def test_hero_classes_stay_out_of_the_deck(class_sections_raw):
@@ -38,7 +38,10 @@ def test_hero_characters_exist_dressed_and_rewarded(config, loc_sections):
         v = variants[ch]
         assert struct_field(v, "BaseTemplate") == "Soldier" and struct_field(v, "DefaultSoldierClass") == cls
         assert struct_field(looks[ch], "bKeepName") == "true" and struct_field(looks[ch], "nmVoice")
-        assert rewards[c["hero"]["faction"]] == ch
+        if c["hero"].get("faction"):
+            assert rewards[c["hero"]["faction"]] == ch
+        else:
+            assert ch not in rewards.values()
         assert f"{ch} X2CharacterTemplate" in stats and (ch, "X2CharacterTemplate") in names
 
 

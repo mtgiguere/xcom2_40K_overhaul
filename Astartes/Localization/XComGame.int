@@ -535,6 +535,32 @@ ShortNames[5]="LCm."
 ShortNames[6]="LCV."
 ShortNames[7]="CGn."
 
+[Astartes_Inquisitor X2SoldierClassTemplate]
+DisplayName="Inquisitor"
+ClassSummary="An agent of the Holy Orders of the Emperor's Inquisition, answerable to no one but the Emperor. Provisional tree: built from existing abilities until the Inquisition arc is designed."
+LeftAbilityTreeTitle="Authority"
+RightAbilityTreeTitle="Hunter"
+AbilityTreeTitles[0]="Authority"
+AbilityTreeTitles[1]="Hunter"
+AbilityTreeTitles[2]="Hereticus"
+AbilityTreeTitles[3]="Chapter"
+RankNames[0]="Acolyte"
+RankNames[1]="Interrogator"
+RankNames[2]="Inquisitor"
+RankNames[3]="Senior Inquisitor"
+RankNames[4]="Inquisitor Lord"
+RankNames[5]="Grand Inquisitor"
+RankNames[6]="Lord Inquisitor"
+RankNames[7]="Grand Master of the Ordo"
+ShortNames[0]="Aco."
+ShortNames[1]="Int."
+ShortNames[2]="Inq."
+ShortNames[3]="SIq."
+ShortNames[4]="ILd."
+ShortNames[5]="GIq."
+ShortNames[6]="LIq."
+ShortNames[7]="GMO."
+
 ; === END GENERATED: CLASSES ===
 
 ; --- Perils of the Warp (X2Ability_Astartes_Librarian) ---
@@ -949,6 +975,15 @@ strCharacterName="Eldar Warlock"
 
 [Astartes_Canoness X2CharacterTemplate]
 strCharacterName="Canoness"
+
+[Astartes_ChaosChampion X2CharacterTemplate]
+strCharacterName="Chaos Champion"
+
+[Astartes_EldarAutarch X2CharacterTemplate]
+strCharacterName="Eldar Autarch"
+
+[Astartes_Inquisitor X2CharacterTemplate]
+strCharacterName="Inquisitor"
 
 [Astartes_Commissar X2CharacterTemplate]
 strCharacterName="Commissar"

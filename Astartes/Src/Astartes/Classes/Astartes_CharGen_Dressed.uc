@@ -17,6 +17,7 @@ struct DressedLook
 	var name nmPawn;           // body part template of type Pawn; '' = the standard soldier body for the gender (never a random mod pawn)
 	var name nmVoice;          // voice body part template; '' = silent
 	var bool bKeepName;        // false: no personal name, the unit flag shows the character template's name
+	var bool bBare;            // monsters: strip every generated helmet, hair, beard, face prop, paint and tattoo first
 	var int iArmorTint, iArmorTintSecondary, iSkinColor;  // -1 = leave the generated value
 	structdefaultproperties
 	{
@@ -59,6 +60,12 @@ function TSoldier CreateTSoldier(optional name CharacterTemplateName, optional E
 /// nmArms clears the per-arm slots and vice versa.
 static function Dress(out TAppearance A, const out DressedLook L)
 {
+	if (L.bBare)
+	{
+		A.nmHelmet = ''; A.nmHaircut = ''; A.nmBeard = ''; A.nmFacePropLower = ''; A.nmFacePropUpper = '';
+		A.nmFacePaint = ''; A.nmScars = ''; A.nmTattoo_LeftArm = ''; A.nmTattoo_RightArm = ''; A.nmTorsoDeco = '';
+		A.nmThighs = ''; A.nmLeftArmDeco = ''; A.nmRightArmDeco = ''; A.nmLeftForearm = ''; A.nmRightForearm = '';
+	}
 	if (L.nmHead != '') A.nmHead = L.nmHead;
 	if (L.nmHelmet != '') { A.nmHelmet = L.nmHelmet; A.nmHaircut = ''; }
 	if (L.nmTorso != '') A.nmTorso = L.nmTorso;

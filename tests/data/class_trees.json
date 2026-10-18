@@ -50,6 +50,16 @@
       "Lord Commissar",
       "Lord Commissar Veteran",
       "Commissar-General"
+    ],
+    "inquisition": [
+      "Acolyte",
+      "Interrogator",
+      "Inquisitor",
+      "Senior Inquisitor",
+      "Inquisitor Lord",
+      "Grand Inquisitor",
+      "Lord Inquisitor",
+      "Grand Master of the Ordo"
     ]
   },
   "short_names": {
@@ -102,6 +112,16 @@
       "LCm.",
       "LCV.",
       "CGn."
+    ],
+    "inquisition": [
+      "Aco.",
+      "Int.",
+      "Inq.",
+      "SIq.",
+      "ILd.",
+      "GIq.",
+      "LIq.",
+      "GMO."
     ]
   },
   "classes": {
@@ -1083,6 +1103,118 @@
           }
         ]
       ]
+    },
+    "Astartes_Inquisitor": {
+      "display_name": "Inquisitor",
+      "summary": "An agent of the Holy Orders of the Emperor's Inquisition, answerable to no one but the Emperor. Provisional tree: built from existing abilities until the Inquisition arc is designed.",
+      "columns": [
+        "Authority",
+        "Hunter",
+        "Hereticus"
+      ],
+      "rank_set": "inquisition",
+      "icon": "img:///UILibrary_XPACK_Common.Faction_Reaper_1_sm",
+      "loadout": [
+        "Astartes_Chainsword_CV_Primary",
+        "Astartes_BoltPistol_CV"
+      ],
+      "weapons": [
+        [
+          "eInvSlot_PrimaryWeapon",
+          "sword"
+        ],
+        [
+          "eInvSlot_SecondaryWeapon",
+          "pistol"
+        ]
+      ],
+      "hero": {
+        "character": "Astartes_Inquisitor"
+      },
+      "ranks": [
+        [
+          {
+            "name": "Astartes_PurgeTheUnclean"
+          },
+          {
+            "name": "Astartes_SummaryExecution",
+            "slot": "secondary"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Rally"
+          },
+          {
+            "name": "Quickdraw",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_HoldFast"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_Inspire",
+            "slot": "primary"
+          },
+          {
+            "name": "LightningHands",
+            "slot": "secondary"
+          },
+          {
+            "name": "Fortress"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_TacticalDoctrine"
+          },
+          {
+            "name": "Faceoff",
+            "slot": "secondary"
+          },
+          {
+            "name": "Astartes_LitanyOfHate"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_CombatSquads"
+          },
+          {
+            "name": "Astartes_Duelist",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_StandYourGround"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_HoldTheLine"
+          },
+          {
+            "name": "Astartes_Executioner",
+            "slot": "primary"
+          },
+          {
+            "name": "Untouchable"
+          }
+        ],
+        [
+          {
+            "name": "Astartes_ForTheEmperor"
+          },
+          {
+            "name": "Reaper",
+            "slot": "primary"
+          },
+          {
+            "name": "Astartes_LitanyOfTheDevout"
+          }
+        ]
+      ]
     }
   },
   "_rank1_note": "Rank 1 is the Squaddie kit: XCOM grants EVERY ability in the rank-1 row at once (vanilla behaviour). Hard choices start at rank 2. Astartes_KnowNoFear is in every Marine class rank-1 row. Astartes_Physiology (poison immunity) is also in every rank-1 row.",
@@ -1142,6 +1274,19 @@
       "items": [
         "Astartes_AvengerCatapult",
         "AssaultRifle_MG"
+      ]
+    },
+    {
+      "name": "Astartes_EldarAutarch_Loadout",
+      "items": [
+        "PSIBlade_MG_Primary",
+        "ChaosAxeM1_WPN"
+      ]
+    },
+    {
+      "name": "Astartes_Daemon_Loadout",
+      "items": [
+        "ChaosAxeM1_WPN"
       ]
     }
   ],
