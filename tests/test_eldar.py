@@ -62,11 +62,10 @@ def test_destructor_and_loadout(config):
     assert lo.index("Astartes_Destructor") < lo.index("AssaultRifle_MG")
 
 
-def test_eldar_faction_and_lists(config):
+def test_eldar_hold_no_territory_but_their_lists_exist(config):
+    """Eldar are incursions (the Lost mechanic reworked), never a continent's faction (decision 2026-10-18)."""
     fc = section(config, "XComAstartes.ini", "Astartes.Astartes_FactionConfig")
-    f = next(x for x in fc.values("Factions") if struct_field(x, "FactionName") == "Eldar")
-    assert struct_field(f, "RequiredDLC") == "DarkEldar_Raiders"
-    assert struct_field(f, "LeaderList") == "Astartes_EldarLeaders" and struct_field(f, "CommanderList") == "Astartes_EldarCommanders"
+    assert not any(struct_field(x, "FactionName") == "Eldar" for x in fc.values("Factions"))
     mgr = section(config, "XComEncounterLists.ini", "XComGame.XComTacticalMissionManager")
     lists = {struct_field(v, "ListID"): v for v in mgr.values("SpawnDistributionLists")}
     for lid in ("Astartes_EldarLeaders", "Astartes_EldarCommanders"):

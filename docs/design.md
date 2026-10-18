@@ -469,9 +469,11 @@ Farseer robe and backpack (Ulthwe thigh plates, black and bone). He carries a **
 rifle: knockback, 80% stun on hit and on overwatch; a charging Assault Marine stunned mid-run is his whole point) and
 fights with the Dark Eldar leader's tree.
 
-A fourth territorial faction, **Eldar**, joins the continent pool: Dark Eldar Raiders' kabalites and wyches as followers
-(raiding parties), our leader and commander lists adding the Warlock from force level 4. Needs DarkEldar_Raiders and
-EldarArmor; Force Weapons for the Destructor (magnetic rifle fallback).
+**Eldar hold no territory** (decided the same day, on the user's point that once the geoscape becomes a star map no
+system is "Eldar"; neither craftworlds nor Commorragh sit anywhere we fight). They are the Lost mechanic reworked
+(9.2): webway incursions on any continent. The spawn lists built for them (`Astartes_EldarLeaders`, `Astartes_EldarCommanders`,
+Dark Eldar Raiders' followers) feed that system; the Eldar entry in `Factions` is kept commented as documentation.
+Needs DarkEldar_Raiders and EldarArmor; Force Weapons for the Destructor (magnetic rifle fallback).
 
 **Next:** psychic powers with AI nodes (Mind War = Soulshock, Conceal/Reveal), Guardians and Dire Avengers as dressed
 soldier bodies with EldarWeapons' shuriken catapults so the faction turns craftworld, a Farseer commander, and the
@@ -479,7 +481,9 @@ Lost-replacement webway incursions (9.2).
 
 ### 9.2 Eldar interventions (Lost-mechanic, reworked)
 
-**Decided 2026-10-18: the Lost are Eldar, full stop.** No Tyranid gaunt swap: gaunts on a Tyranid continent would read as the same faction twice. The Lost SitRep and Lost missions become Eldar incursions (webway raiders) once Eldar unit models are wired in.
+**Decided 2026-10-18: the Lost are Eldar, full stop.** And the Lost and Abandoned analogue is the Eldar first-contact
+mission: the Chapter meets the Eldar in the field and comes away with its first two Imperial heroes (9.1c: the Canoness and
+the Commissar, whose models exist; the Inquisitor when a model turns up) instead of a Reaper and a Skirmisher. No Tyranid gaunt swap: gaunts on a Tyranid continent would read as the same faction twice. The Lost SitRep and Lost missions become Eldar incursions (webway raiders) once Eldar unit models are wired in.
 Keep "third faction hostile to everyone," change the rest:
 - **Small elite strike teams**, not a horde (Rangers, Farseer, Wraithguard).
 - **Prophecy-based arrival** instead of noise: appear at a certain point in the fight, or telegraphed a turn or two ahead ("a Farseer foresaw this").
