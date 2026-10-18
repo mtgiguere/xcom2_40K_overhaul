@@ -466,3 +466,8 @@ Highlander comment: "eTeam_One and eTeam_Two should be the only ones here." The 
 | Space Marine Class Pack | 3789746906 | 10 AA_* classes, no weapons/models | Its classes are removed from our class deck (`remove_from_deck`). Reference for its Dreadnought class |
 
 Still without a 40K model: Psychic Hood and Narthecium (vanilla psi amp and gremlin meshes); a servo-skull mod is subscribed for the Narthecium look.
+
+## Animation sources
+| Mod | ID | Use |
+|---|---|---|
+| Jedi Class Revised | 2031929512 | Force Jump animation set (`AS_ForcePowers`: HL_ForceJumpStart/Loop/Stop) and ignition cue for the Jump Pack arc; optional, loaded by path when enabled. Its `Jedi` class is removed from our deck. Known crashers (Reflect, Lightsaber Telekinesis) are Jedi abilities we never grant. |

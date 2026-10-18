@@ -117,15 +117,22 @@ simulated state Executing
 		}
 	}
 
-	/// Vanilla's climb/drop animations are root-motion driven and must be told where they end
-	/// (DesiredEndingAtoms); without an anchor they play relative to the world origin and drag the pawn there.
-	function AnchorAnim(out CustomAnimParams P, vector Where, vector Facing)
+	/// Play a full-body animation if this pawn has it (a jump animation pack may be absent). None otherwise.
+	function AnimNodeSequence PlayIfAvailable(name AnimName, float Rate, bool bLoop)
 	{
-		Facing.Z = 0;
-		P.DesiredEndingAtoms.Add(1);
-		P.DesiredEndingAtoms[0].Translation = Where;
-		P.DesiredEndingAtoms[0].Rotation = QuatFromRotator(VSizeSq(Facing) > 1.0 ? Rotator(Facing) : UnitPawn.Rotation);
-		P.DesiredEndingAtoms[0].Scale = 1.0f;
+		if (AnimName == '' || !UnitPawn.GetAnimTreeController().CanPlayAnimation(AnimName))
+		{
+			if (AnimName != '')
+			{
+				`log("Astartes: jump animation" @ AnimName @ "not on this pawn (jump animation pack not loaded?); flying without it",, 'Astartes');
+			}
+			return none;
+		}
+		Params = default.Params;
+		Params.AnimName = AnimName;
+		Params.PlayRate = Rate;
+		Params.Looping = bLoop;
+		return UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
 	}
 
 Begin:
@@ -137,16 +144,16 @@ Begin:
 		CompleteAction();
 	}
 	BuildArc();
+
+	// Root motion stays OFF throughout: we place the pawn ourselves. Vanilla climb/fall animations carry root
+	// motion of their own and dragged the pawn to the world origin (playtest 2026-10-18); the configured jump
+	// animations must be authored without it (the Jedi Class Revised set is).
+	UnitPawn.EnableRMA(false, false);
+	UnitPawn.EnableRMAInteractPhysics(false);
 	UnitPawn.bSkipIK = true;
 
-	// leap: a root-motion spring anchored one floor above where he stands
-	UnitPawn.EnableRMA(true, true);
-	UnitPawn.EnableRMAInteractPhysics(true);
-	Params = default.Params;
-	Params.AnimName = class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_START;
-	Params.PlayRate = class'X2Ability_Astartes_Assault'.default.JUMP_START_PLAYRATE;
-	AnchorAnim(Params, StartLocation + vect(0, 0, 1) * class'XComWorldData'.const.WORLD_FloorHeight, EndLocation - StartLocation);
-	PlayingSequence = UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
+	// leap
+	PlayingSequence = PlayIfAvailable(class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_START, class'X2Ability_Astartes_Assault'.default.JUMP_START_PLAYRATE, false);
 	if (IgnitionSound != none)
 	{
 		IgnitionSound.Play();
@@ -156,16 +163,11 @@ Begin:
 		Sleep(FMax(PlayingSequence.GetAnimPlaybackLength() * class'X2Ability_Astartes_Assault'.default.JUMP_START_FRACTION, 0.05));
 	}
 
-	// flight: we place the pawn every frame, so root motion is off
-	UnitPawn.EnableRMA(false, false);
-	UnitPawn.EnableRMAInteractPhysics(false);
+	// flight
 	StartLocation = UnitPawn.Location;
 	bFlying = true;
 	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
-	Params = default.Params;
-	Params.AnimName = class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_LOOP;
-	Params.Looping = true;
-	PlayingSequence = UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
+	PlayingSequence = PlayIfAvailable(class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_LOOP, 1.0, true);
 	while (!bLanded)
 	{
 		Sleep(0.0);
@@ -176,18 +178,11 @@ Begin:
 		PlayingSequence.StopAnim();
 	}
 
-	// landing: a root-motion stop anchored exactly on the landing tile
+	// landing
 	UnitPawn.SetLocation(EndLocation);
-	UnitPawn.EnableRMA(true, true);
-	UnitPawn.EnableRMAInteractPhysics(true);
-	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
-	Params = default.Params;
-	Params.AnimName = class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_STOP;
-	Params.PlayRate = class'X2Ability_Astartes_Assault'.default.JUMP_STOP_PLAYRATE;
-	AnchorAnim(Params, EndLocation, EndLocation - StartLocation);
 	UnitPawn.SnapToGround();
-	UnitPawn.bSkipIK = false;
-	PlayingSequence = UnitPawn.GetAnimTreeController().PlayFullBodyDynamicAnim(Params);
+	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
+	PlayingSequence = PlayIfAvailable(class'X2Ability_Astartes_Assault'.default.JUMP_ANIM_STOP, class'X2Ability_Astartes_Assault'.default.JUMP_STOP_PLAYRATE, false);
 	if (PlayingSequence != none)
 	{
 		FinishAnim(PlayingSequence);
@@ -196,8 +191,10 @@ Begin:
 	{
 		IgnitionSound.Stop();
 	}
-	UnitPawn.Acceleration = vect(0, 0, 0);
-	UnitPawn.vMoveDirection = vect(0, 0, 0);
+	UnitPawn.bSkipIK = false;
+	UnitPawn.EnableRMA(false, false);
+	UnitPawn.EnableRMAInteractPhysics(false);
+	UnitPawn.GetAnimTreeController().SetAllowNewAnimations(true);
 	UnitPawn.SetLocation(EndLocation);
 	UnitPawn.SnapToGround();
 	Unit.ProcessNewPosition();

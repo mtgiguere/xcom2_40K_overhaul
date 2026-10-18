@@ -344,14 +344,18 @@ static function X2AbilityTemplate JumpPackRig()
 	Template.eAbilityIconBehaviorHUD = eAbilityIconBehavior_NeverShow;
 	Template.bDisplayInUITacticalText = false;
 	Template.bDontDisplayInAbilitySummary = true;
-	if (default.JUMP_ANIMSET_PATH != "")
+	if (default.JUMP_ANIMSET_PATH != "" && AnimSet(DynamicLoadObject(default.JUMP_ANIMSET_PATH, class'AnimSet', true)) != none)
 	{
 		AnimSets = new class'X2Effect_AdditionalAnimSets';
 		AnimSets.EffectName = 'Astartes_JumpPackRig_AnimSets';
-		AnimSets.AddAnimSetWithPath(default.JUMP_ANIMSET_PATH);
+		AnimSets.AddAnimSetWithPath("AnimSet'" $ default.JUMP_ANIMSET_PATH $ "'");
 		AnimSets.BuildPersistentEffect(1, true, false, false, eGameRule_TacticalGameStart);
 		AnimSets.DuplicateResponse = eDupe_Ignore;
 		Template.AddTargetEffect(AnimSets);
+	}
+	else if (default.JUMP_ANIMSET_PATH != "")
+	{
+		`log("Astartes: jump animation set" @ default.JUMP_ANIMSET_PATH @ "is not loaded (enable the mod that ships it); jumps fly without animations",, 'Astartes');
 	}
 	return Template;
 }

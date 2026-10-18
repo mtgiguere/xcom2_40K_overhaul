@@ -696,7 +696,8 @@
     "AA_Apothecary",
     "AA_Chaplain",
     "AA_Librarian",
-    "AA_Dreadnought"
+    "AA_Dreadnought",
+    "Jedi"
   ],
   "extra_loadouts": [
     {
@@ -706,7 +707,7 @@
       ]
     }
   ],
-  "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent.",
+  "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent. 'Jedi' is Jedi Class Revised's class: that mod may be enabled for its jump animations.",
   "_loadout_overrides_note": "Vanilla loadouts removed (exact match required) and replaced, so new recruits carry Imperial wargear from day one. Lines copied from the SDK's DefaultGameData.ini.",
   "loadout_overrides": [
     {

@@ -45,7 +45,14 @@ def test_jump_arc_is_configured(config):
         assert float(section.first(key)) > 0, f"{key} must be set"
     assert "XComPrecomputedPath" not in (SRC_DIR / "X2Action_Astartes_JumpPack.uc").read_text(encoding="utf-8"), "the shared grenade path sent the jump to the world origin; compute the arc ourselves"
     for key in ("JUMP_ANIM_START", "JUMP_ANIM_LOOP", "JUMP_ANIM_STOP"):
-        assert (section.first(key) or "").strip('"').startswith("MV_"), f"{key} must name a vanilla movement animation"
+        assert (section.first(key) or "").strip('"'), f"{key} must name an animation"
+        assert not (section.first(key) or "").strip('"').startswith("MV_"), f"{key}: vanilla MV_ climb/fall animations carry root motion and drag the pawn to the origin"
     assert (SRC_DIR / "X2Action_Astartes_JumpPack.uc").exists()
     assault = (SRC_DIR / "X2Ability_Astartes_Assault.uc").read_text(encoding="utf-8")
     assert "RewireJumpVisuals" in assault and "JumpPack_BuildVisualization" in assault
+
+
+def test_jump_never_enables_root_motion():
+    src = (SRC_DIR / "X2Action_Astartes_JumpPack.uc").read_text(encoding="utf-8")
+    assert "EnableRMA(true" not in src, "root motion on during the jump let animations drag the pawn to the world origin"
+    assert "CanPlayAnimation" in src, "animations must be optional: the pack that ships them may be absent"

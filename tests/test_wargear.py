@@ -69,3 +69,11 @@ def test_bolt_pistols_can_be_fired(config):
     extras = {(struct_field(v, "Weapon"), struct_field(v, "Ability")) for v in section.values("ExtraAbilities")}
     for tier in ("CV", "MG", "BM"):
         assert (f"Astartes_BoltPistol_{tier}", "PistolStandardShot") in extras
+
+
+def test_jedi_gear_is_hidden(config):
+    """Jedi Class Revised may be enabled for its jump animations; none of its items may reach the armoury."""
+    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Item_AstartesWeapons"][0]
+    hidden = {unquote(v) for v in section.values("HideDonorItems")}
+    for item in ("Lightsaber_CV", "Lightsaber_MG", "Lightsaber_BM", "Saberstaff_CV", "Holocron_CV"):
+        assert item in hidden, f"{item} must be hidden"

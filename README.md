@@ -70,7 +70,7 @@ Each logs `PASS`/`FAIL`; `pytest -m runtime` turns those into test results.
 - **X2ModBuildCommon** by the X2 Community Core team (build system), vendored in `.scripts/`.
 - Art and enemy factions come from the Workshop mods listed in `docs/mod-inventory.md` as required dependencies.
 
-- **Jedi Class Revised** (workshop 2031929512): the jump-arc visualization pattern (precomputed ballistic path + leap/flight/landing animations) that `X2Action_Astartes_JumpPack` is modelled on. Our implementation uses vanilla soldier animations and does not depend on that mod.
+- **Jedi Class Revised** (workshop 2031929512): the jump-arc visualization pattern (precomputed ballistic path + leap/flight/landing animations) that `X2Action_Astartes_JumpPack` is modelled on. Our implementation is independent code, but the jump *animations and ignition sound* are loaded from that mod's content when it is enabled (vanilla soldier climb/fall animations carry root motion and cannot be used). Jedi Class Revised must be enabled in the launcher for animated jumps; without it the Marine flies the arc unanimated. Its Jedi class is kept out of our promotion deck.
 
 ## Dressing the Marines
 
