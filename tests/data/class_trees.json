@@ -745,5 +745,13 @@
     "Grenadier",
     "Specialist",
     "PsiOperative"
+  ],
+  "extra_loadouts": [
+    {
+      "name": "Astartes_Cultist_Loadout",
+      "items": [
+        "MilitiaRifle_CV"
+      ]
+    }
   ]
 }

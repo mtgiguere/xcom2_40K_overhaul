@@ -1,6 +1,13 @@
 ; Astartes - Warhammer 40K overhaul localization.
 ; Kept as UTF-8 in the repo; the build converts it to UTF-16 for the game.
 
+; ---------------------------------------------------------------- enemies
+[Astartes_Cultist X2CharacterTemplate]
+strCharacterName="Chaos Cultist"
+
+[Astartes_CultHybrid X2CharacterTemplate]
+strCharacterName="Genestealer Cult Hybrid"
+
 ; ---------------------------------------------------------------- shared Marine abilities
 [Astartes_KnowNoFear X2AbilityTemplate]
 LocFriendlyName="Know No Fear"

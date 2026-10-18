@@ -131,6 +131,7 @@ static event OnLoadedSavedGameToStrategy()
 static event OnPostTemplatesCreated()
 {
 	`log("Astartes: OnPostTemplatesCreated",, 'Astartes');
+	class'Astartes_UnitVariants'.static.CreateVariants();
 }
 
 // ---------------------------------------------------------------------------------------
@@ -141,6 +142,14 @@ static event OnPostTemplatesCreated()
 /// For Marines ('Soldier' template): enforce the gender policy, then dress them from the Marine armour packs.
 static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, const name CharacterTemplateName, const EGender eForceGender, const name nmCountry, const int iRace, const name ArmorName, XComGameState_Unit UnitState, XComGameState UseGameState)
 {
+	// Chaos Cultists dress like the civilian militia: regenerate as that template. The nested call
+	// re-enters this hook with 'CivilianMilitia', which falls through untouched.
+	if (CharacterTemplateName == 'Astartes_Cultist')
+	{
+		CharGen.CreateTSoldier('CivilianMilitia', eForceGender, nmCountry, iRace, ArmorName);
+		return;
+	}
+
 	if (CharacterTemplateName != 'Soldier')
 	{
 		return;
@@ -441,6 +450,31 @@ exec function Astartes_SetContinentFaction(string ContinentTemplateStr, string F
 	}
 	`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
 	Say("Astartes_SetContinentFaction: PASS" @ ContinentTemplate @ "->" @ FactionName);
+}
+
+/// Astartes_Variants
+/// Logs every configured unit variant: created (with HP) or skipped because its base mod is off.
+exec function Astartes_Variants()
+{
+	local X2CharacterTemplateManager CharMgr;
+	local X2CharacterTemplate T;
+	local int i;
+
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+	T = CharMgr.FindCharacterTemplate('Astartes_Cultist');
+	Say("Astartes_Variants:" @ (T != none ? "PASS" : "FAIL") @ "Astartes_Cultist" @ (T != none ? ("HP=" $ T.CharacterBaseStats[eStat_HP]) : "missing"));
+	for (i = 0; i < class'Astartes_UnitVariants'.default.Variants.Length; i++)
+	{
+		T = CharMgr.FindCharacterTemplate(class'Astartes_UnitVariants'.default.Variants[i].NewName);
+		if (T == none)
+		{
+			Say("Astartes_Variants: FAIL" @ class'Astartes_UnitVariants'.default.Variants[i].NewName @ "not created (base" @ class'Astartes_UnitVariants'.default.Variants[i].BaseTemplate @ "loaded?)");
+		}
+		else
+		{
+			Say("Astartes_Variants: PASS" @ T.DataName @ "from" @ class'Astartes_UnitVariants'.default.Variants[i].BaseTemplate @ "HP=" $ T.CharacterBaseStats[eStat_HP] @ "armor=" $ T.CharacterBaseStats[eStat_ArmorMitigation]);
+		}
+	}
 }
 
 /// Astartes_PartPacks

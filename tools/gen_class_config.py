@@ -95,6 +95,9 @@ def render_gamedata_ini(spec: dict) -> str:
     for name, c in spec["classes"].items():
         items = ", ".join(f'Items[{i}]=(Item="{item}")' for i, item in enumerate(c["loadout"]))
         parts.append(f'+Loadouts=(LoadoutName="Squaddie{name}", {items})')
+    for lo in spec.get("extra_loadouts", []):
+        items = ", ".join(f'Items[{i}]=(Item="{item}")' for i, item in enumerate(lo["items"]))
+        parts.append(f'+Loadouts=(LoadoutName="{lo["name"]}", {items})')
     return "\n".join(parts) + "\n"
 
 

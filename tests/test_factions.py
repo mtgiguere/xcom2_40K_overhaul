@@ -79,3 +79,28 @@ def test_our_lists_cover_every_force_level(config):
         entries = re.findall(r'MinForceLevel=(\d+),\s*MaxForceLevel=(\d+)', lists[list_id])
         for fl in range(1, 21):
             assert any(int(lo) <= fl <= int(hi) for lo, hi in entries), f"{list_id}: nothing eligible at force level {fl}"
+
+
+def test_early_game_lists_use_our_units_not_advent(config):
+    """Chaos FL 1-4 must be our cultists (not ADVENT models); Tyranids FL 1-4 must be our weak hybrid variant."""
+    mgr = [s for s in config["XComEncounterLists.ini"] if s.name == "XComGame.XComTacticalMissionManager"][0]
+    lists = {struct_field(v, "ListID"): v for v in mgr[0].values("SpawnDistributionLists")} if False else {struct_field(v, "ListID"): v for v in mgr.values("SpawnDistributionLists")}
+    for list_id in ("Astartes_ChaosLeaders", "Astartes_ChaosFollowers"):
+        for tmpl, lo in re.findall(r'Template="(\w+)",\s*MinForceLevel=(\d+)', lists[list_id]):
+            if int(lo) <= 2:
+                assert not tmpl.startswith("Adv"), f"{list_id}: {tmpl} at FL{lo} is an ADVENT model; use Astartes_Cultist"
+    for list_id in ("Astartes_TyranidLeaders", "Astartes_TyranidFollowers"):
+        entries = re.findall(r'Template="(\w+)",\s*MinForceLevel=(\d+)', lists[list_id])
+        assert ("Astartes_CultHybrid", "1") in entries, f"{list_id}: FL1 must use Astartes_CultHybrid"
+        assert all(not (t == "ChrysHybrid" and int(lo) < 5) for t, lo in entries), f"{list_id}: full-strength ChrysHybrid before FL5"
+
+
+def test_variant_and_cultist_have_stats_and_localization(config, loc_sections):
+    stats = {s.template_name for s in config["XComGameData_CharacterStats.ini"] if s.template_class == "X2CharacterTemplate"}
+    loc = {s.template_name for s in loc_sections if s.template_class == "X2CharacterTemplate"}
+    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_UnitVariants"]
+    assert section, "missing [Astartes.Astartes_UnitVariants]"
+    names = {"Astartes_Cultist"} | {struct_field(v, "NewName") for v in section[0].values("Variants")}
+    for n in names:
+        assert n in stats, f"{n} has no [X2CharacterTemplate] stats block"
+        assert n in loc, f"{n} has no strCharacterName localization"

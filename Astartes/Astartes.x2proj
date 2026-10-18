@@ -32,6 +32,8 @@
     <Content Include="Src\Astartes\Classes\X2Ability_Astartes.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_FactionConfig.uc" />
+    <Content Include="Src\Astartes\Classes\Astartes_UnitVariants.uc" />
+    <Content Include="Src\Astartes\Classes\X2Character_Astartes.uc" />
     <Content Include="Src\Astartes\Classes\X2Effect_Astartes_RecoverGeneseed.uc" />
     <Content Include="Src\Astartes\Classes\XComGameState_AstartesChapter.uc" />
   </ItemGroup>
