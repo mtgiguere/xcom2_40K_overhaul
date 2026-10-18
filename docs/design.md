@@ -436,6 +436,12 @@ Leads Chaos pods from force level 6. Stats in `XComGameData_CharacterStats.ini`;
 (`Astartes_ChaosSorcerer::CharacterRoot`: rift first, then the captain's behaviour). Needs the Black Legion mod; Warpfire
 falls back to the captain's bolter without Force Weapons.
 
+**Playtest 2026-10-18:** worked first time (cast, gate, Warpfire "stung"). The pod came out as Orks on an Ork continent: our
+continent pod-rewrite had converted the rift encounter. Fixed the same day: `Astartes_*` encounters are never rewritten.
+
+**Playtest 2026-10-18:** worked first time (cast, gate, Warpfire "stung"). The pod came out as Orks on an Ork continent: our
+continent pod-rewrite had converted the rift encounter. Fixed the same day: `Astartes_*` encounters are never rewritten.
+
 **Next:** god-flavoured variants on Mitzruti's elemental psi (Tzeentch: Fireball, Cinder Bolt; Nurgle: Poisonball, Fetid
 Breath), each a behaviour-tree node away; a Sorcerer who can re-open a collapsed rift at a cost; Eldar Warlock on the same
 pattern with Force Shove.

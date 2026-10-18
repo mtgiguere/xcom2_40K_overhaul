@@ -87,6 +87,12 @@ and shock), **Bulwark** (survive what you dive into).
 
 **Playtest notes (2026-10-18).** Jump arc animations played but the first version flew to the world origin (the shared grenade-path object ignored our overrides); the arc is now a self-computed parabola. Recruits started with XCOM rifles: the vanilla rookie loadouts are now replaced with bolters. Bolt pistols had no fire button (vanilla pistols rely on the Sharpshooter class for the shot): PistolStandardShot is now on the weapon. Psi visuals confirmed back. Open: some Marines show brown helmets on blue armour (tint channel of specific helmets?); Ork Raiders have no hit/miss/death barks (sound pack needed, likely Tyranids too).
 
+**Playtest 2026-10-18, evening (Sorcerer build).** Bolt pistols sit slightly inside the thigh armour on the Marine body
+(holster socket offset; to do). A Skirmisher turned up in a fresh start: faction heroes (Reaper/Skirmisher/Templar) are
+untouched so far; decide whether they become Scouts or are removed in the 40K setting (to do). Jump Pack jets: light and
+sound confirmed; the flames fall back to the pawn centre (spine bone name unknown on this skeleton) and may hide inside a
+bulky pack; the next jump logs the torso bone candidates.
+
 **Playtest 2026-10-18, later.** Jump arc animations confirmed; the post-landing teleport was the EnterCover step restoring a zero RestoreLocation (removed). Two-handed grip: Assault and Chaplain hold the chainsword/crozius two-handed with the pistol holstered; a one-hand-sword-plus-pistol stance needs its own animation set (backlog). Helmets confirmed all tinted after the pool-template look; plasma pistol and rifle confirmed; crozius kill confirmed.
 
 **Jump arc (built 2026-10-18).** `X2Action_Astartes_JumpPack` replaces the Icarus teleport visualization for IcarusJump and Deep Jump: leap (`MV_ClimbHighJump_Start`), flight along a precomputed ballistic arc, hard landing (`MV_ClimbFall_Stop`). Animations and ignition sound come from Jedi Class Revised's Force Jump set when that mod is enabled (vanilla MV_ climb/fall animations carry root motion and dragged the pawn to the world origin); otherwise the arc flies unanimated. Names, play rates, arc shape, the animation set and the SoundCue are config. Still to do on this line: ignition sound asset, the single-action leap strike.

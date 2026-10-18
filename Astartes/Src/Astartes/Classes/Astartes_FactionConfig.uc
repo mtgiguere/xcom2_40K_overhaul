@@ -47,9 +47,11 @@ struct DaemonSpawn
 };
 var config array<DaemonSpawn> DaemonSpawns;
 
+/// Our own encounters (Astartes_*: daemon rifts and the like) are deliberate and keep their units wherever they are
+/// called; the config list covers other mods' special pods.
 static function bool IsNeverRewritten(name EncounterID)
 {
-	return default.NeverRewriteEncounters.Find(EncounterID) != INDEX_NONE;
+	return Left(string(EncounterID), 9) ~= "Astartes_" || default.NeverRewriteEncounters.Find(EncounterID) != INDEX_NONE;
 }
 
 static function bool IsCommanderEncounter(name EncounterID)

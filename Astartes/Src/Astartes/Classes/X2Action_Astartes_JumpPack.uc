@@ -119,12 +119,22 @@ private function StartThrusters()
 	local vector Offset;
 	local bool bOnBone;
 	local int i;
+	local array<name> Bones;
+	local string Candidates;
 
 	Bone = class'X2Ability_Astartes_Assault'.default.JUMP_THRUSTER_BONE;
 	bOnBone = Bone != '' && UnitPawn.Mesh.MatchRefBone(Bone) != INDEX_NONE;
 	if (Bone != '' && !bOnBone)
 	{
-		`log("Astartes: jump thruster bone" @ Bone @ "not on this pawn; flames attached to the pawn instead",, 'Astartes');
+		UnitPawn.Mesh.GetBoneNames(Bones);
+		for (i = 0; i < Bones.Length; i++)
+		{
+			if (InStr(Caps(string(Bones[i])), "SPINE") != INDEX_NONE || InStr(Caps(string(Bones[i])), "TORSO") != INDEX_NONE || InStr(Caps(string(Bones[i])), "CHEST") != INDEX_NONE || InStr(Caps(string(Bones[i])), "BACK") != INDEX_NONE || InStr(Caps(string(Bones[i])), "PELVIS") != INDEX_NONE)
+			{
+				Candidates @= string(Bones[i]);
+			}
+		}
+		`log("Astartes: jump thruster bone" @ Bone @ "not on this pawn (" $ Bones.Length @ "bones; torso candidates:" @ Candidates $ "); flames attached to the pawn instead",, 'Astartes');
 	}
 	for (i = 0; i < ThrusterFX.Length; i++)
 	{

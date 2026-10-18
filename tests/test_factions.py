@@ -109,6 +109,12 @@ def test_variant_and_cultist_have_stats_and_localization(config, loc_sections):
 def test_special_encounters_are_protected_and_commanders_defined(config, faction_section, factions):
     never = {unquote(v) for v in faction_section.values("NeverRewriteEncounters")}
     assert "SPCx1_Faceless" in never, "the hidden Faceless encounter must never be rewritten"
+    assert {"Astartes_DaemonRift_Lesser", "Astartes_DaemonRift_Greater"} <= never, "a Sorcerer's rift brings daemons, not the continent's Orks (playtest 2026-10-18)"
+    fc = (SRC_DIR / "Astartes_FactionConfig.uc").read_text(encoding="utf-8")
+    assert '~= "Astartes_"' in fc, "every Astartes_ encounter is exempt from the rewrite in code too"
+    assert {"Astartes_DaemonRift_Lesser", "Astartes_DaemonRift_Greater"} <= never, "a Sorcerer's rift brings daemons, not the continent's Orks (playtest 2026-10-18)"
+    fc = (SRC_DIR / "Astartes_FactionConfig.uc").read_text(encoding="utf-8")
+    assert '~= "Astartes_"' in fc, "every Astartes_ encounter is exempt from the rewrite in code too"
     prefixes = {unquote(v) for v in faction_section.values("CommanderEncounterPrefixes")}
     assert "SPCx" in prefixes
     mgr = [s for s in config["XComEncounterLists.ini"] if s.name == "XComGame.XComTacticalMissionManager"][0]
