@@ -702,7 +702,7 @@ Keep "third faction hostile to everyone," change the rest:
 
 ## 12. Open questions
 
-- **(2026-10-19, blocking the strategy layer) Build on LWOTC, or reimplement its strategy layer on WotC?** LWOTC already has region
+- **DECIDED 2026-10-19: build on LWOTC** (user: anyone still playing XCOM 2 plays LWOTC). Was: *Build on LWOTC, or reimplement its strategy layer on WotC?* LWOTC already has region
   contact by scanning, havens that fill with rebels, haven advisors, regions owned by a Chosen, liberation, infiltration. Building on
   it means a dependency on a total overhaul (its own classes, AI, pod sizes and mission timers to reconcile with ours); reimplementing
   means writing those systems ourselves, smaller and shaped to this design.
