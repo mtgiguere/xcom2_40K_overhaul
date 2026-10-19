@@ -79,6 +79,11 @@ no `[Soldier]` stat override (2), no rookie loadout override (3), recruits no lo
 (4), the starting faction hero stripped (6), the Narthecium wears the Servoskull mod's skull, Deathclaw / Skorge parts marked
 specialized so random recruits never wear them. Same evening: the basic armour is flak armour again (Marines' +2 HP / +1 armour moved into the ascended physique); a Blood
 Angels strike force (Captain plus Assault, Devastator, Apothecary) joins at campaign start; haven rebels are dressed as Guardsmen.
+Opening mission: LWOTC's Troop Maneuvers is replaced by its retaliation (`Terror_LW`). The starting haven's rebels, dressed
+as Guardsmen, are on the map under attack and the strike force relieves them. Set by `XComMissionSources.ini` and enforced in
+`SetStartMission` at campaign start (start site excludes every other start family, so LWOTC's hybrid-difficulty rebuild keeps it).
+Change it with `StartMissionFamily` in `XComGame.ini` (`Defend_LW` is the haven defence alternative).
+
 Previously open: haven rebels dressed as Guardsmen (5); `KevlarArmor` is still named Power Armour.
 
 ## First spike (user)

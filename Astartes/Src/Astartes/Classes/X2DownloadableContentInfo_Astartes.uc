@@ -28,6 +28,8 @@ struct StartingMarine
 	var string Nickname;
 };
 var config array<StartingMarine> StartingMarines;
+/// The first mission's family. Terror_LW: the starting haven's Guard garrison is under attack and must be relieved.
+var config string StartMissionFamily;
 
 /// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
 /// these packs only, when present. Empty list = vanilla random appearance.
@@ -93,7 +95,85 @@ static event InstallNewCampaign(XComGameState StartState)
 	Chapter.AssignContinentFactions(StartState);
 	StripStartingHeroes(StartState);
 	AddStrikeForce(StartState);
+	SetStartMission(StartState);
 	`log("Astartes: new campaign started",, 'Astartes');
+}
+
+/// The first mission becomes StartMissionFamily. The base game built the start site before this hook runs, so it is
+/// rebuilt here. Every other start family goes on the site's own exclusion list, which persists, so a later rebuild
+/// (LWOTC's hybrid difficulty remakes the start mission) still lands on ours.
+static function SetStartMission(XComGameState StartState)
+{
+	local XComGameState_MissionSite Mission, Candidate;
+	local XComTacticalMissionManager MissionMgr;
+	local MissionSourceRewardMapping Mapping;
+	local XComGameState_Reward Reward;
+	local MissionDefinition Def;
+	local bool bOffered;
+	local int i;
+
+	if (default.StartMissionFamily == "")
+	{
+		return;
+	}
+	foreach StartState.IterateByClassType(class'XComGameState_MissionSite', Candidate)
+	{
+		if (Candidate.Source == 'MissionSource_Start')
+		{
+			Mission = Candidate;
+			break;
+		}
+	}
+	if (Mission == none || Mission.Rewards.Length == 0)
+	{
+		`log("Astartes: no start mission site to rebuild",, 'Astartes');
+		return;
+	}
+	MissionMgr = `TACTICALMISSIONMGR;
+	if (!MissionMgr.GetMissionDefinitionForType(default.StartMissionFamily, Def))
+	{
+		`log("Astartes: start mission" @ default.StartMissionFamily @ "is not a known mission type; keeping" @ Mission.GeneratedMission.Mission.MissionFamily,, 'Astartes');
+		return;
+	}
+	Mission.ExcludeMissionFamilies.Length = 0;
+	for (i = 0; i < MissionMgr.arrSourceRewardMissionTypes.Length; i++)
+	{
+		Mapping = MissionMgr.arrSourceRewardMissionTypes[i];
+		if (Mapping.MissionSource != Mission.Source)
+		{
+			continue;
+		}
+		if (Mapping.MissionFamily == default.StartMissionFamily)
+		{
+			bOffered = true;
+		}
+		else if (Mission.ExcludeMissionFamilies.Find(Mapping.MissionFamily) == INDEX_NONE)
+		{
+			Mission.ExcludeMissionFamilies.AddItem(Mapping.MissionFamily);
+		}
+	}
+	if (!bOffered)
+	{
+		// Our XComMissionSources.ini lost the merge to another mod: offer the family here instead.
+		Mapping.MissionSource = Mission.Source;
+		Mapping.RewardType = 'Reward_None';
+		Mapping.MissionFamily = default.StartMissionFamily;
+		Mapping.XPackMissionSource = false;
+		MissionMgr.arrSourceRewardMissionTypes.AddItem(Mapping);
+	}
+	if (Mission.GeneratedMission.Mission.MissionFamily == default.StartMissionFamily)
+	{
+		`log("Astartes: start mission is already" @ default.StartMissionFamily,, 'Astartes');
+		return;
+	}
+	Reward = XComGameState_Reward(StartState.GetGameStateForObjectID(Mission.Rewards[0].ObjectID));
+	if (Reward == none)
+	{
+		return;
+	}
+	`log("Astartes: start mission" @ Mission.GeneratedMission.Mission.sType @ "becomes" @ default.StartMissionFamily,, 'Astartes');
+	Mission.SetMissionData(Reward.GetMyTemplate(), false, 0);
+	`log("Astartes: start mission is now" @ Mission.GeneratedMission.Mission.sType @ "on" @ Mission.GeneratedMission.Plot.MapName,, 'Astartes');
 }
 
 /// The strike force: Marines made the way the game makes its starting soldiers, then promoted into their class and
