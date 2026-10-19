@@ -79,6 +79,25 @@ Master, a gifted woman a Sister and in time the Canoness. Recruits never stop ma
 **Current state vs this pillar (2026-10-19):** the Canoness and Commissar still arrive as faction-contact rewards (too easy; kept
 for testing until their tricks exist); the seats need only rank 7 plus appointment; hero numbers are the first-pass values.
 
+## 1d. The Death Company (proposal 2026-10-19, user's idea)
+
+Blood Angels are the default Chapter (config, 2026-10-19); changing Chapter changes the livery only, players accept that.
+The Blood Angels' curse becomes a mechanic: the **Black Rage**.
+
+- **Rage builds** per Marine (a unit value): a brother killed in his sight, being critically wounded, melee kills, fighting
+  daemons. A Chaplain in the squad slows it; time in the Reclusiam (a ship room) lowers it.
+- **The fall.** Past a threshold, at the start of a mission or the moment a trigger fires mid-mission, he falls to the Black
+  Rage and joins the **Death Company**: his armour turns black with red saltires (look swap), he hits harder in melee, moves
+  faster, cannot be panicked, stunned or mind-controlled, and can only advance and kill (no overwatch, no hunker down).
+- **Doomed.** The Death Company is not meant to come back. Whether he dies in the fight or not, at the end of the mission he is
+  lost to the Chapter. (Variant: he survives the mission but can only be deployed on one more, as a final charge; a Chaplain
+  present at the end gives a small chance he returns, the way Lemartes did.)
+- **Why it is good design:** losing a Marine is a disaster (1c), but the Rage turns that loss into one hero-level mission: a
+  doomed wrecking ball. It also gives the Chaplain a real job, and a later hero: Lemartes, Guardian of the Lost.
+- **Enemy targeting (user's question):** the AI already favours exposed, reachable targets, and a Death Company brother who
+  can only charge forward will draw fire on his own. Explicit target priority (the AI scoring a marked unit higher) is possible
+  in the behaviour tree if needed, but the mechanic should not depend on it.
+
 ## 2. Core design pillars
 
 1. **Every Marine matters.** Marines are rare and hard to replace. Permadeath should hurt.
