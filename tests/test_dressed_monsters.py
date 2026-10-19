@@ -65,3 +65,13 @@ def test_melee_monsters_rush(config):
 def test_no_axes_on_backs(config):
     loadouts = {struct_field(x, "LoadoutName"): x for x in section(config, "XComGameData.ini", "XComGame.X2ItemTemplateManager").values("Loadouts")}
     assert "ChaosAxe" not in loadouts["Astartes_Daemon_Loadout"] and "ChaosAxe" not in loadouts["Astartes_EldarAutarch_Loadout"]
+
+
+def test_monster_parts_stay_off_random_recruits(config):
+    """LWOTC spike 2026-10-19: a Skirmisher grew a deathclaw tail."""
+    sec = section(config, "XComAstartes.ini", "Astartes.Astartes_CharGen_Dressed")
+    assert {v.strip('"') for v in sec.values("MonsterPartTokens")} >= {"Deathclaw", "Skorge"}
+    gen = (SRC_DIR / "Astartes_CharGen_Dressed.uc").read_text(encoding="utf-8")
+    assert "Parts[i].SpecializedType = true;" in gen
+    assert "HideMonsterParts();" in (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
+

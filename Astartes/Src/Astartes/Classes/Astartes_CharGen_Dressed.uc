@@ -30,6 +30,45 @@ struct DressedLook
 };
 
 var config array<DressedLook> Looks;
+/// Body parts whose template name contains one of these (monster cosmetics: deathclaws, Skorge) are marked specialized, so
+/// random soldier generation never picks them (LWOTC spike 2026-10-19: a Skirmisher grew a deathclaw tail). Looks above still use them.
+var config array<string> MonsterPartTokens;
+
+static function HideMonsterParts()
+{
+	local X2BodyPartTemplateManager PartMgr;
+	local array<X2BodyPartTemplate> Parts;
+	local array<string> Types;
+	local int t, i, j, Hidden;
+
+	if (default.MonsterPartTokens.Length == 0)
+	{
+		return;
+	}
+	Types.AddItem("Head"); Types.AddItem("Helmets"); Types.AddItem("Torso"); Types.AddItem("Arms"); Types.AddItem("Legs");
+	Types.AddItem("LeftArm"); Types.AddItem("RightArm"); Types.AddItem("LeftArmDeco"); Types.AddItem("RightArmDeco");
+	Types.AddItem("LeftForearm"); Types.AddItem("RightForearm"); Types.AddItem("Thighs"); Types.AddItem("Shins"); Types.AddItem("TorsoDeco");
+	Types.AddItem("FacePropsUpper"); Types.AddItem("FacePropsLower");
+	PartMgr = class'X2BodyPartTemplateManager'.static.GetBodyPartTemplateManager();
+	for (t = 0; t < Types.Length; t++)
+	{
+		Parts.Length = 0;
+		PartMgr.GetUberTemplates(Types[t], Parts);
+		for (i = 0; i < Parts.Length; i++)
+		{
+			for (j = 0; j < default.MonsterPartTokens.Length; j++)
+			{
+				if (!Parts[i].SpecializedType && InStr(string(Parts[i].DataName), default.MonsterPartTokens[j], false, true) != INDEX_NONE)
+				{
+					Parts[i].SpecializedType = true;
+					Hidden++;
+					break;
+				}
+			}
+		}
+	}
+	`log("Astartes: monster body parts kept out of random generation:" @ Hidden,, 'Astartes');
+}
 
 function TSoldier CreateTSoldier(optional name CharacterTemplateName, optional EGender eForceGender, optional name nmCountry = '', optional int iRace = -1, optional name ArmorName)
 {

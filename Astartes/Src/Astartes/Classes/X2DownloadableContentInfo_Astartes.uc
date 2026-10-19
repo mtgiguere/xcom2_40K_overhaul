@@ -12,6 +12,10 @@ var config array<name> MarineClasses;
 /// Lore default: Space Marines are male. Set true to let the generator roll female Marines
 /// (they will wear whatever female-compatible armour exists, which today is XCOM gear).
 var config bool bAllowFemaleMarines;
+/// LWOTI (7.8): recruits are Guardsmen; Marines are made at the first promotion (Astartes_Ascension), not generated.
+var config bool bMarinesByAscension;
+/// Faction heroes the campaign start hands out (WotC's starting faction soldier): removed from the crew.
+var config array<name> StripStartingCharacters;
 
 /// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
 /// these packs only, when present. Empty list = vanilla random appearance.
@@ -75,7 +79,38 @@ static event InstallNewCampaign(XComGameState StartState)
 
 	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(StartState);
 	Chapter.AssignContinentFactions(StartState);
+	StripStartingHeroes(StartState);
 	`log("Astartes: new campaign started",, 'Astartes');
+}
+
+/// No Reapers, Skirmishers or Templars, not even the one the campaign start hands out (LWOTC spike, 2026-10-19).
+static function StripStartingHeroes(XComGameState StartState)
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit Unit;
+	local array<StateObjectReference> Gone;
+	local int i;
+
+	foreach StartState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ)
+	{
+		break;
+	}
+	if (XComHQ == none)
+	{
+		return;
+	}
+	foreach StartState.IterateByClassType(class'XComGameState_Unit', Unit)
+	{
+		if (default.StripStartingCharacters.Find(Unit.GetMyTemplateName()) != INDEX_NONE && XComHQ.Crew.Find('ObjectID', Unit.ObjectID) != INDEX_NONE)
+		{
+			Gone.AddItem(Unit.GetReference());
+		}
+	}
+	for (i = 0; i < Gone.Length; i++)
+	{
+		XComHQ.RemoveFromCrew(Gone[i]);
+		`log("Astartes: starting faction hero" @ Gone[i].ObjectID @ "removed from the crew",, 'Astartes');
+	}
 }
 
 // ---------------------------------------------------------------------------------------
@@ -290,6 +325,7 @@ static event OnPostTemplatesCreated()
 	class'Astartes_FactionConfig'.static.AddDaemonSpawns();
 	class'X2Ability_Astartes_Assault'.static.RewireJumpVisuals();
 	class'Astartes_NoHeroes'.static.Apply();
+	class'Astartes_CharGen_Dressed'.static.HideMonsterParts();
 }
 
 /// Called when a mission is generated, after the faction mods have added their raid SitReps (we run after
@@ -350,9 +386,9 @@ static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, cons
 		return;
 	}
 
-	if (CharacterTemplateName != 'Soldier')
+	if (CharacterTemplateName != 'Soldier' || default.bMarinesByAscension)
 	{
-		return;
+		return; // recruits are human Guardsmen; Marines are dressed when they ascend
 	}
 
 	// Policy: Marines are male unless allowed otherwise, and belong to the campaign's Chapter (a country).

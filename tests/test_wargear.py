@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import re
 
-from conftest import SRC_DIR
+from conftest import REPO, SRC_DIR
 from x2config import sections_of_class, struct_field, unquote
 
 UNNAMED_CLONE_RE = re.compile(r"\bnew\s+\w+\.Class\s*\(")
@@ -54,14 +54,10 @@ def test_borrowed_looks_hide_their_donors(config):
     assert donors <= hidden, f"donor items not hidden: {sorted(donors - hidden)}"
 
 
-def test_recruits_carry_bolters(config):
-    """New recruits must not start with XCOM rifles: the vanilla rookie loadouts are replaced."""
-    mgr = [s for s in config["XComGameData.ini"] if s.name == "XComGame.X2ItemTemplateManager"][0]
-    added = {struct_field(v, "LoadoutName"): v for op, k, v in mgr.entries if k == "Loadouts" and op == "+"}
-    removed = {struct_field(v, "LoadoutName") for op, k, v in mgr.entries if k == "Loadouts" and op == "-"}
-    for name in ("RookieSoldier", "RookieSoldierM2", "RookieSoldierM3"):
-        assert name in removed, f"vanilla {name} loadout must be removed before being replaced"
-        assert name in added and "Astartes_Bolter" in added[name], f"{name} must hand out a Bolter"
+def test_recruits_carry_lwotc_kit(config):
+    """LWOTI: recruits are Guardsmen with LWOTC's rookie kit; we no longer override RookieSoldier (two entries collided)."""
+    gamedata = (REPO / "Astartes/Config/XComGameData.ini").read_text(encoding="utf-8")
+    assert 'LoadoutName="RookieSoldier"' not in gamedata
 
 
 def test_bolt_pistols_can_be_fired(config):

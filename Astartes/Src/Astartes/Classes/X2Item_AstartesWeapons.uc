@@ -118,6 +118,10 @@ static function BorrowLook(X2WeaponTemplate Clone, name DonorName, X2ItemTemplat
 	Clone.UIArmoryCameraPointTag = Donor.UIArmoryCameraPointTag;
 	Clone.EquipSound = Donor.EquipSound;
 	Clone.DefaultAttachments = Donor.DefaultAttachments;
+	if (Donor.CosmeticUnitTemplate != "")
+	{
+		Clone.CosmeticUnitTemplate = Donor.CosmeticUnitTemplate; // gremlin-style drones: the flying unit itself
+	}
 	`log("Astartes: weapon" @ Clone.DataName @ "wears" @ Donor.GameArchetype,, 'Astartes');
 }
 

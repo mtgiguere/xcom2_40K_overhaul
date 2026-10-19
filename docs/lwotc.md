@@ -66,6 +66,15 @@ class; female → a Sister of Battle class (to be designed); everyone else → a
    LWOTC's timed missions.
 10. **Load order.** Our config must load after LWOTC's where both set the same keys (`RequiredMods` / run order).
 
+## Spike results (2026-10-19) and fixes
+
+Played one mission: rookies started with assault rifles (LWOTC's loadout won), a Skirmisher was on the crew (the start state's
+faction soldier) and wore Deathclaw parts, eight Marines (our classes in the deck), LWOTC classes present (expected), the
+Narthecium was a plain gremlin. Fixed the same day: Marine classes out of the deck and `Astartes_Ascension` (collision 1),
+no `[Soldier]` stat override (2), no rookie loadout override (3), recruits no longer dressed as Marines; ascended aspirants are
+(4), the starting faction hero stripped (6), the Narthecium wears the Servoskull mod's skull, Deathclaw / Skorge parts marked
+specialized so random recruits never wear them. Open: haven rebels dressed as Guardsmen (5); `KevlarArmor` is still named Power Armour.
+
 ## First spike (user)
 
 Enable LWOTC with the current Astartes profile, start a campaign, play one mission and one strategy month. Look for:

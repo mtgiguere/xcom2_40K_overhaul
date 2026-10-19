@@ -4,15 +4,14 @@ from x2config import struct_field, unquote
 
 def _soldier_stats(config):
     sections = [s for s in config.get("XComGameData_CharacterStats.ini", []) if s.name == "Soldier X2CharacterTemplate"]
-    assert sections, "missing [Soldier X2CharacterTemplate] override in XComGameData_CharacterStats.ini"
+    assert not sections, "LWOTI: recruits are human (LWOTC stats); the Marine physique comes with ascension"
+    return
     return {k: v for _, k, v in sections[0].entries}
 
 
 def test_marines_are_tougher_than_xcom_soldiers(config):
-    stats = _soldier_stats(config)
-    assert int(stats["CharacterBaseStats[eStat_HP]"]) >= 7, "a Marine in power armour should start with more than vanilla 5 HP"
-    assert int(stats["CharacterBaseStats[eStat_Will]"]) >= 50, "Marines have high Will (Know No Fear is separate)"
-    assert int(stats["CharacterBaseStats[eStat_Strength]"]) > 40
+    sec = next(s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_Ascension")
+    assert int(sec.first("ASCENSION_HP")) >= 3 and int(sec.first("ASCENSION_WILL")) >= 20, "the Astartes physique is granted on ascension"
 
 
 def test_gender_policy_is_configurable(config):

@@ -1332,55 +1332,11 @@
     }
   ],
   "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent. 'Jedi' is Jedi Class Revised's class: that mod may be enabled for its jump animations.",
-  "_loadout_overrides_note": "Vanilla loadouts removed (exact match required) and replaced, so new recruits carry Imperial wargear from day one. Lines copied from the SDK's DefaultGameData.ini.",
-  "loadout_overrides": [
-    {
-      "name": "RookieSoldier",
-      "remove": [
-        "KevlarArmor",
-        "AssaultRifle_CV",
-        "FragGrenade",
-        "FragGrenade"
-      ],
-      "items": [
-        "KevlarArmor",
-        "Astartes_Bolter_CV",
-        "FragGrenade",
-        "FragGrenade"
-      ]
-    },
-    {
-      "name": "RookieSoldierM2",
-      "remove": [
-        "KevlarArmor",
-        "AssaultRifle_MG",
-        "FragGrenade",
-        "FragGrenade"
-      ],
-      "items": [
-        "KevlarArmor",
-        "Astartes_Bolter_MG",
-        "FragGrenade",
-        "FragGrenade"
-      ]
-    },
-    {
-      "name": "RookieSoldierM3",
-      "remove": [
-        "KevlarArmor",
-        "AssaultRifle_BM",
-        "FragGrenade",
-        "FragGrenade"
-      ],
-      "items": [
-        "KevlarArmor",
-        "Astartes_Bolter_BM",
-        "FragGrenade",
-        "FragGrenade"
-      ]
-    }
-  ],
+  "_loadout_overrides_note": "Empty since 2026-10-19 (LWOTI): recruits are Guardsmen and carry LWOTC's rookie kit; Marines get bolters through their class loadout.",
+  "loadout_overrides": [],
   "_fallback_note": "fallback: a vanilla ability used for the slot when the named ability (from an optional mod) is not loaded; mirrored in XComAstartes.ini +Fallbacks and applied at template init.",
   "_extra_loadouts_note": "Enemy loadouts live here too: XComGameData.ini is generated, hand edits are lost. Order matters: the first item is the weapon, later ones are fallbacks when a mod is absent.",
-  "_hero_note": "Classes with a 'hero' block are faction heroes: out of the recruit deck, no AWC, bound to their character template (Astartes_UnitVariants), granted by Astartes_NoHeroes.HeroCharacters."
+  "_hero_note": "Classes with a 'hero' block are faction heroes: out of the recruit deck, no AWC, bound to their character template (Astartes_UnitVariants), granted by Astartes_NoHeroes.HeroCharacters.",
+  "marines_by_ascension": true,
+  "_ascension_note": "Marine classes are out of the random deck (NumInDeck 0); recruits reach them only by ascension (Astartes_Ascension)."
 }

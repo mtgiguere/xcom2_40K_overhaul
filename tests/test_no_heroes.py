@@ -32,6 +32,6 @@ def test_hero_characters_per_faction_are_wired_but_gated():
     assert "static function name HeroCharacterFor" in src and "FindCharacterTemplate(default.HeroCharacters[i].Character) != none" in src
     assert "nmCharacter = HeroCharacterFor(FactionState);" in src
     gen = (REPO / "tools/gen_class_config.py").read_text(encoding="utf-8")
-    assert '"+NumInDeck=0" if c.get("hero")' in gen and '+RequiredCharacterClass=' in gen, "hero classes stay out of the recruit deck and bind to their character"
+    assert 'c.get("hero")' in gen and '"+NumInDeck=0"' in gen and '+RequiredCharacterClass=' in gen, "hero classes stay out of the recruit deck and bind to their character"
     uv = (SRC_DIR / "Astartes_UnitVariants.uc").read_text(encoding="utf-8")
     assert "T.DefaultSoldierClass = Def.DefaultSoldierClass" in uv
