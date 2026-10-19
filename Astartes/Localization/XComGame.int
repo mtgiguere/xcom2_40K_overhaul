@@ -1086,6 +1086,12 @@ FriendlyNamePlural="Hot-shot Lasguns"
 BriefSummary="The Kasrkin's high-powered lasgun."
 TacticalText="<Bullet/> A storm trooper's weapon."
 
+[Astartes_ThunderHammer X2WeaponTemplate]
+FriendlyName="Thunder Hammer"
+FriendlyNamePlural="Thunder Hammers"
+BriefSummary="A relic of the Chapter's armouries: a power hammer whose disruption field releases a thunderclap on impact."
+TacticalText="<Bullet/> Devastating melee weapon.<br/><Bullet/> A relic: found, never forged."
+
 [Astartes_Hellblade X2WeaponTemplate]
 FriendlyName="Hellblade"
 FriendlyNamePlural="Hellblades"

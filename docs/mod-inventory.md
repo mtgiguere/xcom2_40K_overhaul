@@ -494,6 +494,8 @@ EldarArmor's Autarch helmets and the dressed-body technique. Whether its abiliti
 Neural Shredder, Executioner pistol, Neuro Gauntlet, Animus Speculum anti-psyker gun). Use: the Inquisition's strike teams in the Taint
 *Refuse* branch (design.md 9.1e), dressed soldier bodies with enemy-only weapon clones; Culexus vs Librarians. Content likely in CookedPCConsole.
 
+**Thunder hammer (2026-10-19):** A2I_MiscContentForXCOM (1943822053) `XC_ThunderHammer_*` with its `ThunderHammerStrike`. Ours: `Astartes_ThunderHammer`, a relic to be found (Terminators, Chaplains, Captains); the mod's own items hidden.
+
 ## Animation sources
 | Mod | ID | Use |
 |---|---|---|
