@@ -496,6 +496,14 @@ dialog offers Submit (the most exposed Librarian, else the most exposed brother,
 Inquisitor joins) or Refuse (hostile; the next judgement at Taint + 100). Still to come: Prove Purity (a mission), the
 Assassin strike teams after a refusal, Chaos corruption as a Taint source. `Astartes_Taint 100` forces a judgement.
 
+### 9.1g The Imperial Guard as allies (built 2026-10-18)
+
+The armed resistance militia of retaliation missions are Cadian Guardsmen: `AllyReplacements` swaps the three militia tiers in
+allied pods for dressed militia clones (Guardsman, Veteran Guardsman, Kasrkin) in the Space Marine 2 Cadian armour with the
+Imperial Guardsman voices and lasguns (hot-shot for Kasrkin). They are men with low will: they panic, which is what the
+Commissar's Aura of Discipline and Summary Execution are for, and what a Warlock's Horrify feeds on. Next for the Guard: a
+Guard squad as a mission reward / call-in, Ogryns, and the Guard as a strategy-layer ally once the factions are rewritten.
+
 ### 9.1f Hero classes: Canoness and Commissar (proposal 2026-10-18, awaiting the user's eye)
 
 Both are faction heroes in the game's sense (no AWC roll, not in the recruit deck, one per campaign unless lost), rewarded

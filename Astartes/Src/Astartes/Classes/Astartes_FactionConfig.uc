@@ -32,6 +32,13 @@ var config bool bEnableIncursions;
 var config FactionDef Incursion;
 var config array<string> IncursionEncounterPrefixes;
 var config int IncursionMaxPodSize;
+/// Allied pods (the resistance team: retaliation militia): template swaps, e.g. CivilianMilitia -> Astartes_Guardsman.
+struct AllyReplacement
+{
+	var name From;
+	var name To;
+};
+var config array<AllyReplacement> AllyReplacements;
 var config name IncursionArrival;   // reinforcement visual for incursion swarms: PsiGate (the webway); '' keeps the Lost run-in
 
 /// Encounter IDs that are never rewritten (hidden Faceless, swarm VIPs...). Chosen/VIP pods are skipped by tag anyway.

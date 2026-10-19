@@ -114,7 +114,7 @@ def test_lost_pods_become_eldar_incursions(faction_section):
     assert "TheLost" in {unquote(v) for v in faction_section.values("IncursionEncounterPrefixes")}
     assert 3 <= int(faction_section.first("IncursionMaxPodSize")) <= 8, "a Lost swarm is huge; an Eldar pod must be a pod"
     src = (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
-    assert src.count("if (RewriteIncursion(Encounter, EncounterName, ForceLevel,") == 2, "both the pod and the reinforcement hooks"
+    assert src.count("RewriteIncursion(Encounter, EncounterName, ForceLevel,") == 2, "both the pod and the reinforcement hooks"
     body = src[src.index("static function bool RewriteIncursion"):]
     assert "Encounter.Team = eTeam_Alien;" in body and "IncursionMaxPodSize" in body
     assert unquote(faction_section.first("IncursionArrival") or "") == "PsiGate", "incursions come through the webway, not the Lost run-in"

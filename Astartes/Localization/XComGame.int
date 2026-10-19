@@ -1029,6 +1029,33 @@ strCharacterName="Eldar Guardian"
 [Astartes_DireAvenger X2CharacterTemplate]
 strCharacterName="Dire Avenger"
 
+[Astartes_Guardsman X2CharacterTemplate]
+strCharacterName="Guardsman"
+
+[Astartes_GuardsmanVeteran X2CharacterTemplate]
+strCharacterName="Veteran Guardsman"
+
+[Astartes_Kasrkin X2CharacterTemplate]
+strCharacterName="Kasrkin"
+
+[Astartes_Lasgun X2WeaponTemplate]
+FriendlyName="Lasgun"
+FriendlyNamePlural="Lasguns"
+BriefSummary="The Imperial Guard's rifle."
+TacticalText="<Bullet/> A Guardsman's weapon."
+
+[Astartes_LasgunMG X2WeaponTemplate]
+FriendlyName="Lasgun"
+FriendlyNamePlural="Lasguns"
+BriefSummary="The Imperial Guard's rifle."
+TacticalText="<Bullet/> A veteran's weapon."
+
+[Astartes_Hotshot X2WeaponTemplate]
+FriendlyName="Hot-shot Lasgun"
+FriendlyNamePlural="Hot-shot Lasguns"
+BriefSummary="The Kasrkin's high-powered lasgun."
+TacticalText="<Bullet/> A storm trooper's weapon."
+
 [Astartes_Hellblade X2WeaponTemplate]
 FriendlyName="Hellblade"
 FriendlyNamePlural="Hellblades"

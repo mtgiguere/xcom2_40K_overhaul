@@ -85,7 +85,7 @@ static event InstallNewCampaign(XComGameState StartState)
 /// Called per pod when a mission's encounter data is cached. SourceObject is the mission site.
 static function PostEncounterCreation(out name EncounterName, out PodSpawnInfo Encounter, int ForceLevel, int AlertLevel, optional XComGameState_BaseObject SourceObject)
 {
-	if (RewriteIncursion(Encounter, EncounterName, ForceLevel, "pod" @ EncounterName))
+	if (RewriteAllies(Encounter, "pod" @ EncounterName) || RewriteIncursion(Encounter, EncounterName, ForceLevel, "pod" @ EncounterName))
 	{
 		return;
 	}
@@ -103,11 +103,40 @@ static function PostReinforcementCreation(out name EncounterName, out PodSpawnIn
 	{
 		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(BattleData.m_iMissionID));
 	}
-	if (RewriteIncursion(Encounter, EncounterName, ForceLevel, "reinforcements" @ EncounterName))
+	if (RewriteAllies(Encounter, "reinforcements" @ EncounterName) || RewriteIncursion(Encounter, EncounterName, ForceLevel, "reinforcements" @ EncounterName))
 	{
 		return;
 	}
 	RewritePodForContinent(Encounter, EncounterName, ForceLevel, MissionSite, "reinforcements" @ EncounterName);
+}
+
+/// Allied pods: the resistance militia are the Imperial Guard (2026-10-18). Each configured template is swapped when its
+/// replacement exists (the dressed Guardsmen need no mod to exist; their look and lasgun do). True when anything changed.
+static function bool RewriteAllies(out PodSpawnInfo Encounter, string Context)
+{
+	local X2CharacterTemplateManager CharMgr;
+	local int i, j;
+	local bool bChanged;
+
+	if (Encounter.Team != eTeam_Resistance)
+	{
+		return false;
+	}
+	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
+	for (i = 0; i < Encounter.SelectedCharacterTemplateNames.Length; i++)
+	{
+		j = class'Astartes_FactionConfig'.default.AllyReplacements.Find('From', Encounter.SelectedCharacterTemplateNames[i]);
+		if (j != INDEX_NONE && CharMgr.FindCharacterTemplate(class'Astartes_FactionConfig'.default.AllyReplacements[j].To) != none)
+		{
+			Encounter.SelectedCharacterTemplateNames[i] = class'Astartes_FactionConfig'.default.AllyReplacements[j].To;
+			bChanged = true;
+		}
+	}
+	if (bChanged)
+	{
+		`log("Astartes: allies" @ Context @ "are the Imperial Guard",, 'Astartes');
+	}
+	return bChanged;
 }
 
 /// The Lost are Eldar (decision 2026-10-18): a Lost pod or swarm becomes a webway incursion pod on the alien team, on any
