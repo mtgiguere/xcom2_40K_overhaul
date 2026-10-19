@@ -1038,6 +1038,15 @@ strCharacterName="Veteran Guardsman"
 [Astartes_Kasrkin X2CharacterTemplate]
 strCharacterName="Kasrkin"
 
+[Astartes_BattleSister X2CharacterTemplate]
+strCharacterName="Battle Sister"
+
+[Astartes_BattleSisterVet X2CharacterTemplate]
+strCharacterName="Battle Sister Superior"
+
+[Astartes_Celestian X2CharacterTemplate]
+strCharacterName="Celestian"
+
 [Astartes_Lasgun X2WeaponTemplate]
 FriendlyName="Lasgun"
 FriendlyNamePlural="Lasguns"

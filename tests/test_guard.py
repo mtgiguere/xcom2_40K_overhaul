@@ -14,7 +14,10 @@ def section(config, file, name):
 def test_militia_tiers_become_guardsmen(config):
     fc = section(config, "XComAstartes.ini", "Astartes.Astartes_FactionConfig")
     swaps = {struct_field(v, "From"): struct_field(v, "To") for v in fc.values("AllyReplacements")}
+    swaps = {struct_field(v, "From"): struct_field(v, "To") for v in fc.values("AllyReplacements") if not struct_field(v, "ContinentFaction")}
     assert swaps == TIERS
+    chaos = {struct_field(v, "From"): struct_field(v, "To") for v in fc.values("AllyReplacements") if struct_field(v, "ContinentFaction") == "Chaos"}
+    assert chaos == {"CivilianMilitia": "Astartes_BattleSister", "CivilianMilitiaM2": "Astartes_BattleSisterVet", "CivilianMilitiaM3": "Astartes_Celestian"}, "the Sororitas answer where Chaos holds"
     variants = {struct_field(x, "NewName"): x for x in section(config, "XComAstartes.ini", "Astartes.Astartes_UnitVariants").values("Variants")}
     looks = {struct_field(x, "Template"): x for x in section(config, "XComAstartes.ini", "Astartes.Astartes_CharGen_Dressed").values("Looks")}
     for base, unit in TIERS.items():

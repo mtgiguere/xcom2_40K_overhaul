@@ -1305,6 +1305,24 @@
       "items": [
         "Astartes_Hotshot"
       ]
+    },
+    {
+      "name": "Astartes_BattleSister_Loadout",
+      "items": [
+        "Astartes_Bolter_CV"
+      ]
+    },
+    {
+      "name": "Astartes_BattleSisterVet_Loadout",
+      "items": [
+        "Astartes_Bolter_MG"
+      ]
+    },
+    {
+      "name": "Astartes_Celestian_Loadout",
+      "items": [
+        "Astartes_Bolter_BM"
+      ]
     }
   ],
   "_remove_note": "AA_* are the Space Marine Class Pack (workshop 3789746906) classes: removed from the deck so scouts only promote into ours; harmless when that mod is absent. 'Jedi' is Jedi Class Revised's class: that mod may be enabled for its jump animations.",

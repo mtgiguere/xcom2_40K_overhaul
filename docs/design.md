@@ -504,6 +504,9 @@ Imperial Guardsman voices and lasguns (hot-shot for Kasrkin). They are men with 
 Commissar's Aura of Discipline and Summary Execution are for, and what a Warlock's Horrify feeds on. Next for the Guard: a
 Guard squad as a mission reward / call-in, Ogryns, and the Guard as a strategy-layer ally once the factions are rewritten.
 
+**Sororitas (same day):** on continents Chaos holds, the swap is bound to the faction (`ContinentFaction`) and the allies are
+Battle Sisters, Sisters Superior and Celestians in Sister of Battle plate with boltguns: the Orders Militant go where heresy is.
+
 ### 9.1f Hero classes: Canoness and Commissar (proposal 2026-10-18, awaiting the user's eye)
 
 Both are faction heroes in the game's sense (no AWC roll, not in the recruit deck, one per campaign unless lost), rewarded

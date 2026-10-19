@@ -37,6 +37,7 @@ struct AllyReplacement
 {
 	var name From;
 	var name To;
+	var name ContinentFaction;   // optional: only where this faction holds the continent (e.g. Chaos: the Sororitas answer)
 };
 var config array<AllyReplacement> AllyReplacements;
 var config name IncursionArrival;   // reinforcement visual for incursion swarms: PsiGate (the webway); '' keeps the Lost run-in

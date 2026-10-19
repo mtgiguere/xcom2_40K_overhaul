@@ -85,7 +85,7 @@ static event InstallNewCampaign(XComGameState StartState)
 /// Called per pod when a mission's encounter data is cached. SourceObject is the mission site.
 static function PostEncounterCreation(out name EncounterName, out PodSpawnInfo Encounter, int ForceLevel, int AlertLevel, optional XComGameState_BaseObject SourceObject)
 {
-	if (RewriteAllies(Encounter, "pod" @ EncounterName) || RewriteIncursion(Encounter, EncounterName, ForceLevel, "pod" @ EncounterName))
+	if (RewriteAllies(Encounter, "pod" @ EncounterName, XComGameState_MissionSite(SourceObject)) || RewriteIncursion(Encounter, EncounterName, ForceLevel, "pod" @ EncounterName))
 	{
 		return;
 	}
@@ -103,7 +103,7 @@ static function PostReinforcementCreation(out name EncounterName, out PodSpawnIn
 	{
 		MissionSite = XComGameState_MissionSite(`XCOMHISTORY.GetGameStateForObjectID(BattleData.m_iMissionID));
 	}
-	if (RewriteAllies(Encounter, "reinforcements" @ EncounterName) || RewriteIncursion(Encounter, EncounterName, ForceLevel, "reinforcements" @ EncounterName))
+	if (RewriteAllies(Encounter, "reinforcements" @ EncounterName, MissionSite) || RewriteIncursion(Encounter, EncounterName, ForceLevel, "reinforcements" @ EncounterName))
 	{
 		return;
 	}
@@ -112,9 +112,11 @@ static function PostReinforcementCreation(out name EncounterName, out PodSpawnIn
 
 /// Allied pods: the resistance militia are the Imperial Guard (2026-10-18). Each configured template is swapped when its
 /// replacement exists (the dressed Guardsmen need no mod to exist; their look and lasgun do). True when anything changed.
-static function bool RewriteAllies(out PodSpawnInfo Encounter, string Context)
+static function bool RewriteAllies(out PodSpawnInfo Encounter, string Context, optional XComGameState_MissionSite MissionSite)
 {
 	local X2CharacterTemplateManager CharMgr;
+	local XComGameState_AstartesChapter Chapter;
+	local name HeldBy, To;
 	local int i, j;
 	local bool bChanged;
 
@@ -122,19 +124,42 @@ static function bool RewriteAllies(out PodSpawnInfo Encounter, string Context)
 	{
 		return false;
 	}
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	if (Chapter != none && MissionSite != none && MissionSite.GetContinent() != none)
+	{
+		HeldBy = Chapter.GetFactionForContinent(MissionSite.GetContinent().GetReference());
+	}
 	CharMgr = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager();
 	for (i = 0; i < Encounter.SelectedCharacterTemplateNames.Length; i++)
 	{
-		j = class'Astartes_FactionConfig'.default.AllyReplacements.Find('From', Encounter.SelectedCharacterTemplateNames[i]);
-		if (j != INDEX_NONE && CharMgr.FindCharacterTemplate(class'Astartes_FactionConfig'.default.AllyReplacements[j].To) != none)
+		// a swap bound to the continent's faction wins over the general one
+		To = '';
+		for (j = 0; j < class'Astartes_FactionConfig'.default.AllyReplacements.Length; j++)
 		{
-			Encounter.SelectedCharacterTemplateNames[i] = class'Astartes_FactionConfig'.default.AllyReplacements[j].To;
+			if (class'Astartes_FactionConfig'.default.AllyReplacements[j].From != Encounter.SelectedCharacterTemplateNames[i]
+				|| CharMgr.FindCharacterTemplate(class'Astartes_FactionConfig'.default.AllyReplacements[j].To) == none)
+			{
+				continue;
+			}
+			if (class'Astartes_FactionConfig'.default.AllyReplacements[j].ContinentFaction == '')
+			{
+				if (To == '') To = class'Astartes_FactionConfig'.default.AllyReplacements[j].To;
+			}
+			else if (class'Astartes_FactionConfig'.default.AllyReplacements[j].ContinentFaction == HeldBy)
+			{
+				To = class'Astartes_FactionConfig'.default.AllyReplacements[j].To;
+				break;
+			}
+		}
+		if (To != '')
+		{
+			Encounter.SelectedCharacterTemplateNames[i] = To;
 			bChanged = true;
 		}
 	}
 	if (bChanged)
 	{
-		`log("Astartes: allies" @ Context @ "are the Imperial Guard",, 'Astartes');
+		`log("Astartes: allies" @ Context @ "rewritten (continent held by" @ HeldBy $ ")",, 'Astartes');
 	}
 	return bChanged;
 }
