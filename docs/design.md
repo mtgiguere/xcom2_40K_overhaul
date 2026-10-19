@@ -49,6 +49,28 @@ Orks (*Bane of the Greenskin*, after Yarrick), the Inquisitor against Tyranids a
 **Win condition (proposal):** cleanse every system around the yard and hold it until the forge-ship can sail; possibly a final
 mission as the warp storm begins to close again.
 
+## 1c. Power curve and hero acquisition (user, 2026-10-19)
+
+**The curve.** The regular game is *super hard*. At the start the player is overmatched with Guardsmen and loses a lot. Marines
+are an even match for the enemy: with them the campaign reaches a holding pattern. What breaks the stalemate is **top-tier
+heroes**: the Marine seats (Chapter Master, Chief Librarian, Master of Sanctity), the Dreadnought, and the found heroes (Commissar,
+Canoness, Inquisitor, the Saint). Heroes are **crazy strong** (power levels may be raised further); they are the difference.
+
+**The trick.** Every hero is hard to get because the way to get them is not straightforward; the harder, the more valuable.
+Never "play a mission and you get him". Decided tricks and proposals (P):
+
+| Hero | How he is earned |
+|---|---|
+| Dreadnought | A battle brother must fall first (stabilised by an Apothecary, interred; relic science recovered; Proving Ground) |
+| The Saint | Survive her rescue mission (she may die), then the darkest hour manifests her (1b) |
+| Inquisitor | Not recruited: the Inquisition judges a tainted Chapter (9.1e). Submitting brings him; refusing brings assassins |
+| Commissar | The easiest, still earned. (P) A Guard garrison must hold through a defence it should have lost, or Guardsmen must break under fire (panic) enough times: the Officio Prefectus sends a Commissar to stiffen the line |
+| Canoness | (P) Chaos must be fought where faith is tested: a Chaos-held world liberated, or a Sororitas-allied defence won on a Chaos continent |
+| Chapter Master / Chief Librarian / Master of Sanctity | (P) Rank alone is not enough: each seat also needs a relic recovered from the forge-ship's vaults or a story mission (a Librarian's trial in the Warp, a Chaplain's crusade) |
+
+**Current state vs this pillar (2026-10-19):** the Canoness and Commissar still arrive as faction-contact rewards (too easy; kept
+for testing until their tricks exist); the seats need only rank 7 plus appointment; hero numbers are the first-pass values.
+
 ## 2. Core design pillars
 
 1. **Every Marine matters.** Marines are rare and hard to replace. Permadeath should hurt.
