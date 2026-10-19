@@ -67,3 +67,13 @@ def test_recruits_are_dressed_as_cadians(config):
         assert "SM2Cadian_" in look and "bKeepVoice=true" in look, f"{name}: Cadian parts, own voice"
     assert "DressRecruitAsGuard(CharGen);" in (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
 
+
+def test_strike_force_and_rebels(config):
+    game = next(s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes")
+    force = game.values("StartingMarines")
+    assert 3 <= len(force) <= 6 and any("Captain" in f for f in force), "a Captain and a handful of brothers (design 1b)"
+    assert {unquote(v) for v in game.values("RebelTemplates")} == {"Rebel", "FacelessRebel"}
+    dlc = (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
+    assert "AddStrikeForce(StartState);" in dlc and "class'Astartes_Ascension'.static.Ascend(Unit);" in dlc
+    assert "MakeKevlarPowerArmour();" not in dlc, "the basic armour is flak again"
+

@@ -16,10 +16,9 @@ strCharacterName="Daemon"
 
 ; ---------------------------------------------------------------- armour (vanilla tiers renamed as power armour marks)
 [KevlarArmor X2ArmorTemplate]
-FriendlyName="Power Armour Mk VII"
-FriendlyNamePlural="Power Armour Mk VII"
-BriefSummary="Mk VII 'Aquila' pattern power armour: ceramite plate over an adamantium skeleton, fibre-bundle muscles, a sealed life-support system. The standard wargear of a battle-brother."
-TacticalText="<Bullet/> Every Marine wears power armour as part of his basic kit.\n<Bullet/> The Forge can produce heavier marks and artificer plate."
+FriendlyName="Flak Armour"
+FriendlyNamePlural="Flak Armour"
+BriefSummary="The Imperial Guard's standard-issue flak vest and plates. A Space Marine's power armour is part of what he becomes."
 
 [MediumPlatedArmor X2ArmorTemplate]
 FriendlyName="Artificer Power Armour"

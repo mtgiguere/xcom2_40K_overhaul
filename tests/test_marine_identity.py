@@ -46,12 +46,11 @@ def test_chapter_country_and_liveries(config):
 
 
 def test_power_armour_is_configured_and_named(config, loc_sections):
-    section = [s for s in config["XComAstartes.ini"] if s.name == "Astartes.X2Ability_Astartes"][0]
-    assert int(section.first("POWER_ARMOUR_HEALTH_BONUS")) >= 1
-    assert int(section.first("POWER_ARMOUR_MITIGATION")) >= 1
-    armour_loc = {s.template_name: s for s in loc_sections if s.template_class == "X2ArmorTemplate"}
-    assert "KevlarArmor" in armour_loc, "KevlarArmor must be renamed to power armour"
-    assert "Power Armour" in unquote(armour_loc["KevlarArmor"].first("FriendlyName"))
+    """LWOTI: the basic armour is the Guard's flak armour; Marines' power armour comes with ascension."""
+    kevlar = next(s for s in loc_sections if s.name == "KevlarArmor X2ArmorTemplate")
+    assert "Flak" in kevlar.first("FriendlyName")
+    sec = next(s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_Ascension")
+    assert int(sec.first("ASCENSION_ARMOUR")) >= 1 and int(sec.first("SISTER_ARMOUR")) >= 1
 
 
 def test_marine_look_uses_only_tintable_parts(config):

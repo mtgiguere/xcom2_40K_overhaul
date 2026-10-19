@@ -12,8 +12,8 @@ class Astartes_Ascension extends X2EventListener config(Astartes) dependson(Asta
 var config int MinComInt;                      // ECombatIntelligence: 2 = Gifted, 3 = Genius, 4 = Savant
 var config array<name> AspirantMarineClasses;
 var config array<name> AspirantSisterClasses;
-var config int ASCENSION_HP, ASCENSION_WILL, ASCENSION_STRENGTH;
-var config int SISTER_HP, SISTER_WILL;
+var config int ASCENSION_HP, ASCENSION_WILL, ASCENSION_STRENGTH, ASCENSION_ARMOUR;
+var config int SISTER_HP, SISTER_WILL, SISTER_ARMOUR;
 var config name SisterLook;                    // an Astartes_CharGen_Dressed look (parts and voice) for a new Sister
 var name AscendedValueName;
 
@@ -90,6 +90,7 @@ static function Ascend(XComGameState_Unit Unit)
 	Unit.SetBaseMaxStat(eStat_Will, Unit.GetBaseStat(eStat_Will) + default.ASCENSION_WILL);
 	Unit.SetCurrentStat(eStat_Will, Unit.GetMaxStat(eStat_Will));
 	Unit.SetBaseMaxStat(eStat_Strength, Unit.GetBaseStat(eStat_Strength) + default.ASCENSION_STRENGTH);
+	Unit.SetBaseMaxStat(eStat_ArmorMitigation, Unit.GetBaseStat(eStat_ArmorMitigation) + default.ASCENSION_ARMOUR); // power armour
 	Unit.SetCurrentStat(eStat_Strength, Unit.GetMaxStat(eStat_Strength));
 
 	Country = class'X2DownloadableContentInfo_Astartes'.static.GetChapterCountry();
@@ -124,6 +125,7 @@ static function TakeTheVeil(XComGameState_Unit Unit)
 	Unit.SetBaseMaxStat(eStat_HP, Unit.GetBaseStat(eStat_HP) + default.SISTER_HP);
 	Unit.SetCurrentStat(eStat_HP, Unit.GetMaxStat(eStat_HP));
 	Unit.SetBaseMaxStat(eStat_Will, Unit.GetBaseStat(eStat_Will) + default.SISTER_WILL);
+	Unit.SetBaseMaxStat(eStat_ArmorMitigation, Unit.GetBaseStat(eStat_ArmorMitigation) + default.SISTER_ARMOUR); // power armour
 	Unit.SetCurrentStat(eStat_Will, Unit.GetMaxStat(eStat_Will));
 	i = class'Astartes_CharGen_Dressed'.default.Looks.Find('Template', default.SisterLook);
 	if (i != INDEX_NONE)

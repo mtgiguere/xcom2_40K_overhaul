@@ -18,6 +18,16 @@ var config bool bMarinesByAscension;
 var config array<name> StripStartingCharacters;
 /// LWOTI: every new recruit is dressed as a Guardsman (Astartes_CharGen_Dressed looks, by gender).
 var config name RecruitLookMale, RecruitLookFemale;
+/// LWOTC haven rebels (and the rebel soldiers copied from them) are dressed as Guardsmen too.
+var config array<name> RebelTemplates;
+/// The Blood Angels strike force that arrives at campaign start (design 1b): class, rank, optional nickname.
+struct StartingMarine
+{
+	var name SoldierClass;
+	var int Rank;
+	var string Nickname;
+};
+var config array<StartingMarine> StartingMarines;
 
 /// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
 /// these packs only, when present. Empty list = vanilla random appearance.
@@ -82,7 +92,66 @@ static event InstallNewCampaign(XComGameState StartState)
 	Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(StartState);
 	Chapter.AssignContinentFactions(StartState);
 	StripStartingHeroes(StartState);
+	AddStrikeForce(StartState);
 	`log("Astartes: new campaign started",, 'Astartes');
+}
+
+/// The strike force: Marines made the way the game makes its starting soldiers, then promoted into their class and
+/// given the ascended physique and the Chapter's armour. They join the barracks and, while there is room, the first squad.
+static function AddStrikeForce(XComGameState StartState)
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit Unit;
+	local XGCharacterGenerator CharGen;
+	local TSoldier Man;
+	local int i, r;
+
+	foreach StartState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ)
+	{
+		break;
+	}
+	if (XComHQ == none || default.StartingMarines.Length == 0)
+	{
+		return;
+	}
+	CharGen = class'Engine'.static.GetCurrentWorldInfo().Spawn(class'XGCharacterGenerator');
+	for (i = 0; i < default.StartingMarines.Length; i++)
+	{
+		Unit = `CHARACTERPOOLMGR.CreateCharacter(StartState, eCPSM_RandomOnly);
+		if (Unit == none)
+		{
+			continue;
+		}
+		if (CharGen != none && EGender(Unit.kAppearance.iGender) == eGender_Female)
+		{
+			Man = CharGen.CreateTSoldier('Soldier', eGender_Male);
+			Unit.SetTAppearance(Man.kAppearance);
+			Unit.SetCharacterName(Man.strFirstName, Man.strLastName, Man.strNickName);
+		}
+		Unit.RandomizeStats();
+		Unit.ApplyInventoryLoadout(StartState);
+		for (r = 0; r < Max(1, default.StartingMarines[i].Rank); r++)
+		{
+			Unit.RankUpSoldier(StartState, r == 0 ? default.StartingMarines[i].SoldierClass : '');
+		}
+		Unit.ApplySquaddieLoadout(StartState, XComHQ);
+		class'Astartes_Ascension'.static.Ascend(Unit);
+		if (default.StartingMarines[i].Nickname != "")
+		{
+			Unit.SetCharacterName(Unit.GetFirstName(), Unit.GetLastName(), default.StartingMarines[i].Nickname);
+		}
+		Unit.SetHQLocation(eSoldierLoc_Barracks);
+		XComHQ.AddToCrew(StartState, Unit);
+		if (XComHQ.Squad.Length < class'X2StrategyGameRulesetDataStructures'.static.GetMaxSoldiersAllowedOnMission())
+		{
+			XComHQ.Squad.AddItem(Unit.GetReference());
+		}
+		`log("Astartes: strike force:" @ Unit.GetFullName() @ "joins as" @ default.StartingMarines[i].SoldierClass @ "rank" @ Unit.GetRank(),, 'Astartes');
+	}
+	if (CharGen != none)
+	{
+		CharGen.Destroy();
+	}
 }
 
 /// No Reapers, Skirmishers or Templars, not even the one the campaign start hands out (LWOTC spike, 2026-10-19).
@@ -322,7 +391,7 @@ static event OnPostTemplatesCreated()
 {
 	`log("Astartes: OnPostTemplatesCreated",, 'Astartes');
 	class'Astartes_UnitVariants'.static.CreateVariants();
-	class'X2Ability_Astartes'.static.MakeKevlarPowerArmour();
+	// LWOTI: KevlarArmor is the Guard's flak armour again; the power armour bonus is part of the ascended physique.
 	class'X2Item_AstartesWeapons'.static.CreateWeapons();
 	class'Astartes_AbilityVariants'.static.CreateClones();
 	class'Astartes_FactionConfig'.static.AddDaemonSpawns();
@@ -391,6 +460,11 @@ static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, cons
 		return;
 	}
 
+	if (default.RebelTemplates.Find(CharacterTemplateName) != INDEX_NONE)
+	{
+		DressRecruitAsGuard(CharGen);
+		return;
+	}
 	if (CharacterTemplateName == 'Soldier' && default.bMarinesByAscension)
 	{
 		DressRecruitAsGuard(CharGen);

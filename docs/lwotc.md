@@ -77,7 +77,9 @@ faction soldier) and wore Deathclaw parts, eight Marines (our classes in the dec
 Narthecium was a plain gremlin. Fixed the same day: Marine classes out of the deck and `Astartes_Ascension` (collision 1),
 no `[Soldier]` stat override (2), no rookie loadout override (3), recruits no longer dressed as Marines; ascended aspirants are
 (4), the starting faction hero stripped (6), the Narthecium wears the Servoskull mod's skull, Deathclaw / Skorge parts marked
-specialized so random recruits never wear them. Open: haven rebels dressed as Guardsmen (5); `KevlarArmor` is still named Power Armour.
+specialized so random recruits never wear them. Same evening: the basic armour is flak armour again (Marines' +2 HP / +1 armour moved into the ascended physique); a Blood
+Angels strike force (Captain plus Assault, Devastator, Apothecary) joins at campaign start; haven rebels are dressed as Guardsmen.
+Previously open: haven rebels dressed as Guardsmen (5); `KevlarArmor` is still named Power Armour.
 
 ## First spike (user)
 
