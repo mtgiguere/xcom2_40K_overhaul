@@ -402,6 +402,50 @@ They run covert actions and give resources/favors. (WotC's hero classes — Reap
 
 ---
 
+### 7.8 Strategy layer v2: the user's design (2026-10-19)
+
+The campaign loop, in the user's words reduced to rules. Supersedes 7.1c / 7.2 where they disagree.
+
+**Map.** Continent = a star system cluster owned by one enemy faction (as now, 7.1b); region = a planet.
+
+**Bases replace contact.** Where LWOTC scans to contact a region's resistance, we *build a base* on the planet: the scan time
+is construction time. A finished base claims the planet. Over time it fills with Imperial Guard (LWOTC's rebels growing in a
+haven). One **base commander** can be assigned (LWOTC's haven advisor), e.g. a Commissar; he helps defend it. Bases are
+attacked (LWOTC's haven retaliations) and can fall, leaving the planet to the enemy.
+
+**Overlords** (replace the Chosen). Each faction's overlord lives in its systems and *strengthens the enemy there over time*:
+leave him too long and that territory becomes impossible to retake. Liberating a faction's systems = a base on every planet of
+the continent **and** its stronghold(s) destroyed; that cripples the faction's ability to swarm the player.
+
+**Recruits are the Guard.** A rookie promotes into an **Imperial Guard** class, never a Marine, *unless* its Combat
+Intelligence is high: then men may become **Space Marines** and women **Sisters of Battle**. Marines and Sisters are rare and
+precious; losing one is a disaster. Guardsmen are the meat grinder, "just like the lore". Recruits become the main resource.
+
+**Resources:** supplies and recruits. (Intel, alloys, elerium fold away or into supplies.)
+
+**Technology is recovered, not invented.** Bases are precious for a second reason: the number of bases and the people on them
+(the old scientist count) speed up the *discovery* of relic technology on those worlds. Dreadnoughts: Proving Ground project
+once the ingredients are in hand and the relic science is recovered.
+
+**Missions are won by the objective, not by survival.** If the charge is planted and the squad dies, the mission still
+succeeds. Expect many deaths; success = someone, anyone, completed the objective.
+
+**The Inquisition's punishment** (refines 9.1e). Corruption tracked per region / system. Let it run unchecked and the
+Inquisition sends an **assassination**: Assassins (and the Inquisitor) hit a base to kill its commander, presumed the source
+of the corruption and the player's best hero there, then slip away in the night. Nearly unstoppable; Guardsmen who get in the
+way die; a gutted base is left open to the local enemy.
+
+**Feasibility notes (Claude, 2026-10-19).**
+- Combat Intelligence is vanilla WotC (`XComGameState_Unit.ComInt`, rolled at recruitment): the Marine/Sister gate needs no LWOTC.
+- Rookie class routing: the rank-up class pick is hookable (the unit's soldier class is assigned at the first promotion); Guard
+  classes need trees (a Guardsman, sergeant, heavy-weapons, vox, medic line), so this is a class-design job before it is code.
+- Win on objective: the squad-wipe loss is a tactical rule; overriding it after the objective is complete is likely possible via
+  the mission's Kismet objective state and a Highlander hook; needs investigation per mission family.
+- Enemy assassination mission: feasible as a base-defence variant: the commander is tagged, the attackers' AI is pointed at
+  him (behaviour-tree target priority) and their pod extracts once he is dead. Real work, not config.
+- Bases / Guard growth / advisors / liberation / overlord regions: this is LWOTC's strategy layer almost one-to-one. Deciding
+  whether to build on LWOTC or to reimplement on WotC is the first strategy decision (see 12. Open questions).
+
 ## 8. Chaos corruption
 - Use WotC's **Will** and **negative trait** systems.
 - Fighting Chaos accumulates corruption → dark traits.
@@ -657,6 +701,11 @@ Keep "third faction hostile to everyone," change the rest:
 ---
 
 ## 12. Open questions
+
+- **(2026-10-19, blocking the strategy layer) Build on LWOTC, or reimplement its strategy layer on WotC?** LWOTC already has region
+  contact by scanning, havens that fill with rebels, haven advisors, regions owned by a Chosen, liberation, infiltration. Building on
+  it means a dependency on a total overhaul (its own classes, AI, pod sizes and mission timers to reconcile with ours); reimplementing
+  means writing those systems ourselves, smaller and shaped to this design.
 1. ~~Which classes can become **Chapter Master**?~~ Answered 2026-10-17: any rank-7 combat class; his relic ability depends on the origin class (4.4).
 2. Exact **Will threshold / experiences** for Chaplain eligibility.
 3. How slow/expensive is **replacing a dead unique**?
