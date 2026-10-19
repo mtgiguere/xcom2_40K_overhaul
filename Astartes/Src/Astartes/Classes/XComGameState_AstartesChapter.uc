@@ -35,6 +35,12 @@ struct SeatHolder
 };
 var array<SeatHolder> Seats;
 
+// The Inquisition (design.md 9.1e). Taint: the Chapter's exposure to the Warp, tallied by Astartes_Inquisition.
+var int Taint;
+var int JudgementAt;            // Taint that triggers the next judgement (0 = not yet set: the config threshold)
+var bool bInquisitorJoined;     // the Chapter submitted once and an Inquisitor serves with it
+var bool bInquisitionHostile;   // the Chapter refused a judgement
+
 static function XComGameState_AstartesChapter GetChapter(optional bool bAllowNone = false)
 {
 	return XComGameState_AstartesChapter(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_AstartesChapter', bAllowNone));

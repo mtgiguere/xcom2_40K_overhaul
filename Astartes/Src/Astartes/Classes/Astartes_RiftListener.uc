@@ -99,6 +99,7 @@ static function OpenRift(XComGameState_Unit Sorcerer, vector Location)
 	NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: rift bound to its Sorcerer");
 	NewSorcerer = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', Sorcerer.ObjectID));
 	NewSorcerer.SetUnitFloatValue('Astartes_OpenRift', Newest.ObjectID, eCleanup_BeginTactical);
+	AddWarpExposure(NewGameState);
 	`TACTICALRULES.SubmitGameState(NewGameState);
 	`log("Astartes:" @ Sorcerer.GetMyTemplateName() @ "opened the Warp:" @ EncounterID @ "at" @ Newest.SpawnInfo.SpawnLocation @ "(spawner" @ Newest.ObjectID $ ")",, 'Astartes');
 }
@@ -125,6 +126,24 @@ static function EventListenerReturn OnReinforcementSpawnerCreated(Object EventDa
 	Spawner.SpawnVisualizationType = class'Astartes_FactionConfig'.default.IncursionArrival;
 	`log("Astartes: incursion" @ Spawner.SpawnInfo.EncounterID @ "arrives by" @ Spawner.SpawnVisualizationType @ "(webway)",, 'Astartes');
 	return ELR_NoInterrupt;
+}
+
+/// Every XCOM soldier on the field when the Warp opens is exposed to it. Read back in strategy by Astartes_Inquisition.
+static function AddWarpExposure(XComGameState NewGameState)
+{
+	local XComGameState_Unit Unit, NewUnit;
+	local UnitValue Value;
+
+	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', Unit)
+	{
+		if (Unit.GetTeam() != eTeam_XCom || !Unit.IsSoldier() || !Unit.IsAlive() || Unit.bRemovedFromPlay)
+		{
+			continue;
+		}
+		NewUnit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', Unit.ObjectID));
+		NewUnit.GetUnitValue(class'Astartes_Inquisition'.default.ExposureValueName, Value);
+		NewUnit.SetUnitFloatValue(class'Astartes_Inquisition'.default.ExposureValueName, Value.fValue + 1, eCleanup_Never);
+	}
 }
 
 /// 'UnitDied': EventData is the dead unit. A Sorcerer who dies with a rift still forming takes it with him.

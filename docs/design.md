@@ -490,7 +490,11 @@ targets: the perfect anti-Librarian weapon for a purge. The *Refuse* branch's st
 (Astartes_CharGen_Dressed) with enemy-only clones of the pack's weapons: Vindicare on overwatch from range, Eversor rushing with
 the gauntlet, Culexus hunting the Librarian, Callidus appearing mid-pod. One temple per strike team at first, all four for Exterminatus.
 
-Model still needed for the Inquisitor (a coat-and-rosette cosmetic). Mechanics after Chaos corruption exists.
+**Built 2026-10-18 (first slice, `Astartes_Inquisition`):** Taint is tallied on the Avenger from what soldiers carry home: a
+Librarian lost to possession (60) and each soldier present when a Sorcerer opens the Warp (5 per exposure). At 100 a judgement
+dialog offers Submit (the most exposed Librarian, else the most exposed brother, is taken; Taint resets; the first time an
+Inquisitor joins) or Refuse (hostile; the next judgement at Taint + 100). Still to come: Prove Purity (a mission), the
+Assassin strike teams after a refusal, Chaos corruption as a Taint source. `Astartes_Taint 100` forces a judgement.
 
 ### 9.1f Hero classes: Canoness and Commissar (proposal 2026-10-18, awaiting the user's eye)
 

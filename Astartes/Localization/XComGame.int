@@ -1059,6 +1059,15 @@ FriendlyNamePlural="Warpfire"
 BriefSummary="Lightning torn from the Warp and hurled from the Sorcerer's hands."
 TacticalText="<Bullet/> The Chaos Sorcerer's ranged attack.<br/><Bullet/> Electrical damage."
 
+[Astartes_Inquisition]
+JudgementTitle="THE INQUISITION"
+JudgementText="The Chapter's dealings with the Warp have not gone unnoticed. Taint: %TAINT. An Inquisitor of the Ordo Malleus demands that the Chapter submit to scrutiny, and names %CENSURE for censure.\n\nSubmit, and the brother is taken. Refuse, and the Inquisition will remember."
+JudgementSubmit="SUBMIT"
+JudgementRefuse="REFUSE"
+CensureNobody="no one in particular"
+InquisitorArrives="If the Chapter submits, the Inquisitor will remain at its side."
+RefusalText="The Inquisitor departs without a word. Somewhere, a file is opened in the Chapter's name."
+
 [Astartes_RiftListener]
 RiftCollapsesText="The rift collapses"
 

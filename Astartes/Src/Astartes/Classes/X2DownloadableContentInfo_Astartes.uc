@@ -1103,6 +1103,30 @@ exec function Astartes_JumpThrusters(optional float Back = 0, optional float Sid
 	Say("Astartes_JumpThrusters: PASS jump again to see the flames there");
 }
 
+/// Astartes_Taint [Amount]: prints the Chapter's Taint and judgement state; with an amount, sets Taint (testing the
+/// Inquisition: set it to the threshold, then open the geoscape or the Avenger view to be judged).
+exec function Astartes_Taint(optional int Amount = -1)
+{
+	local XComGameState NewGameState;
+	local XComGameState_AstartesChapter Chapter;
+
+	if (Amount >= 0)
+	{
+		NewGameState = class'XComGameStateContext_ChangeContainer'.static.CreateChangeState("Astartes: set Taint");
+		Chapter = class'XComGameState_AstartesChapter'.static.GetOrCreateChapter(NewGameState);
+		Chapter.Taint = Amount;
+		`XCOMGAME.GameRuleset.SubmitGameState(NewGameState);
+	}
+	Chapter = class'XComGameState_AstartesChapter'.static.GetChapter(true);
+	if (Chapter == none)
+	{
+		Say("Astartes_Taint: FAIL no Chapter state");
+		return;
+	}
+	Say("Astartes_Taint: PASS Taint" @ Chapter.Taint @ "judgement at" @ class'Astartes_Inquisition'.static.JudgementThreshold(Chapter)
+		@ "Inquisitor joined=" $ Chapter.bInquisitorJoined @ "hostile=" $ Chapter.bInquisitionHostile);
+}
+
 /// Astartes_GiveHero <Canoness|Commissar>: in the Avenger, adds that Imperial hero to the barracks at a rank fit for the
 /// campaign's progress, as a faction contact would. For testing the hero classes without waiting for the reward.
 exec function Astartes_GiveHero(string Which)
