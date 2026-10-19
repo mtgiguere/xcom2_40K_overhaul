@@ -39,6 +39,10 @@ new names, gear and looks rather than new trees:
 | `LWS_Shinobi` | Scout / infiltrator (Catachan) |
 | `LWS_RebelSoldier` | Kept: LWOTC's rebel-turned-soldier |
 
+**Built 2026-10-19:** `Astartes_GuardClasses` renames these eight at load (names, summaries, Guard rank titles: Conscript to
+Lieutenant); XCOM's rifles wear the lasgun, LWOTC's laser rifle the hot-shot (`Reskins`). Sister classes: Battle Sister,
+Retributor, Seraphim, Hospitaller, reached by a gifted woman's ascension (she takes the veil: Sister plate, +HP, +will).
+
 Rookie routing at first promotion: Combat Intelligence (vanilla `ComInt`) at or above a threshold and male → a Marine
 class; female → a Sister of Battle class (to be designed); everyone else → an `LWS_*` Guard class.
 

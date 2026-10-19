@@ -17,7 +17,8 @@ from x2config import sections_of_class, struct_field, unquote
 SPEC = json.loads((REPO / "tests" / "data" / "class_trees.json").read_text(encoding="utf-8"))
 ALL_CLASSES = sorted(SPEC["classes"])
 # Faction heroes (Canoness, Commissar) are human: the Marine kit rules do not apply to them.
-MARINE_CLASSES = sorted(k for k, v in SPEC["classes"].items() if "hero" not in v)
+# Sisters of Battle ("order") are not Marines either.
+MARINE_CLASSES = sorted(k for k, v in SPEC["classes"].items() if "hero" not in v and "order" not in v)
 EXPECTED_RANKS = 7
 EXPECTED_COLUMNS = 3
 LIBRARIUS_RANKS = ["Lexicanium", "Codicier", "Epistolary", "Librarian"]
@@ -183,7 +184,7 @@ def test_implemented_new_abilities_have_localization(loc_sections):
 def test_dlcinfo_marine_class_list_matches_spec(config):
     section = [s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes"][0]
     listed = [unquote(v) for v in section.values("MarineClasses")]
-    assert listed == [k for k, v in SPEC["classes"].items() if "hero" not in v], "MarineClasses in XComGame.ini must list the spec Marine classes in order"
+    assert listed == [k for k, v in SPEC["classes"].items() if "hero" not in v and "order" not in v], "MarineClasses in XComGame.ini must list the spec Marine classes in order"
 
 
 # --- shared Marine kit --------------------------------------------------------------------------

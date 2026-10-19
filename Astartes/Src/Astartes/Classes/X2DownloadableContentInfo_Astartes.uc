@@ -326,6 +326,8 @@ static event OnPostTemplatesCreated()
 	class'X2Ability_Astartes_Assault'.static.RewireJumpVisuals();
 	class'Astartes_NoHeroes'.static.Apply();
 	class'Astartes_CharGen_Dressed'.static.HideMonsterParts();
+	class'Astartes_GuardClasses'.static.Apply();
+	class'X2Item_AstartesWeapons'.static.ApplyReskins();
 }
 
 /// Called when a mission is generated, after the faction mods have added their raid SitReps (we run after

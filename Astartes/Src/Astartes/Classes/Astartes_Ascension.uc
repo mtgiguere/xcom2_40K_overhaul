@@ -7,12 +7,14 @@
 //           empty until those classes exist). An ascended aspirant gains the Astartes physique (stats)
 //           and is re-armoured in the Chapter's livery. Highlander event FirstPromotionOverrideClass.
 //---------------------------------------------------------------------------------------
-class Astartes_Ascension extends X2EventListener config(Astartes);
+class Astartes_Ascension extends X2EventListener config(Astartes) dependson(Astartes_CharGen_Dressed);
 
 var config int MinComInt;                      // ECombatIntelligence: 2 = Gifted, 3 = Genius, 4 = Savant
 var config array<name> AspirantMarineClasses;
 var config array<name> AspirantSisterClasses;
 var config int ASCENSION_HP, ASCENSION_WILL, ASCENSION_STRENGTH;
+var config int SISTER_HP, SISTER_WILL;
+var config name SisterLook;                    // an Astartes_CharGen_Dressed look (parts and voice) for a new Sister
 var name AscendedValueName;
 
 static function array<X2DataTemplate> CreateTemplates()
@@ -63,6 +65,10 @@ static function EventListenerReturn OnFirstPromotion(Object EventData, Object Ev
 	{
 		Ascend(Unit);
 	}
+	else
+	{
+		TakeTheVeil(Unit);
+	}
 	`log("Astartes: aspirant" @ Unit.GetFullName() @ "(combat intelligence" @ int(Unit.ComInt) $ ") ascends as" @ Chosen,, 'Astartes');
 	return ELR_NoInterrupt;
 }
@@ -99,6 +105,33 @@ static function Ascend(XComGameState_Unit Unit)
 		class'X2DownloadableContentInfo_Astartes'.static.ApplyMarineArmourLook(CharGen, 'KevlarArmor');
 		Unit.SetTAppearance(CharGen.kSoldier.kAppearance);
 		CharGen.Destroy();
+	}
+}
+
+/// A gifted woman joins the Orders Militant: steadier and tougher, and armoured in Sister of Battle plate.
+static function TakeTheVeil(XComGameState_Unit Unit)
+{
+	local UnitValue Done;
+	local TAppearance Look;
+	local Astartes_CharGen_Dressed.DressedLook Dress;
+	local int i;
+
+	if (Unit.GetUnitValue(default.AscendedValueName, Done) && Done.fValue > 0)
+	{
+		return;
+	}
+	Unit.SetUnitFloatValue(default.AscendedValueName, 1, eCleanup_Never);
+	Unit.SetBaseMaxStat(eStat_HP, Unit.GetBaseStat(eStat_HP) + default.SISTER_HP);
+	Unit.SetCurrentStat(eStat_HP, Unit.GetMaxStat(eStat_HP));
+	Unit.SetBaseMaxStat(eStat_Will, Unit.GetBaseStat(eStat_Will) + default.SISTER_WILL);
+	Unit.SetCurrentStat(eStat_Will, Unit.GetMaxStat(eStat_Will));
+	i = class'Astartes_CharGen_Dressed'.default.Looks.Find('Template', default.SisterLook);
+	if (i != INDEX_NONE)
+	{
+		Dress = class'Astartes_CharGen_Dressed'.default.Looks[i];
+		Look = Unit.kAppearance;
+		class'Astartes_CharGen_Dressed'.static.Dress(Look, Dress);
+		Unit.SetTAppearance(Look);
 	}
 }
 

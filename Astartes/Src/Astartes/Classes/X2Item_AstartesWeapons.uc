@@ -27,6 +27,13 @@ struct WeaponDef
 };
 
 var config array<WeaponDef> Weapons;
+/// Existing items that wear another item's look (all difficulty variants): XCOM's rifles become the Guard's lasguns.
+struct Reskin
+{
+	var name Target;
+	var name Donor;
+};
+var config array<Reskin> Reskins;
 // Donor templates (other mods' weapons) whose looks we borrowed: hidden from the armoury and build list so
 // the player sees one Bolter, ours, not theirs as well. Skipped silently when the mod is not loaded.
 var config array<name> HideDonorItems;
@@ -98,6 +105,33 @@ static function CreateWeapons()
 /// Give our clone another mod's model, icon, camera point and default attachment meshes. Stats, abilities and
 /// the vanilla upgrade chain stay ours. Vanilla weapon-upgrade attachment meshes are keyed by template name,
 /// so they do not apply to the clone (upgrades still work, they just show no bolt-on mesh).
+static function ApplyReskins()
+{
+	local X2ItemTemplateManager ItemMgr;
+	local array<X2DataTemplate> Variants;
+	local X2DataTemplate DataTemplate;
+	local int i;
+
+	ItemMgr = class'X2ItemTemplateManager'.static.GetItemTemplateManager();
+	for (i = 0; i < default.Reskins.Length; i++)
+	{
+		if (ItemMgr.FindItemTemplate(default.Reskins[i].Donor) == none)
+		{
+			`log("Astartes: reskin of" @ default.Reskins[i].Target @ "skipped: donor" @ default.Reskins[i].Donor @ "not loaded",, 'Astartes');
+			continue;
+		}
+		Variants.Length = 0;
+		ItemMgr.FindDataTemplateAllDifficulties(default.Reskins[i].Target, Variants);
+		foreach Variants(DataTemplate)
+		{
+			if (X2WeaponTemplate(DataTemplate) != none)
+			{
+				BorrowLook(X2WeaponTemplate(DataTemplate), default.Reskins[i].Donor, ItemMgr);
+			}
+		}
+	}
+}
+
 static function BorrowLook(X2WeaponTemplate Clone, name DonorName, X2ItemTemplateManager ItemMgr)
 {
 	local X2WeaponTemplate Donor;
