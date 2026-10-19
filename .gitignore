@@ -17,3 +17,6 @@ __pycache__/
 /*.jpg
 /*.JPG
 /*.png
+
+# Source art from Sketchfab (hundreds of MB; one file is over GitHub's 100 MB limit). Only converted, credited assets go in the mod.
+3D_models/
