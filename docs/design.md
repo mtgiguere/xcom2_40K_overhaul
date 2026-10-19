@@ -36,7 +36,9 @@ fatigue keeps them off some missions.
 **The Saint (user's arc).** An original Living Saint, not Keeler, following Keeler's arc:
 1. A story **civilian rescue** mission: among the civilians is a woman who will become the Saint. At least one civilian in her
    group **erupts into a daemon** mid-mission (the vanilla Faceless reveal, with our daemon / possession code). She must survive.
-2. Rescued, she joins (as a Sister). She has seen Chaos; her faith hardens.
+2. Rescued, she joins the force as **her own unique hero**, like the Commissar and the Inquisitor: never a Sister of Battle,
+   never part of any order (user, 2026-10-19). She has seen Chaos; her faith hardens. (Proposal: she fights from the start as a
+   hero class of her own, a pilgrim-preacher whose tree grows toward the manifestation.)
 3. At the Chapter's darkest hour (Taint at its peak, a Librarian lost to the Warp, or before an overlord's fortress) she
    **manifests as the Living Saint**: the rarest, most powerful hero, the one who can whip the Chaos armies.
 
