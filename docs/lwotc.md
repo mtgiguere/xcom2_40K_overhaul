@@ -36,7 +36,7 @@ new names, gear and looks rather than new trees:
 | `LWS_Grenadier` | Grenadier |
 | `LWS_Specialist` | Medic / vox operator |
 | `LWS_Technical` | Flamer trooper |
-| `LWS_Shinobi` | Scout / infiltrator (Catachan) |
+| `LWS_Shinobi` | Out of the recruit deck (user: line Guardsmen do not fight in melee; that is the Ogryns' job, a later class) |
 | `LWS_RebelSoldier` | Kept: LWOTC's rebel-turned-soldier |
 
 **Built 2026-10-19:** `Astartes_GuardClasses` renames these eight at load (names, summaries, Guard rank titles: Conscript to

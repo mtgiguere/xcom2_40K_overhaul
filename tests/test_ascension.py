@@ -33,13 +33,14 @@ def test_recruits_stay_human_and_the_start_hero_is_stripped(config):
     assert game.first("bMarinesByAscension") == "true"
     assert {unquote(v) for v in game.values("StripStartingCharacters")} == {"ReaperSoldier", "SkirmisherSoldier", "TemplarSoldier"}
     dlc = (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
-    assert "StripStartingHeroes(StartState);" in dlc and "|| default.bMarinesByAscension" in dlc
+    assert "StripStartingHeroes(StartState);" in dlc and "CharacterTemplateName == 'Soldier' && default.bMarinesByAscension" in dlc
 
 
 def test_guard_classes_are_lwotcs_renamed(config, loc_sections):
     sec = next(s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_GuardClasses")
     classes = [unquote(v) for v in sec.values("GuardClasses")]
     assert "LWS_Ranger" in classes and len(classes) == 8
+    assert "LWS_Shinobi" in {unquote(v) for v in sec.values("NotInRecruitDeck")}, "no melee line Guardsmen"
     loc = next(s for s in loc_sections if s.name == "Astartes_GuardClasses")
     assert len(loc.values("GuardNames")) == len(classes) == len(loc.values("GuardSummaries"))
     assert len(loc.values("GuardRankNames")) == 8 == len(loc.values("GuardShortNames"))
@@ -53,4 +54,14 @@ def test_sisters_take_the_veil():
     for name, c in SPEC["classes"].items():
         if c.get("order") == "sororitas":
             assert c["ranks"][0][0]["name"] == "Astartes_Rosarius", f"{name}: every Sister wears the rosarius"
+
+
+def test_recruits_are_dressed_as_cadians(config):
+    game = next(s for s in config["XComGame.ini"] if s.name == "Astartes.X2DownloadableContentInfo_Astartes")
+    looks = {s for s in (unquote(game.first("RecruitLookMale")), unquote(game.first("RecruitLookFemale")))}
+    dressed = next(s for s in config["XComAstartes.ini"] if s.name == "Astartes.Astartes_CharGen_Dressed").values("Looks")
+    for name in looks:
+        look = next(v for v in dressed if f'Template="{name}"' in v)
+        assert "SM2Cadian_" in look and "bKeepVoice=true" in look, f"{name}: Cadian parts, own voice"
+    assert "DressRecruitAsGuard(CharGen);" in (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
 

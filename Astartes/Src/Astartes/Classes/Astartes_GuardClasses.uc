@@ -8,6 +8,7 @@
 class Astartes_GuardClasses extends Object config(Astartes);
 
 var config array<name> GuardClasses;               // in the order of the localized lists below
+var config array<name> NotInRecruitDeck;          // LWOTC classes no Guardsman is promoted into (user: no melee line troops)
 var localized array<string> GuardNames, GuardSummaries;
 var localized array<string> GuardRankNames, GuardShortNames;
 
@@ -39,6 +40,15 @@ static function Apply()
 			T.ShortNames = default.GuardShortNames;
 		}
 		Renamed++;
+	}
+	for (i = 0; i < default.NotInRecruitDeck.Length; i++)
+	{
+		T = ClassMgr.FindSoldierClassTemplate(default.NotInRecruitDeck[i]);
+		if (T != none)
+		{
+			T.NumInDeck = 0;
+			T.NumInForcedDeck = 0;
+		}
 	}
 	`log("Astartes: Imperial Guard classes:" @ Renamed @ "of" @ default.GuardClasses.Length @ "LWOTC classes renamed",, 'Astartes');
 }

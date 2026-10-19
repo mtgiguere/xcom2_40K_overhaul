@@ -130,6 +130,7 @@ static function TakeTheVeil(XComGameState_Unit Unit)
 	{
 		Dress = class'Astartes_CharGen_Dressed'.default.Looks[i];
 		Look = Unit.kAppearance;
+		Look.nmHelmet = ''; // the Guard helmet comes off; Sisters go bare-headed unless their look says otherwise
 		class'Astartes_CharGen_Dressed'.static.Dress(Look, Dress);
 		Unit.SetTAppearance(Look);
 	}

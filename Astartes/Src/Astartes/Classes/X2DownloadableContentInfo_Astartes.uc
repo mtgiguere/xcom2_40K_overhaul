@@ -16,6 +16,8 @@ var config bool bAllowFemaleMarines;
 var config bool bMarinesByAscension;
 /// Faction heroes the campaign start hands out (WotC's starting faction soldier): removed from the crew.
 var config array<name> StripStartingCharacters;
+/// LWOTI: every new recruit is dressed as a Guardsman (Astartes_CharGen_Dressed looks, by gender).
+var config name RecruitLookMale, RecruitLookFemale;
 
 /// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
 /// these packs only, when present. Empty list = vanilla random appearance.
@@ -388,9 +390,14 @@ static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, cons
 		return;
 	}
 
-	if (CharacterTemplateName != 'Soldier' || default.bMarinesByAscension)
+	if (CharacterTemplateName == 'Soldier' && default.bMarinesByAscension)
 	{
+		DressRecruitAsGuard(CharGen);
 		return; // recruits are human Guardsmen; Marines are dressed when they ascend
+	}
+	if (CharacterTemplateName != 'Soldier')
+	{
+		return;
 	}
 
 	// Policy: Marines are male unless allowed otherwise, and belong to the campaign's Chapter (a country).
@@ -418,6 +425,23 @@ static function ModifyGeneratedUnitAppearance(XGCharacterGenerator CharGen, cons
 
 	ApplyChapterLivery(CharGen, DesiredCountry);
 	ApplyMarineArmourLook(CharGen, ArmorName);
+}
+
+/// New recruits wear the Guard's armour (Cadian), whatever cosmetic packs are installed.
+static function DressRecruitAsGuard(XGCharacterGenerator CharGen)
+{
+	local Astartes_CharGen_Dressed.DressedLook Look;
+	local name LookName;
+	local int i;
+
+	LookName = EGender(CharGen.kSoldier.kAppearance.iGender) == eGender_Female ? default.RecruitLookFemale : default.RecruitLookMale;
+	i = class'Astartes_CharGen_Dressed'.default.Looks.Find('Template', LookName);
+	if (i == INDEX_NONE)
+	{
+		return;
+	}
+	Look = class'Astartes_CharGen_Dressed'.default.Looks[i];
+	class'Astartes_CharGen_Dressed'.static.Dress(CharGen.kSoldier.kAppearance, Look);
 }
 
 /// The Chapter this campaign fights as: the Chapter state's choice if set, else the config default.

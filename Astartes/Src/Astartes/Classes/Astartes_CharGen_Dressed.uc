@@ -17,6 +17,7 @@ struct DressedLook
 	var name nmPawn;           // body part template of type Pawn; '' = the standard soldier body for the gender (never a random mod pawn)
 	var name nmVoice;          // voice body part template; '' = silent
 	var bool bKeepName;        // false: no personal name, the unit flag shows the character template's name
+	var bool bKeepVoice;       // recruits: keep the generated voice (and its variety) instead of nmVoice
 	var bool bBare;            // monsters: strip every generated helmet, hair, beard, face prop, paint and tattoo first
 	var string PoolName;       // optional: a Character Pool soldier whose whole appearance (gender, voice, every part, tints)
 	                           // is used instead of the parts above, when that soldier exists. Design heroes in the pool.
@@ -174,7 +175,10 @@ static function Dress(out TAppearance A, const out DressedLook L)
 	// The body itself: a named Pawn part, else the standard soldier body. Left empty, the game picks a random Pawn part from
 	// every loaded mod (playtest 2026-10-18: the Warlock came out as a Chaos Marine).
 	A.nmPawn = L.nmPawn != '' ? L.nmPawn : (A.iGender == eGender_Female ? 'XCom_Soldier_F' : 'XCom_Soldier_M');
-	A.nmVoice = L.nmVoice;
+	if (!L.bKeepVoice)
+	{
+		A.nmVoice = L.nmVoice;
+	}
 	if (L.iArmorTint >= 0) A.iArmorTint = L.iArmorTint;
 	if (L.iArmorTintSecondary >= 0) A.iArmorTintSecondary = L.iArmorTintSecondary;
 	if (L.iSkinColor >= 0) A.iSkinColor = L.iSkinColor;
