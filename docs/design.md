@@ -11,6 +11,38 @@
 
 The player commands a Space Marine Chapter fighting to liberate a cluster of star systems from three enemy factions — **Orks, Tyranids, and Chaos** — while the **Eldar** appear unpredictably as a hostile wildcard. Victory comes from clearing systems and killing each faction's overlord. There is no hard "you lose on day X" timer; instead, unchecked factions grow steadily stronger until missions become effectively unwinnable and the Chapter dies fighting. The tone is grim, costly, and Space Hulk–flavored: every Marine is precious, losses are permanent, and the Chapter's future depends on recovering its dead.
 
+## 1b. Story premise (user, 2026-10-19)
+
+**The sector opens.** A warp storm that sealed a sector for centuries breaks. The Blood Angels (the default Chapter) know
+that inside it lay a **Mechanicus shipyard**: they send a strike force to claim it. The Avenger is that derelict forge-ship;
+its "rooms" are **renovated**, and relic technology is **found** in them as the work goes on (vanilla room excavation,
+re-explained): technology is recovered, never invented (design 7.8). The yard is ringed by enemies, so the sector (our
+LWOTC regions = planets, continents = systems) must be cleansed of xenos and corruption to keep it.
+
+**The army.** Few Marines at the start: Guard regiments trapped in the sector through the storm are the bulk of the force
+(proposal: a Blood Angels Captain and a handful of brothers arrive and take command of them). Guardsmen die in their hundreds.
+
+**Proposals (Claude, 2026-10-19, to confirm):**
+- *Aspirants.* The Combat Intelligence gate (7.8) is an aspirant trial: a gifted Guardsman becomes a Marine only through
+  geneseed and the Apothecary's surgery, so a lost Marine costs the brother and the geneseed it took to make him. Gifted women
+  go to the Schola Progenium and return as Sisters of Battle.
+- *The Blood Angels' flaw.* The Red Thirst / Black Rage feeds the corruption and Taint systems; the Inquisition watching a Blood
+  Angels force is lore-perfect.
+
+**Heroes are rare and over the top.** Chapter Master, Chief Librarian, Master of Sanctity, Commissar, the Saint: each one can
+wipe a pod alone, so earning one is worth it. The counterweight is that they are unique, losing one is permanent, and LWOTC
+fatigue keeps them off some missions.
+
+**The Saint (user's arc).** An original Living Saint, not Keeler, following Keeler's arc:
+1. A story **civilian rescue** mission: among the civilians is a woman who will become the Saint. At least one civilian in her
+   group **erupts into a daemon** mid-mission (the vanilla Faceless reveal, with our daemon / possession code). She must survive.
+2. Rescued, she joins (as a Sister). She has seen Chaos; her faith hardens.
+3. At the Chapter's darkest hour (Taint at its peak, a Librarian lost to the Warp, or before an overlord's fortress) she
+   **manifests as the Living Saint**: the rarest, most powerful hero, the one who can whip the Chaos armies.
+
+**Win condition (proposal):** cleanse every system around the yard and hold it until the forge-ship can sail; possibly a final
+mission as the warp storm begins to close again.
+
 ## 2. Core design pillars
 
 1. **Every Marine matters.** Marines are rare and hard to replace. Permadeath should hurt.
