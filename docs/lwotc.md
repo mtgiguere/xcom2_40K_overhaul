@@ -1,5 +1,7 @@
 # Building on LWOTC (decided 2026-10-19)
 
+Working title for the combined experience: **Long War of the Imperium (LWOTI)** (user, 2026-10-19).
+
 Long War of the Chosen (workshop 2683996590) becomes a required dependency: its strategy layer is the loop of
 design.md 7.8, re-skinned. This page maps LWOTC's systems onto ours and lists every collision found by reading its
 config and source (static audit, 2026-10-19). Nothing here is verified in game yet; the first spike is a test run.
