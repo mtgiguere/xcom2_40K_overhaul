@@ -1026,6 +1026,9 @@
           {
             "name": "Astartes_SummaryExecution",
             "slot": "secondary"
+          },
+          {
+            "name": "Astartes_BaneOfTheGreenskin"
           }
         ],
         [
@@ -1139,6 +1142,9 @@
           {
             "name": "Astartes_SummaryExecution",
             "slot": "secondary"
+          },
+          {
+            "name": "Astartes_OrdoXenos"
           }
         ],
         [

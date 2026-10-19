@@ -1016,6 +1016,27 @@ LocHelpText="Kill a panicked or mind-controlled unit outright, friend or foe."
 LocFlyOverText="Summary Execution"
 LocPromotionPopupText="<Bullet/> Targets only units that are panicked or mind-controlled, on either side.<br/><Bullet/> Kills outright; cannot miss.<br/><Bullet/> Two charges per mission.<br/>"
 
+[Astartes_BaneOfTheGreenskin X2AbilityTemplate]
+LocFriendlyName="Bane of the Greenskin"
+LocLongDescription="He has stood on burning walls against the Waaagh! before, and he knows how greenskins die. +15 aim, +15 critical chance and +2 damage against Orks."
+LocHelpText="+15 aim, +15 crit, +2 damage against Orks."
+LocFlyOverText="Bane of the Greenskin"
+LocPromotionPopupText="<Bullet/> Passive.<br/><Bullet/> Against Orks: +15 aim, +15 critical chance, +2 damage.<br/>"
+
+[Astartes_OrdoXenos X2AbilityTemplate]
+LocFriendlyName="Ordo Xenos"
+LocLongDescription="The Inquisition's xenos-hunters know the hive mind's children, and the cults that worship them, better than anyone alive. +15 aim, +15 critical chance and +2 damage against Tyranids and their cults."
+LocHelpText="+15 aim, +15 crit, +2 damage against Tyranids and their cults."
+LocFlyOverText="Ordo Xenos"
+LocPromotionPopupText="<Bullet/> Passive.<br/><Bullet/> Against Tyranids and their cults: +15 aim, +15 critical chance, +2 damage.<br/>"
+
+[Astartes_LightOfTheEmperor X2AbilityTemplate]
+LocFriendlyName="Light of the Emperor"
+LocLongDescription="The warp recoils from her. Daemon and heretic alike burn in the light she carries. +15 aim, +15 critical chance and +2 damage against Chaos."
+LocHelpText="+15 aim, +15 crit, +2 damage against Chaos."
+LocFlyOverText="Light of the Emperor"
+LocPromotionPopupText="<Bullet/> Passive.<br/><Bullet/> Against Chaos: +15 aim, +15 critical chance, +2 damage.<br/>"
+
 [Astartes_StandYourGround X2AbilityTemplate]
 LocFriendlyName="Stand Your Ground"
 LocLongDescription="The Commissar plants his feet and the line holds. Allies within 6 tiles gain +20 defence until his next turn."

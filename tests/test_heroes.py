@@ -73,3 +73,14 @@ def test_heroes_can_be_designed_in_the_character_pool(config):
     gen = (SRC_DIR / "Astartes_CharGen_Dressed.uc").read_text(encoding="utf-8")
     assert "kSoldier.kAppearance = Model.kAppearance;" in gen and "if (!FromPool(Look))" in gen
 
+
+def test_each_hero_hates_one_faction():
+    """User, 2026-10-19: Commissar vs Orks, Inquisitor vs Tyranids, Saint vs Chaos."""
+    src = (SRC_DIR / "X2Ability_Astartes_Heroes.uc").read_text(encoding="utf-8")
+    assert "FactionHatred('Astartes_BaneOfTheGreenskin', 'Orks'" in src
+    assert "FactionHatred('Astartes_OrdoXenos', 'Tyranids'" in src
+    assert "FactionHatred('Astartes_LightOfTheEmperor', 'Chaos'" in src
+    cond = (SRC_DIR / "X2Condition_Astartes_FactionTarget.uc").read_text(encoding="utf-8")
+    assert "GetSpawnList(Lists[i], Entries)" in cond, "faction membership comes from our spawn lists"
+    assert {"name": "Astartes_BaneOfTheGreenskin"} in SPEC["classes"]["Astartes_Commissar"]["ranks"][0]
+    assert {"name": "Astartes_OrdoXenos"} in SPEC["classes"]["Astartes_Inquisitor"]["ranks"][0]

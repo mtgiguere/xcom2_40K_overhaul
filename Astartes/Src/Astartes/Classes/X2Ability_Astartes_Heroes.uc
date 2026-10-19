@@ -10,6 +10,7 @@ var config int DIVINE_GUIDANCE_CHARGES;
 var config int MARTYR_DAMAGE, MARTYR_CRIT, MARTYR_TURNS;
 var config int SUMMARY_EXECUTION_CHARGES;
 var config int STAND_YOUR_GROUND_DEFENSE, STAND_YOUR_GROUND_RADIUS_TILES, STAND_YOUR_GROUND_COOLDOWN;
+var config int HATRED_AIM, HATRED_CRIT, HATRED_DAMAGE;
 
 static function array<X2DataTemplate> CreateTemplates()
 {
@@ -20,7 +21,30 @@ static function array<X2DataTemplate> CreateTemplates()
 	Templates.AddItem(AuraOfDiscipline());
 	Templates.AddItem(SummaryExecution());
 	Templates.AddItem(StandYourGround());
+	// Each hero is the answer to one enemy (user, 2026-10-19): Commissar vs Orks, Inquisitor vs Tyranids, the Saint vs Chaos.
+	Templates.AddItem(FactionHatred('Astartes_BaneOfTheGreenskin', 'Orks', "img:///UILibrary_PerkIcons.UIPerk_bulletshred"));
+	Templates.AddItem(FactionHatred('Astartes_OrdoXenos', 'Tyranids', "img:///UILibrary_PerkIcons.UIPerk_tacticalsense"));
+	Templates.AddItem(FactionHatred('Astartes_LightOfTheEmperor', 'Chaos', "img:///UILibrary_PerkIcons.UIPerk_inspire"));
 	return Templates;
+}
+
+// --- Faction hatred -----------------------------------------------------------------------
+
+/// Passive: more aim, crit and damage against one enemy faction (judged by that faction's spawn lists).
+static function X2AbilityTemplate FactionHatred(name AbilityName, name Faction, string Icon)
+{
+	local XMBEffect_ConditionalBonus Effect;
+	local X2Condition_Astartes_FactionTarget OfFaction;
+
+	OfFaction = new class'X2Condition_Astartes_FactionTarget';
+	OfFaction.FactionName = Faction;
+	Effect = new class'XMBEffect_ConditionalBonus';
+	Effect.EffectName = name(string(AbilityName) $ "_Bonus");
+	Effect.AddToHitModifier(default.HATRED_AIM, eHit_Success);
+	Effect.AddToHitModifier(default.HATRED_CRIT, eHit_Crit);
+	Effect.AddDamageModifier(default.HATRED_DAMAGE);
+	Effect.AbilityTargetConditions.AddItem(OfFaction);
+	return Passive(AbilityName, Icon, false, Effect);
 }
 
 // --- Canoness ---------------------------------------------------------------------------------

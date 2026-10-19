@@ -42,6 +42,10 @@ fatigue keeps them off some missions.
 3. At the Chapter's darkest hour (Taint at its peak, a Librarian lost to the Warp, or before an overlord's fortress) she
    **manifests as the Living Saint**: the rarest, most powerful hero, the one who can whip the Chaos armies.
 
+**Each hero is one enemy's answer (user, 2026-10-19).** The Saint against Chaos (*Light of the Emperor*), the Commissar against
+Orks (*Bane of the Greenskin*, after Yarrick), the Inquisitor against Tyranids and genestealer cults (*Ordo Xenos*). Built as passives
+(+15 aim, +15 crit, +2 damage) judged by the faction's spawn lists, so new units of that faction count automatically.
+
 **Win condition (proposal):** cleanse every system around the yard and hold it until the forge-ship can sail; possibly a final
 mission as the warp storm begins to close again.
 
