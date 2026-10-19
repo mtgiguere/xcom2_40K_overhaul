@@ -18,6 +18,8 @@ struct DressedLook
 	var name nmVoice;          // voice body part template; '' = silent
 	var bool bKeepName;        // false: no personal name, the unit flag shows the character template's name
 	var bool bBare;            // monsters: strip every generated helmet, hair, beard, face prop, paint and tattoo first
+	var string PoolName;       // optional: a Character Pool soldier whose whole appearance (gender, voice, every part, tints)
+	                           // is used instead of the parts above, when that soldier exists. Design heroes in the pool.
 	var int iArmorTint, iArmorTintSecondary, iSkinColor;  // -1 = leave the generated value
 	structdefaultproperties
 	{
@@ -44,7 +46,10 @@ function TSoldier CreateTSoldier(optional name CharacterTemplateName, optional E
 	if (i != INDEX_NONE)
 	{
 		Look = default.Looks[i];
-		Dress(kSoldier.kAppearance, Look);
+		if (!FromPool(Look))
+		{
+			Dress(kSoldier.kAppearance, Look);
+		}
 		if (!Look.bKeepName)
 		{
 			kSoldier.strFirstName = "";
@@ -54,6 +59,43 @@ function TSoldier CreateTSoldier(optional name CharacterTemplateName, optional E
 		`log("Astartes: dressed" @ CharacterTemplateName @ "in" @ default.Looks[i].nmTorso @ default.Looks[i].nmHelmet,, 'Astartes');
 	}
 	return kSoldier;
+}
+
+/// The pool soldier named by the look, if any: his whole appearance, and his name when the look keeps names.
+function bool FromPool(const out DressedLook Look)
+{
+	local CharacterPoolManager Pool;
+	local XComGameState_Unit Model;
+	local int i;
+
+	if (Look.PoolName == "")
+	{
+		return false;
+	}
+	Pool = CharacterPoolManager(`XENGINE.GetCharacterPoolManager());
+	Model = Pool == none ? none : Pool.GetCharacter(Look.PoolName);
+	for (i = 0; Model == none && Pool != none && i < Pool.CharacterPool.Length; i++)
+	{
+		// also match a first, last or nick name alone ("Inquisitor" with no surname, or "Inquisitor Greyfax")
+		if (Pool.CharacterPool[i].GetFirstName() ~= Look.PoolName || Pool.CharacterPool[i].GetLastName() ~= Look.PoolName
+			|| Pool.CharacterPool[i].GetNickName() ~= Look.PoolName || Pool.CharacterPool[i].GetFullName() ~= Look.PoolName)
+		{
+			Model = Pool.CharacterPool[i];
+		}
+	}
+	if (Model == none)
+	{
+		return false;
+	}
+	kSoldier.kAppearance = Model.kAppearance;
+	if (Look.bKeepName)
+	{
+		kSoldier.strFirstName = Model.GetFirstName();
+		kSoldier.strLastName = Model.GetLastName();
+		kSoldier.strNickName = Model.GetNickName();
+	}
+	`log("Astartes: dressed" @ Look.Template @ "from pool soldier" @ Look.PoolName,, 'Astartes');
+	return true;
 }
 
 /// Overwrite the parts the look names. A whole-arms part and separate arm parts are exclusive, so naming

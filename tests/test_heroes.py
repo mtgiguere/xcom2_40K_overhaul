@@ -63,3 +63,13 @@ def test_clones_carry_soldier_plumbing():
     uv = (SRC_DIR / "Astartes_UnitVariants.uc").read_text(encoding="utf-8")
     for field in ("bStaffingAllowed", "bUsesWillSystem", "bCanBeCriticallyWounded", "CustomizationManagerClass", "UICustomizationMenuClass"):
         assert f"T.{field} = Base.{field};" in uv, field
+
+
+def test_heroes_can_be_designed_in_the_character_pool(config):
+    """User, 2026-10-18: design heroes in the pool's customisation screen (gender, voice, parts) instead of config."""
+    looks = {struct_field(x, "Template"): x for x in section(config, "XComAstartes.ini", "Astartes.Astartes_CharGen_Dressed").values("Looks")}
+    for cls, c in HEROES.items():
+        assert struct_field(looks[c["hero"]["character"]], "PoolName"), f"{cls}: no PoolName"
+    gen = (SRC_DIR / "Astartes_CharGen_Dressed.uc").read_text(encoding="utf-8")
+    assert "kSoldier.kAppearance = Model.kAppearance;" in gen and "if (!FromPool(Look))" in gen
+
