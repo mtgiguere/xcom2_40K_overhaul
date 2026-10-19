@@ -72,6 +72,9 @@ Never "play a mission and you get him". Decided tricks and proposals (P):
 the top-tier Guardsman is appointed Commissar, the top-tier Sister of Battle becomes Canoness. This reuses the seat system
 (`Astartes_ChapterMaster` seats: unique, rank-gated, class-gated) and gives the Guard and Sororitas lines a ceiling worth climbing for.
 Not decided; their character templates and rewards stay as they are until it is.
+**Why recruits matter all game (user, 2026-10-19):** the reason to keep feeding Guardsmen and Sisters into the war is to grow the
+top-tier heroes. Every recruit is a lottery ticket: a Guardsman may become the Commissar, a gifted man a Marine and in time a Chapter
+Master, a gifted woman a Sister and in time the Canoness. Recruits never stop mattering, unlike vanilla's settled A-team.
 
 **Current state vs this pillar (2026-10-19):** the Canoness and Commissar still arrive as faction-contact rewards (too easy; kept
 for testing until their tricks exist); the seats need only rank 7 plus appointment; hero numbers are the first-pass values.
