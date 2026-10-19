@@ -68,6 +68,11 @@ Never "play a mission and you get him". Decided tricks and proposals (P):
 | Canoness | (P) Chaos must be fought where faith is tested: a Chaos-held world liberated, or a Sororitas-allied defence won on a Chaos continent |
 | Chapter Master / Chief Librarian / Master of Sanctity | (P) Rank alone is not enough: each seat also needs a relic recovered from the forge-ship's vaults or a story mission (a Librarian's trial in the Warp, a Chaplain's crusade) |
 
+**Under consideration (user, 2026-10-19):** the Commissar and the Canoness may instead be **promotions**, like the Marine seats:
+the top-tier Guardsman is appointed Commissar, the top-tier Sister of Battle becomes Canoness. This reuses the seat system
+(`Astartes_ChapterMaster` seats: unique, rank-gated, class-gated) and gives the Guard and Sororitas lines a ceiling worth climbing for.
+Not decided; their character templates and rewards stay as they are until it is.
+
 **Current state vs this pillar (2026-10-19):** the Canoness and Commissar still arrive as faction-contact rewards (too easy; kept
 for testing until their tricks exist); the seats need only rank 7 plus appointment; hero numbers are the first-pass values.
 
