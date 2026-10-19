@@ -111,6 +111,7 @@ static function StripStartingHeroes(XComGameState StartState)
 	for (i = 0; i < Gone.Length; i++)
 	{
 		XComHQ.RemoveFromCrew(Gone[i]);
+		XComHQ.Squad.RemoveItem(Gone[i]); // LWOTC builds its first mission squad from this list (spike 2: a Reaper deployed)
 		`log("Astartes: starting faction hero" @ Gone[i].ObjectID @ "removed from the crew",, 'Astartes');
 	}
 }

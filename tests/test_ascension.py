@@ -33,6 +33,8 @@ def test_recruits_stay_human_and_the_start_hero_is_stripped(config):
     assert game.first("bMarinesByAscension") == "true"
     assert {unquote(v) for v in game.values("StripStartingCharacters")} == {"ReaperSoldier", "SkirmisherSoldier", "TemplarSoldier"}
     dlc = (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
+    assert "XComHQ.Squad.RemoveItem(Gone[i]);" in dlc, "the starting squad list too, or LWOTC deploys the hero"
+    assert "LongWarOfTheChosen" in (REPO / "Astartes/Config/XComGame.ini").read_text(encoding="utf-8"), "run before LWOTC builds its squad"
     assert "StripStartingHeroes(StartState);" in dlc and "CharacterTemplateName == 'Soldier' && default.bMarinesByAscension" in dlc
 
 
