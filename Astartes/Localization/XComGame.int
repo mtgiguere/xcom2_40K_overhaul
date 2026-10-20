@@ -1228,6 +1228,9 @@ FriendlyNamePlural="Warpfire"
 BriefSummary="Lightning torn from the Warp and hurled from the Sorcerer's hands."
 TacticalText="<Bullet/> The Chaos Sorcerer's ranged attack.<br/><Bullet/> Electrical damage."
 
+[Astartes_GarrisonRescue]
+JoinsTheFightText="Takes up arms!"
+
 [Astartes_GuardClasses]
 +GuardNames="Guardsman"
 +GuardNames="Storm Trooper"

@@ -58,6 +58,7 @@
     <Content Include="Src\Astartes\Classes\Astartes_Ascension.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_GuardClasses.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_Tyranids.uc" />
+    <Content Include="Src\Astartes\Classes\Astartes_GarrisonRescue.uc" />
     <Content Include="Src\Astartes\Classes\X2Condition_Astartes_SourceNotTemplate.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_AbilityVariants.uc" />
     <Content Include="Src\Astartes\Classes\Astartes_BodyPartFilter.uc" />

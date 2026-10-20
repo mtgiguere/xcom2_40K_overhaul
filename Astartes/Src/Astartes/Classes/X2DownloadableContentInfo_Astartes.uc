@@ -30,6 +30,8 @@ struct StartingMarine
 var config array<StartingMarine> StartingMarines;
 /// The first mission's family. Terror_LW: the starting haven's Guard garrison is under attack and must be relieved.
 var config string StartMissionFamily;
+/// The first squad is the strike force alone; the garrison's Guardsmen join on the map (Astartes_GarrisonRescue).
+var config bool bStrikeForceOnly;
 
 /// Body-part packs (DLCName values) that define the Marine look. Recruits are generated from
 /// these packs only, when present. Empty list = vanilla random appearance.
@@ -228,6 +230,10 @@ static function AddStrikeForce(XComGameState StartState)
 		XComHQ.Squad.InsertItem(Min(Placed, XComHQ.Squad.Length), Unit.GetReference());
 		Placed++;
 		`log("Astartes: strike force:" @ Unit.GetFullName() @ "joins as" @ default.StartingMarines[i].SoldierClass @ "rank" @ Unit.GetRank(),, 'Astartes');
+	}
+	if (default.bStrikeForceOnly)
+	{
+		XComHQ.Squad.Length = Placed;
 	}
 	if (XComHQ.Squad.Length > class'X2StrategyGameRulesetDataStructures'.static.GetMaxSoldiersAllowedOnMission())
 	{
