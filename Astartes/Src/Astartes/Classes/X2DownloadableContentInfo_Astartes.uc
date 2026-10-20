@@ -184,7 +184,7 @@ static function AddStrikeForce(XComGameState StartState)
 	local XComGameState_Unit Unit;
 	local XGCharacterGenerator CharGen;
 	local TSoldier Man;
-	local int i, r;
+	local int i, r, Placed;
 
 	foreach StartState.IterateByClassType(class'XComGameState_HeadquartersXCom', XComHQ)
 	{
@@ -194,6 +194,7 @@ static function AddStrikeForce(XComGameState StartState)
 	{
 		return;
 	}
+	Placed = 0;
 	CharGen = class'Engine'.static.GetCurrentWorldInfo().Spawn(class'XGCharacterGenerator');
 	for (i = 0; i < default.StartingMarines.Length; i++)
 	{
@@ -222,11 +223,15 @@ static function AddStrikeForce(XComGameState StartState)
 		}
 		Unit.SetHQLocation(eSoldierLoc_Barracks);
 		XComHQ.AddToCrew(StartState, Unit);
-		if (XComHQ.Squad.Length < class'X2StrategyGameRulesetDataStructures'.static.GetMaxSoldiersAllowedOnMission())
-		{
-			XComHQ.Squad.AddItem(Unit.GetReference());
-		}
+		// The strike force leads the first squad. LWOTC trims the starting squad from the end, so Guardsmen make way, not Marines.
+		XComHQ.Squad.RemoveItem(Unit.GetReference());
+		XComHQ.Squad.InsertItem(Min(Placed, XComHQ.Squad.Length), Unit.GetReference());
+		Placed++;
 		`log("Astartes: strike force:" @ Unit.GetFullName() @ "joins as" @ default.StartingMarines[i].SoldierClass @ "rank" @ Unit.GetRank(),, 'Astartes');
+	}
+	if (XComHQ.Squad.Length > class'X2StrategyGameRulesetDataStructures'.static.GetMaxSoldiersAllowedOnMission())
+	{
+		XComHQ.Squad.Length = class'X2StrategyGameRulesetDataStructures'.static.GetMaxSoldiersAllowedOnMission();
 	}
 	if (CharGen != none)
 	{
@@ -452,6 +457,29 @@ static function RewritePodForContinent(out PodSpawnInfo Encounter, name Encounte
 	}
 
 	Encounter.SelectedCharacterTemplateNames = NewTemplates;
+}
+
+/// Logs who deploys, so a playtest's Launch.log shows the squad (and the strike force in it).
+static event OnPreMission(XComGameState StartGameState, XComGameState_MissionSite MissionState)
+{
+	local XComGameState_HeadquartersXCom XComHQ;
+	local XComGameState_Unit Unit;
+	local int i;
+
+	XComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
+	if (XComHQ == none)
+	{
+		return;
+	}
+	`log("Astartes: deploying" @ XComHQ.Squad.Length @ "to" @ (MissionState != none ? MissionState.GeneratedMission.Mission.sType : "?"),, 'Astartes');
+	for (i = 0; i < XComHQ.Squad.Length; i++)
+	{
+		Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(XComHQ.Squad[i].ObjectID));
+		if (Unit != none)
+		{
+			`log("Astartes:   " @ Unit.GetFullName() @ Unit.GetSoldierClassTemplateName() @ "rank" @ Unit.GetRank(),, 'Astartes');
+		}
+	}
 }
 
 /// Called when the player loads a saved game that was created without this mod.

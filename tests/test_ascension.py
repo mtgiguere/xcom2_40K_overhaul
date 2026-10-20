@@ -77,3 +77,11 @@ def test_strike_force_and_rebels(config):
     assert "AddStrikeForce(StartState);" in dlc and "class'Astartes_Ascension'.static.Ascend(Unit);" in dlc
     assert "MakeKevlarPowerArmour();" not in dlc, "the basic armour is flak again"
 
+
+
+def test_strike_force_leads_the_first_squad():
+    """LWOTC trims the starting squad to 8 from the end; the Marines were appended last and got cut (playtest, 2026-10-19)."""
+    dlc = (SRC_DIR / "X2DownloadableContentInfo_Astartes.uc").read_text(encoding="utf-8")
+    assert "XComHQ.Squad.InsertItem(" in dlc, "the strike force goes to the front of the squad"
+    assert "XComHQ.Squad.AddItem(Unit.GetReference());" not in dlc
+    assert "static event OnPreMission(" in dlc, "log who deploys, so a playtest log shows the squad"
