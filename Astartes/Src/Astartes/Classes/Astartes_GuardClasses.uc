@@ -12,6 +12,24 @@ var config array<name> NotInRecruitDeck;          // LWOTC classes no Guardsman 
 var localized array<string> GuardNames, GuardSummaries;
 var localized array<string> GuardRankNames, GuardShortNames;
 
+/// The classes a Guardsman can be promoted into: the renamed LWOTC classes that are loaded and not barred.
+static function array<name> RecruitClasses()
+{
+	local X2SoldierClassTemplateManager ClassMgr;
+	local array<name> Pool;
+	local int i;
+
+	ClassMgr = class'X2SoldierClassTemplateManager'.static.GetSoldierClassTemplateManager();
+	for (i = 0; i < default.GuardClasses.Length; i++)
+	{
+		if (default.NotInRecruitDeck.Find(default.GuardClasses[i]) == INDEX_NONE && ClassMgr.FindSoldierClassTemplate(default.GuardClasses[i]) != none)
+		{
+			Pool.AddItem(default.GuardClasses[i]);
+		}
+	}
+	return Pool;
+}
+
 static function Apply()
 {
 	local X2SoldierClassTemplateManager ClassMgr;

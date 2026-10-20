@@ -8,6 +8,9 @@ class X2DownloadableContentInfo_Astartes extends X2DownloadableContentInfo;
 
 /// Soldier classes this mod defines, in roster order. Kept in sync with tests/data/class_trees.json.
 var config array<name> MarineClasses;
+/// Weapons whose template name starts with one of these are Astartes wargear: Marines, Sisters and heroes only.
+var config array<string> WargearPrefixes;
+var localized string WargearNotForGuardText;
 
 /// Lore default: Space Marines are male. Set true to let the generator roll female Marines
 /// (they will wear whatever female-compatible armour exists, which today is XCOM gear).
@@ -486,6 +489,38 @@ static event OnPreMission(XComGameState StartGameState, XComGameState_MissionSit
 			`log("Astartes:   " @ Unit.GetFullName() @ Unit.GetSoldierClassTemplateName() @ "rank" @ Unit.GetRank(),, 'Astartes');
 		}
 	}
+}
+
+/// The Guard never carries Astartes wargear (user, 2026-10-19). Our soldier classes (Marines, Sisters, heroes) may.
+static function bool CanAddItemToInventory_CH_Improved(out int bCanAddItem, const EInventorySlot Slot, const X2ItemTemplate ItemTemplate, int Quantity, XComGameState_Unit UnitState, optional XComGameState CheckGameState, optional out string DisabledReason, optional XComGameState_Item ItemState)
+{
+	if (X2WeaponTemplate(ItemTemplate) == none || UnitState == none || !UnitState.IsSoldier() || !IsWargear(ItemTemplate.DataName) || IsAstartesSoldier(UnitState))
+	{
+		return CheckGameState == none; // not ours to decide
+	}
+	bCanAddItem = 0;
+	DisabledReason = default.WargearNotForGuardText;
+	return CheckGameState != none;
+}
+
+static function bool IsWargear(name ItemName)
+{
+	local int i;
+
+	for (i = 0; i < default.WargearPrefixes.Length; i++)
+	{
+		if (Left(string(ItemName), Len(default.WargearPrefixes[i])) ~= default.WargearPrefixes[i])
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/// A Marine, a Sister or a hero: their soldier classes are ours (Astartes_ prefix).
+static function bool IsAstartesSoldier(XComGameState_Unit Unit)
+{
+	return Left(string(Unit.GetSoldierClassTemplateName()), 9) ~= "Astartes_";
 }
 
 /// Called when the player loads a saved game that was created without this mod.

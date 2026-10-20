@@ -52,7 +52,14 @@ static function EventListenerReturn OnFirstPromotion(Object EventData, Object Ev
 	}
 	if (int(Unit.ComInt) < default.MinComInt)
 	{
-		return ELR_NoInterrupt; // a Guardsman: LWOTC's deck decides
+		// A Guardsman: one of the allowed Guard classes, never a barred one (a Shinobi came up in play, 2026-10-19).
+		Pool = class'Astartes_GuardClasses'.static.RecruitClasses();
+		if (Pool.Length > 0)
+		{
+			Tuple.Data[0].n = Pool[`SYNC_RAND_STATIC(Pool.Length)];
+			`log("Astartes: Guardsman" @ Unit.GetFullName() @ "is promoted into" @ Tuple.Data[0].n,, 'Astartes');
+		}
+		return ELR_NoInterrupt;
 	}
 	Pool = EGender(Unit.kAppearance.iGender) == eGender_Female ? default.AspirantSisterClasses : default.AspirantMarineClasses;
 	if (Pool.Length == 0)
