@@ -1,23 +1,19 @@
 //---------------------------------------------------------------------------------------
 //  FILE:    Astartes_GarrisonRescue.uc
-//  PURPOSE: The garrison takes up arms (user, 2026-10-19). On a retaliation the haven's rebels are unarmed
-//           civilians. When one of our soldiers ends a move next to one, the civilian leaves play (LWOTC
-//           counts a rebel removed from play as saved) and a Guard recruit with the same face and name joins
-//           our team on that tile, in flak with a lasgun. The recruit is in the crew and flagged as spawned from
-//           the Avenger, so the post-mission transfer moves them into the barracks.
-//           Two game states per rescue: the civilian's removal (visualized with X2Action_RemoveUnit and a
-//           flyover), then a UnitAdded rule for the recruit, the way LWOTC adds its rebel soldiers mid-mission.
+//  PURPOSE: The garrison takes up arms (user, 2026-10-19/20). LWOTC's retaliation rescue is left exactly as it is:
+//           a haven rebel our soldier reaches is swapped to our team (LWOTC's SeqAct_ControlCivilian) and counts as
+//           rescued. We only arm them: when a rescued rebel joins our team ('UnitChangedTeam') they get the Guard's
+//           lasgun in the primary slot, its abilities (shot, overwatch, reload...) and the gun on their pawn.
+//           Rebels wear the Guard's armour on a soldier pawn (our RebelTemplates dressing), so they can hold it.
 //---------------------------------------------------------------------------------------
 class Astartes_GarrisonRescue extends X2EventListener config(Astartes);
 
-/// Mission types (sType) where the garrison can be rescued.
+/// Mission types (sType) where rescued rebels are armed.
 var config array<string> Missions;
-/// Civilian templates that are rescued. Only 'Rebel': a hidden Faceless rebel uses another template.
+/// Civilian templates that are armed. Only 'Rebel': a Faceless rebel proxy uses another template.
 var config array<name> RescueTemplates;
-var config int RescueRadiusTiles;
-/// The recruit: a normal soldier template and the loadout they pick up.
-var config name JoinTemplate;
-var config name JoinLoadout;
+/// The weapon they take up: XCOM's rifle, which this mod reskins as the lasgun.
+var config name GarrisonWeapon;
 
 var localized string JoinsTheFightText;
 
@@ -35,7 +31,7 @@ static function CHEventListenerTemplate CreateListener()
 
 	`CREATE_X2TEMPLATE(class'CHEventListenerTemplate', Template, 'Astartes_GarrisonRescue_Listener');
 	Template.RegisterInTactical = true;
-	Template.AddCHEvent('UnitMoveFinished', OnUnitMoveFinished, ELD_OnStateSubmitted);
+	Template.AddCHEvent('UnitChangedTeam', OnUnitChangedTeam, ELD_OnStateSubmitted);
 	return Template;
 }
 
@@ -47,100 +43,80 @@ static function bool IsRescueMission()
 	return BattleData != none && default.Missions.Find(BattleData.MapData.ActiveMission.sType) != INDEX_NONE;
 }
 
-/// 'UnitMoveFinished': the mover is the event data (and source). Every waiting civilian in reach joins.
-static function EventListenerReturn OnUnitMoveFinished(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
+/// 'UnitChangedTeam': the unit is the event data and source.
+static function EventListenerReturn OnUnitChangedTeam(Object EventData, Object EventSource, XComGameState GameState, Name Event, Object CallbackData)
 {
-	local XComGameState_Unit Mover, Civilian;
-	local array<XComGameState_Unit> Rescued;
-	local int i;
+	local XComGameState_Unit Unit;
 
-	Mover = XComGameState_Unit(EventData);
-	if (Mover == none)
+	Unit = XComGameState_Unit(EventData);
+	if (Unit == none)
 	{
-		Mover = XComGameState_Unit(EventSource);
+		Unit = XComGameState_Unit(EventSource);
 	}
-	if (Mover == none || Mover.GetTeam() != eTeam_XCom || !Mover.IsAlive() || !IsRescueMission())
+	if (Unit == none || !IsRescueMission())
 	{
 		return ELR_NoInterrupt;
 	}
-	Mover = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Mover.ObjectID));
-	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', Civilian)
+	Unit = XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Unit.ObjectID));
+	if (Unit == none || Unit.GetTeam() != eTeam_XCom || !Unit.IsAlive()
+		|| default.RescueTemplates.Find(Unit.GetMyTemplateName()) == INDEX_NONE
+		|| Unit.GetItemInSlot(eInvSlot_PrimaryWeapon) != none)
 	{
-		if (Civilian.GetTeam() == eTeam_Neutral && Civilian.IsAlive() && !Civilian.bRemovedFromPlay
-			&& default.RescueTemplates.Find(Civilian.GetMyTemplateName()) != INDEX_NONE
-			&& Mover.TileDistanceBetween(Civilian) <= default.RescueRadiusTiles)
-		{
-			Rescued.AddItem(Civilian);
-		}
+		return ELR_NoInterrupt;
 	}
-	for (i = 0; i < Rescued.Length; i++)
-	{
-		JoinTheFight(Rescued[i]);
-	}
+	TakeUpArms(Unit);
 	return ELR_NoInterrupt;
 }
 
-static function JoinTheFight(XComGameState_Unit Civilian)
+static function TakeUpArms(XComGameState_Unit Rebel)
 {
+	local X2WeaponTemplate WeaponTemplate;
+	local X2AbilityTemplateManager AbilityMgr;
+	local X2AbilityTemplate AbilityTemplate;
 	local XComGameState NewGameState;
 	local XComGameStateContext_ChangeContainer Change;
-	local XComGameStateContext_TacticalGameRule AddContext;
-	local XComGameState_Unit Gone, Recruit;
-	local XComGameState_HeadquartersXCom XComHQ;
-	local XComGameState_Player Player;
-	local X2CharacterTemplate Template;
-	local TAppearance Look;
-	local TTile Tile;
+	local XComGameState_Unit Unit;
+	local XComGameState_Item Weapon;
+	local XGUnit Visualizer;
+	local int i;
 
-	Template = class'X2CharacterTemplateManager'.static.GetCharacterTemplateManager().FindCharacterTemplate(default.JoinTemplate);
-	Player = FindPlayer(eTeam_XCom);
-	if (Template == none || Player == none)
+	WeaponTemplate = X2WeaponTemplate(class'X2ItemTemplateManager'.static.GetItemTemplateManager().FindItemTemplate(default.GarrisonWeapon));
+	if (WeaponTemplate == none)
 	{
+		`log("Astartes: garrison weapon" @ default.GarrisonWeapon @ "not found; rebel left unarmed",, 'Astartes');
 		return;
 	}
-	Tile = Civilian.TileLocation;
-
-	// 1. The civilian leaves the map.
 	Change = class'XComGameStateContext_ChangeContainer'.static.CreateEmptyChangeContainer("Astartes: garrison trooper takes up arms");
 	NewGameState = `XCOMHISTORY.CreateNewGameState(true, Change);
-	Gone = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', Civilian.ObjectID));
-	Gone.RemoveStateFromPlay();
-	Change.BuildVisualizationFn = RemoveCivilian_BuildVisualization;
-	`TACTICALRULES.SubmitGameState(NewGameState);
-
-	// 2. A Guard recruit with the same face and name joins on that tile.
-	AddContext = class'XComGameStateContext_TacticalGameRule'.static.BuildContextFromGameRule(eGameRule_UnitAdded);
-	NewGameState = `XCOMHISTORY.CreateNewGameState(true, AddContext);
-	Recruit = Template.CreateInstanceFromTemplate(NewGameState);
-	Look = Civilian.kAppearance;
-	Look.nmPawn = EGender(Look.iGender) == eGender_Female ? 'XCom_Soldier_F' : 'XCom_Soldier_M';
-	Recruit.SetTAppearance(Look);
-	Recruit.SetCharacterName(Civilian.GetFirstName(), Civilian.GetLastName(), "");
-	Recruit.SetCountry(Civilian.GetCountry());
-	Recruit.RandomizeStats();
-	Recruit.ApplyInventoryLoadout(NewGameState, default.JoinLoadout);
-	Recruit.SetHQLocation(eSoldierLoc_Barracks);
-	Recruit.bSpawnedFromAvenger = true;
-	Recruit.SetVisibilityLocation(Tile);
-	Recruit.SetControllingPlayer(Player.GetReference());
-	AddToTeamGroup(NewGameState, Recruit, Player);
-
-	XComHQ = XComGameState_HeadquartersXCom(`XCOMHISTORY.GetSingleGameStateObjectForClass(class'XComGameState_HeadquartersXCom'));
-	if (XComHQ != none)
+	Unit = XComGameState_Unit(NewGameState.ModifyStateObject(class'XComGameState_Unit', Rebel.ObjectID));
+	Weapon = WeaponTemplate.CreateInstanceFromTemplate(NewGameState);
+	if (!Unit.AddItemToInventory(Weapon, eInvSlot_PrimaryWeapon, NewGameState))
 	{
-		XComHQ = XComGameState_HeadquartersXCom(NewGameState.ModifyStateObject(class'XComGameState_HeadquartersXCom', XComHQ.ObjectID));
-		XComHQ.AddToCrew(NewGameState, Recruit);
+		`log("Astartes: could not hand" @ Unit.GetFullName() @ "a" @ default.GarrisonWeapon,, 'Astartes');
+		`XCOMHISTORY.CleanupPendingGameState(NewGameState);
+		return;
 	}
-
-	`TACTICALRULES.InitializeUnitAbilities(NewGameState, Recruit);
-	class'XGUnit'.static.CreateVisualizer(NewGameState, Recruit, Player, none);
-	AddContext.UnitRef = Recruit.GetReference();
+	AbilityMgr = class'X2AbilityTemplateManager'.static.GetAbilityTemplateManager();
+	for (i = 0; i < WeaponTemplate.Abilities.Length; i++)
+	{
+		AbilityTemplate = AbilityMgr.FindAbilityTemplate(WeaponTemplate.Abilities[i]);
+		if (AbilityTemplate != none && Unit.FindAbility(AbilityTemplate.DataName, Weapon.GetReference()).ObjectID == 0)
+		{
+			class'X2TacticalGameRuleset'.static.InitAbilityForUnit(AbilityTemplate, Unit, NewGameState, Weapon.GetReference());
+		}
+	}
+	Change.BuildVisualizationFn = TakeUpArms_BuildVisualization;
 	`TACTICALRULES.SubmitGameState(NewGameState);
-	Recruit.OnBeginTacticalPlay(NewGameState);
-	`log("Astartes: garrison trooper" @ Recruit.GetFullName() @ "takes up arms and joins the squad",, 'Astartes');
+
+	Visualizer = XGUnit(Unit.GetVisualizer());
+	if (Visualizer != none)
+	{
+		Visualizer.ApplyLoadoutFromGameState(XComGameState_Unit(`XCOMHISTORY.GetGameStateForObjectID(Unit.ObjectID)), NewGameState);
+	}
+	`log("Astartes: garrison trooper" @ Unit.GetFullName() @ "takes up a" @ default.GarrisonWeapon,, 'Astartes');
 }
 
-static function RemoveCivilian_BuildVisualization(XComGameState VisualizeGameState)
+static function TakeUpArms_BuildVisualization(XComGameState VisualizeGameState)
 {
 	local XComGameState_Unit Unit;
 	local VisualizationActionMetadata Metadata;
@@ -153,40 +129,5 @@ static function RemoveCivilian_BuildVisualization(XComGameState VisualizeGameSta
 		Metadata.VisualizeActor = Unit.GetVisualizer();
 		Flyover = X2Action_PlaySoundAndFlyOver(class'X2Action_PlaySoundAndFlyOver'.static.AddToVisualizationTree(Metadata, VisualizeGameState.GetContext()));
 		Flyover.SetSoundAndFlyOverParameters(none, default.JoinsTheFightText, '', eColor_Good);
-		class'X2Action_RemoveUnit'.static.AddToVisualizationTree(Metadata, VisualizeGameState.GetContext());
-	}
-}
-
-static function XComGameState_Player FindPlayer(ETeam Team)
-{
-	local XComGameState_Player Player;
-
-	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Player', Player)
-	{
-		if (Player.GetTeam() == Team)
-		{
-			return Player;
-		}
-	}
-	return none;
-}
-
-/// Join the initiative group of a unit already on that team (as LWOTC's Helpers_LW.AddUnitToXComGroup does).
-static function AddToTeamGroup(XComGameState NewGameState, XComGameState_Unit Unit, XComGameState_Player Player)
-{
-	local XComGameState_Unit Member;
-	local XComGameState_AIGroup Group;
-
-	foreach `XCOMHISTORY.IterateByClassType(class'XComGameState_Unit', Member)
-	{
-		if (Member.ControllingPlayer.ObjectID == Player.ObjectID && Member.ObjectID != Unit.ObjectID)
-		{
-			Group = Member.GetGroupMembership();
-			if (Group != none)
-			{
-				Group.AddUnitToGroup(Unit.ObjectID, NewGameState);
-				return;
-			}
-		}
 	}
 }

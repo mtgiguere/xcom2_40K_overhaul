@@ -1,9 +1,9 @@
-"""The opening rescue (user, 2026-10-19): only the four Marines drop in, and the garrison's Guardsmen join them.
+"""The opening rescue (user, 2026-10-19/20): only the four Marines drop in, and the garrison's Guardsmen fight beside them.
 
-A haven rebel on a retaliation is an unarmed civilian. When one of our soldiers reaches them, they take up a lasgun:
-the civilian leaves play (LWOTC counts them as saved) and a real Guard recruit with their face and name joins the
-squad under our control. Recruits that join this way are flagged as spawned from the Avenger, so the game moves
-them into the barracks after the mission.
+LWOTC's own retaliation rescue is kept as it is: a rebel our soldier reaches comes under our control (and counts as
+rescued). We only arm them: when a rescued rebel switches to our team they get a lasgun and its shot, overwatch and
+reload abilities. (A first version replaced the rebel with a new recruit; the rebels vanished and the rescue count
+stayed at zero in play, 2026-10-20.)
 """
 from __future__ import annotations
 
@@ -26,22 +26,29 @@ def test_rescue_config(config):
     sec = _sec(config, "XComAstartes.ini", "Astartes.Astartes_GarrisonRescue")
     assert {unquote(v) for v in sec.values("Missions")} >= {"Terror_LW", "Defend_LW"}
     assert [unquote(v) for v in sec.values("RescueTemplates")] == ["Rebel"], "never a hidden Faceless"
-    assert 1 <= int(sec.first("RescueRadiusTiles")) <= 4
-    assert unquote(sec.first("JoinTemplate")) == "Soldier"
-    assert unquote(sec.first("JoinLoadout")) == "RookieSoldier", "lasgun and flak, the Guard's kit"
+    assert unquote(sec.first("GarrisonWeapon")) == "AssaultRifle_CV", "XCOM's rifle is the Guard's lasgun"
+    for gone in ("RescueRadiusTiles", "JoinTemplate", "JoinLoadout"):
+        assert sec.first(gone) is None
 
 
-def test_rescue_listener_turns_civilians_into_recruits():
+def test_rescued_rebels_are_armed_not_replaced():
     src = (SRC_DIR / "Astartes_GarrisonRescue.uc").read_text(encoding="utf-8")
-    assert "AddCHEvent('UnitMoveFinished'" in src and "RegisterInTactical = true" in src
-    assert "RemoveStateFromPlay()" in src and "X2Action_RemoveUnit" in src
-    assert "bSpawnedFromAvenger = true" in src, "the post-mission transfer then moves them into the barracks"
-    assert "AddToCrew(" in src and "ApplyInventoryLoadout(" in src and "InitializeUnitAbilities(" in src
-    assert "eTeam_Neutral" in src, "only civilians still waiting to be saved"
-    proj = (SRC_DIR.parent.parent.parent / "Astartes.x2proj").read_text(encoding="utf-8")
-    assert "Astartes_GarrisonRescue.uc" in proj
+    assert "AddCHEvent('UnitChangedTeam'" in src and "RegisterInTactical = true" in src
+    assert "AddItemToInventory(" in src and "eInvSlot_PrimaryWeapon" in src
+    assert "InitAbilityForUnit(" in src, "the lasgun's shot, overwatch and reload"
+    assert "ApplyLoadoutFromGameState(" in src, "the gun shows in their hands"
+    assert "eTeam_XCom" in src
+    for gone in ("RemoveStateFromPlay()", "CreateInstanceFromTemplate(NewGameState);\n\tLook", "bSpawnedFromAvenger"):
+        assert gone not in src, "LWOTC's rescue stays untouched"
 
 
 def test_rescue_is_localized(loc_sections):
     sec = next(s for s in loc_sections if s.name == "Astartes_GarrisonRescue")
     assert sec.first("JoinsTheFightText")
+
+
+def test_lwotc_pod_diversity_is_off(config):
+    """LWOTC's diversity pass re-rolled duplicate followers from the encounter's own (ADVENT) list after our faction
+    rewrite: an ADVENT trooper in a Chaos pod (playtest, 2026-10-20). Our faction lists set the mix instead."""
+    sec = _sec(config, "XComLW_Overhaul.ini", "LW_Overhaul.X2DownloadableContentInfo_LongWarOfTheChosen")
+    assert sec.first("bDisableDiversitySystem").lower() == "true"
