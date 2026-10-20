@@ -8,6 +8,9 @@ strCharacterName="Chaos Cultist"
 [Astartes_CultHybrid X2CharacterTemplate]
 strCharacterName="Genestealer Cult Hybrid"
 
+[Astartes_RipperSwarm X2CharacterTemplate]
+strCharacterName="Ripper Swarm"
+
 [Astartes_GreaterDaemon X2CharacterTemplate]
 strCharacterName="Greater Daemon"
 

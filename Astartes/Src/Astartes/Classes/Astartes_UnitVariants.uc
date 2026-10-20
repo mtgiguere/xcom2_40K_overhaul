@@ -16,6 +16,7 @@ struct UnitVariant
 	var name CharacterGroup;   // optional: different CharacterGroupName (for AI / target icons)
 	var string BehaviorTree;   // optional: different AI root (XComAI.ini), e.g. Astartes_ChaosSorcerer::CharacterRoot
 	var array<name> ExtraAbilities; // added to the base's abilities when their templates exist
+	var array<name> RemoveAbilities; // base abilities left off the variant
 	var bool bAppearanceDefinesPawn; // soldier body dressed in cosmetic parts (pawn from the appearance, not the base's archetype)
 	var string CharacterGenerator;   // optional: generator class path, e.g. Astartes.Astartes_CharGen_Dressed
 	var name DefaultSoldierClass;    // optional: the class this soldier is created as (faction heroes)
@@ -89,7 +90,10 @@ static function X2CharacterTemplate CloneTemplate(X2CharacterTemplate Base, cons
 	}
 	for (i = 0; i < Base.Abilities.Length; i++)
 	{
-		T.Abilities.AddItem(Base.Abilities[i]);
+		if (Def.RemoveAbilities.Find(Base.Abilities[i]) == INDEX_NONE)
+		{
+			T.Abilities.AddItem(Base.Abilities[i]);
+		}
 	}
 	for (i = 0; i < Def.ExtraAbilities.Length; i++)
 	{
